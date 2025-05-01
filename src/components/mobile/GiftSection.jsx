@@ -1,0 +1,79 @@
+import React from 'react';
+import {
+	FaCopy,
+	FaUserFriends,
+	FaBullhorn,
+	FaTasks,
+	FaUsers,
+} from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+
+const GiftsSection = () => {
+	const quickActions = [
+		{ label: 'Copy', icon: <FaCopy size={20} /> },
+		{ label: 'Invite', icon: <FaUserFriends size={20} /> },
+		{ label: 'Campaign', icon: <FaBullhorn size={20} /> },
+		{ label: 'Task', icon: <FaTasks size={20} /> },
+		{ label: 'Community', icon: <FaUsers size={20} /> },
+	];
+
+	return (
+		<section className='bg-black pt-6 pb-12 px-4 flex flex-col items-center overflow-hidden'>
+			{/* Top Logo/Graphic Placeholder */}
+			<div>
+				<img
+					width={150}
+					src='https://static.bitunix.com/web/bitunix-assets/homeindex-guide-banner2.CPBBsizT.svg'
+					alt=''
+				/>
+			</div>
+			{/* Main Heading */}
+			<h1 className='text-white text-2xl font-bold mb-2 text-center'>
+				$5,500 Newcomers Gifts
+			</h1>
+
+			{/* Subtitle link */}
+			<Link
+				to='/rewards'
+				className='text-lime-400 text-sm underline mb-6 hover:text-lime-500 transition'>
+				Unlock Newcomers Rewards
+			</Link>
+
+			{/* Sign Up / Log In Button */}
+			<Link to='/login'>
+				<button className='bg-lime-400 hover:bg-lime-500 text-black font-semibold py-3 px-8 rounded-full text-sm mb-8'>
+					Sign up / Log in
+				</button>
+			</Link>
+
+			{/* Quick Actions */}
+			<div className='grid grid-cols-5 gap-4 max-w-xs'>
+				{quickActions.map((action, index) => (
+					<div
+						key={index}
+						className='flex flex-col items-center gap-1 text-gray-400 hover:text-lime-400 transition'>
+						<div className='p-2 bg-[#121212] rounded-full'>{action.icon}</div>
+						<span className='text-xs'>{action.label}</span>
+					</div>
+				))}
+			</div>
+
+			{/* Slower spin animation */}
+			<style jsx>{`
+				.animate-spin-slow {
+					animation: spin 8s linear infinite;
+				}
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+			`}</style>
+		</section>
+	);
+};
+
+export default GiftsSection;
