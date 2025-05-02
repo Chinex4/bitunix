@@ -12,6 +12,12 @@ import P2PTrading from './pages/desktop/P2PTrading';
 import Opportunities from './pages/desktop/Opportunities';
 import FlashExchange from './pages/desktop/FlashExchange';
 import Earn from './pages/desktop/Earn';
+import CopyTradingPage from './pages/desktop/CopyTradingPage';
+import CampaignCenterPage from './pages/desktop/CampaignCenterPage';
+import TaskCenterPage from './pages/desktop/TaskCenterPage';
+import ReferralPage from './pages/desktop/ReferralPage';
+import Login from './pages/desktop/Login';
+import Signup from './pages/desktop/Signup';
 
 function App() {
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -51,6 +57,30 @@ function App() {
 				<Route
 					path='/earn/financial-management'
 					element={<Earn />}
+				/>
+				<Route
+					path='/copy-trading/square'
+					element={<CopyTradingPage />}
+				/>
+				<Route
+					path='/activity/act-center'
+					element={<CampaignCenterPage />}
+				/>
+				<Route
+					path='/activity/task-center'
+					element={<TaskCenterPage />}
+				/>
+				<Route
+					path='/referral'
+					element={<ReferralPage />}
+				/>
+				<Route
+					path='/login'
+					element={<Login />}
+				/>
+				<Route
+					path='/register'
+					element={<Signup />}
 				/>
 			</Route>
 			{/* More routes can be added here later */}

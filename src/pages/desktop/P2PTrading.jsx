@@ -39,8 +39,8 @@ const P2PTrading = () => {
   const [activeTab, setActiveTab] = useState('p2p');
 
   return (
-    <>
-        <div className="min-h-screen bg-black text-white p-4">
+    <div className='max-w-7xl mx-auto'>
+        <div className="bg-black text-white p-4">
           {/* Tabs */}
           <div className="flex space-x-6 border-b border-gray-700 mb-4">
             <button
@@ -120,7 +120,7 @@ const P2PTrading = () => {
         </div>
         <P2PGuide />
         <FAQ />
-    </>
+    </div>
   );
 };
 

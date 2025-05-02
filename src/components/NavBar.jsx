@@ -66,13 +66,19 @@ const Navbar = () => {
 		},
 		{
 			name: 'Earn',
-			path: '/earn/financial-management',
-			dropdown: false,
+			dropdown: true,
+			dropdownItems: [
+				{
+					text: 'Flexible/Fixed Term',
+					path: '/earn/financial-management',
+					icon: <MdOutlineCurrencyExchange size={20} />
+				}
+			],
 			badge: 'NEW',
 		},
-		{ name: 'Copy Trading', badge: 'NEW' },
-		{ name: 'Campaign Center', badge: 'NEW' },
-		{ name: 'Task Center', badge: 'NEW' },
+		{ name: 'Copy Trading', path: '/copy-trading/square'},
+		{ name: 'Campaign Center', path: '/activity/act-center', badge: 'NEW' },
+		{ name: 'Task Center', path: '/activity/task-center', badge: 'NEW' },
 		{ name: 'Referral', dropdown: false },
 	];
 
@@ -142,7 +148,7 @@ const Navbar = () => {
 					Log in
 				</Link>
 				<Link
-					to='/signup'
+					to='/register'
 					className='px-6 py-2 rounded-md hover:bg-lime-300 duration-300 transition-colors text-center bg-lime-400 border-none text-black inline-block'>
 					Sign Up
 				</Link>
@@ -194,10 +200,7 @@ const Navbar = () => {
 							<Link to='/earn/financial-management'>Earn</Link>
 						</li>
 						<li>
-							<Link to='/settings'>Settings</Link>
-						</li>
-						<li>
-							<Link to='/download'>Download Bitunix App</Link>
+							<Link to='/login'>Log in</Link>
 						</li>
 					</ul>
 

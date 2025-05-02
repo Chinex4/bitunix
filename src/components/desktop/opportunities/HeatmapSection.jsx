@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const HeatmapSection = () => {
+const HeatMapSection = () => {
 	const [data, setData] = useState([]);
 	const [interval, setInterval] = useState('24h');
 	const [loading, setLoading] = useState(true);
@@ -140,4 +140,4 @@ Vol: ${coin.total_volume.toLocaleString()}`}>
 	);
 };
 
-export default HeatmapSection;
+export default HeatMapSection;

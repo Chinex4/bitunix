@@ -224,7 +224,7 @@ const Footer = () => {
 			)}
 
 			{/* Simple fade-in-up animation */}
-			<style jsx>{`
+			<style jsx={`
 				@keyframes fadeInUp {
 					0% {
 						opacity: 0;
@@ -238,7 +238,7 @@ const Footer = () => {
 				.animate-fadeInUp {
 					animation: fadeInUp 0.5s ease-out;
 				}
-			`}</style>
+			`}></style>
 		</footer>
 	);
 };
