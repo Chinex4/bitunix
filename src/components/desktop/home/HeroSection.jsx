@@ -51,7 +51,7 @@ const HeroSection = () => {
 			</div>
 
 			{/* Right Side (Video inside Phone Frame) */}
-			<div className='relative w-[240px] h-[522.5px] lg:w-1/2 flex justify-center mb-10 lg:mb-0'>
+			<div className='hidden lg:flex relative w-[240px] h-[522.5px] lg:w-1/2 justify-center mb-10 lg:mb-0'>
 				{/* Phone Frame */}
 				<img
 					src={phoneFrame}

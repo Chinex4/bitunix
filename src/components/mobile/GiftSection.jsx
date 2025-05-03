@@ -10,11 +10,11 @@ import { Link } from 'react-router-dom';
 
 const GiftsSection = () => {
 	const quickActions = [
-		{ label: 'Copy', icon: <FaCopy size={20} /> },
-		{ label: 'Invite', icon: <FaUserFriends size={20} /> },
-		{ label: 'Campaign', icon: <FaBullhorn size={20} /> },
-		{ label: 'Task', icon: <FaTasks size={20} /> },
-		{ label: 'Community', icon: <FaUsers size={20} /> },
+		{ label: 'Copy', path: '/copy-trading/square', icon: <FaCopy size={20} /> },
+		{ label: 'Invite', path: '/referral', icon: <FaUserFriends size={20} /> },
+		{ label: 'Campaign', path: '/activity/act-center', icon: <FaBullhorn size={20} /> },
+		{ label: 'Task', path: '/activity/task-center', icon: <FaTasks size={20} /> },
+		// { label: 'Community', path: '/copy-traing/square', icon: <FaUsers size={20} /> },
 	];
 
 	return (
@@ -47,14 +47,15 @@ const GiftsSection = () => {
 			</Link>
 
 			{/* Quick Actions */}
-			<div className='grid grid-cols-5 gap-4 max-w-xs'>
+			<div className='grid grid-cols-4 gap-4 max-w-xs'>
 				{quickActions.map((action, index) => (
-					<div
+					<Link
+						to={action.path}
 						key={index}
 						className='flex flex-col items-center gap-1 text-gray-400 hover:text-lime-400 transition'>
 						<div className='p-2 bg-[#121212] rounded-full'>{action.icon}</div>
 						<span className='text-xs'>{action.label}</span>
-					</div>
+					</Link>
 				))}
 			</div>
 

@@ -41,7 +41,7 @@ const BottomNavigation = () => {
 		{ path: '/', label: 'Home', icon: <FaHome size={20} /> },
 		{ path: '/markets', label: 'Markets', icon: <FaChartLine size={20} /> },
 		{ path: '/contact-trade/BTC-USDT', label: 'Trade', icon: <FaExchangeAlt size={24} /> },
-		{ path: '/campaign', label: 'Campaign', icon: <FaGift size={20} /> },
+		{ path: '/copy-trading/square', label: 'Campaign', icon: <FaGift size={20} /> },
 		{ path: '/assets', label: 'Assets', icon: <FaWallet size={20} /> },
 	];
 
