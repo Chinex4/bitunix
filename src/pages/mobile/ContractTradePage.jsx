@@ -1,9 +1,10 @@
 // ContractTradePage.jsx
 import { useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
-import TradingChart from '../../components/TradingChart';
+// import TradingChart from '../../components/TradingChart';
 import OrderBook from '../../components/OrderBook';
 import TradePanel from '../../components/TradePanel';
+import TradingViewWidget from '../../components/desktop/trading/TradingViewWidget';
 
 const SOCKET_URL =
   'wss://stream.binance.com:9443/stream?streams=btcusdt@depth20@100ms/btcusdt@trade';
@@ -34,7 +35,7 @@ const ContractTradePage = () => {
   return (
     <div className="min-h-screen bg-black text-white grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
       <div className="lg:col-span-8">
-        <TradingChart symbol="BTCUSDT" />
+        <TradingViewWidget symbol={'BINANCE:BTCUSDT'} />
       </div>
 
       <div className="lg:col-span-4 space-y-4">
