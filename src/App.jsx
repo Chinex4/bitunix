@@ -20,6 +20,7 @@ import Login from './pages/desktop/Login';
 import Signup from './pages/desktop/Signup';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
+import AssetsRoutes from './pages/mobile/AssetsRoutes';
 
 function App() {
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -85,6 +86,10 @@ function App() {
 					<Route
 						path='/register'
 						element={<Signup />}
+					/>
+					<Route
+						path='/assets/*'
+						element={<AssetsRoutes />}
 					/>
 					<Route
 						path='*'

@@ -12,5 +12,14 @@
 }
 
 @plugin "daisyui" {
-    themes: black --default, dark --prefersdark, cupcake;
-  }
+	themes: black --default, dark --prefersdark, cupcake;
+}
+/* hide-scrollbar class */
+.hide-scrollbar {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none; /* Safari and Chrome */
+}

@@ -25,7 +25,7 @@ const faqs = [
 			'Transactions are usually completed within 5-30 minutes, depending on network conditions and payment verification.',
 	},
 ];
-const FAQ = () => {
+const FAQ = ({ showHeader = true }) => {
 	const [activeIndex, setActiveIndex] = useState(null);
 
 	const toggleFAQ = (index) => {
@@ -33,9 +33,11 @@ const FAQ = () => {
 	};
 	return (
 		<section className='max-w-7xl mx-auto mt-12 px-4'>
-            <h2 className='mb-4 md:mb-8 text-2xl md:text-3xl lg:text-4xl font-bold text-left md:text-center '>
-                Frequently Asked Questions
-            </h2>
+			{showHeader && (
+				<h2 className='mb-4 md:mb-8 text-2xl md:text-3xl lg:text-4xl font-bold text-left md:text-center '>
+					Frequently Asked Questions
+				</h2>
+			)}
 			{faqs.map((faq, index) => (
 				<div
 					key={index}
