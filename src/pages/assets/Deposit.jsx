@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Copy } from 'lucide-react';
 // import QRCode from 'qrcode.react';
+import FAQ from '../../components/FAQ';
 
 const MOCK_COINS = [
 	{ symbol: 'USDT', name: 'Tether' },
@@ -33,7 +34,7 @@ const Deposit = () => {
 	const [selectedNetwork, setSelectedNetwork] = useState(null);
 	const [networks, setNetworks] = useState([]);
 	const [details, setDetails] = useState(null);
-    const [copied, setCopied] = useState(false)
+	const [copied, setCopied] = useState(false);
 
 	useEffect(() => {
 		if (selectedCoin) {
@@ -167,24 +168,53 @@ const Deposit = () => {
 			</div>
 
 			{/* FAQ */}
-			<div className='bg-[#1A1A1A] p-4 rounded-lg'>
-				<h3 className='text-white font-semibold mb-2'>
-					Frequently asked questions
-				</h3>
-				<ul className='space-y-1 text-sm text-gray-300'>
-					<li className='flex justify-between items-center'>
-						<span>How to deposit into Bitunix?</span>
-						<ChevronRight className='w-4 h-4' />
-					</li>
-					<li className='flex justify-between items-center'>
-						<span>FAQ about deposit</span>
-						<ChevronRight className='w-4 h-4' />
-					</li>
-					<li className='flex justify-between items-center'>
-						<span>Deposit hasn’t arrived?</span>
-						<ChevronRight className='w-4 h-4' />
-					</li>
-				</ul>
+			<FAQ />
+
+			{/* DEPOSIT RECORDS  */}
+			{/* Deposit Records */}
+			<div className='mt-10'>
+				<div className='flex items-center justify-between mb-4'>
+					<h3 className='text-white text-lg font-semibold'>Deposit records</h3>
+					<button className='text-xs text-gray-400 flex items-center gap-1 hover:text-white transition'>
+						More <ChevronRight size={14} />
+					</button>
+				</div>
+
+				<div className='w-full overflow-x-auto rounded-md'>
+					<table className='w-full min-w-[700px] text-left'>
+						<thead className='text-xs text-gray-500 border-b border-gray-800'>
+							<tr>
+								<th className='py-2 px-3'>Time</th>
+								<th className='py-2 px-3'>Coin</th>
+								<th className='py-2 px-3'>Received amount</th>
+								<th className='py-2 px-3'>Type</th>
+								<th className='py-2 px-3'>Status</th>
+								<th className='py-2 px-3'>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{/* No Data UI */}
+							<tr>
+								<td
+									colSpan='6'
+									className='text-center py-10'>
+									<div className='flex flex-col items-center justify-center text-gray-500'>
+										<svg
+											className='w-10 h-10 mb-3 text-gray-600'
+											fill='none'
+											stroke='currentColor'
+											strokeWidth={1.5}
+											viewBox='0 0 24 24'>
+											<path d='M4 4h16v16H4z' />
+											<path d='M9 9h6M9 13h6M9 17h6' />
+										</svg>
+										<p className='text-sm'>No Data</p>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	);

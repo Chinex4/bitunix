@@ -7,6 +7,8 @@ import FuturesAccount from '../assets/FuteuresAccount';
 import EarnAccount from '../assets/EarnAccount';
 import CopyAccount from '../assets/CopyAccount';
 import Deposit from '../assets/Deposit';
+import Withdraw from '../assets/Withdraw';
+import Rewards from '../assets/Rewards';
 // import other components...
 
 const AssetsRoutes = () => {
@@ -50,15 +52,15 @@ const AssetsRoutes = () => {
 					/>
 					<Route
 						path='withdraw'
-						element={<div>Withdraw Page</div>}
+						element={<Withdraw />}
 					/>
-					<Route
+					{/* <Route
 						path='transaction-history'
 						element={<div>Transaction History Page</div>}
-					/>
+					/> */}
 					<Route
 						path='rewards'
-						element={<div>Rewards Page</div>}
+						element={<Rewards />}
 					/>
 				</Routes>
 			</div>

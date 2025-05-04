@@ -13,6 +13,8 @@ import { GiTargeting } from 'react-icons/gi';
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isUserOpen, setIsUserOpen] = useState(false);
+	const [isAuthenticated] = useState(true); // toggle this for testing
 
 	const navLinks = [
 		{
@@ -75,20 +77,18 @@ const Navbar = () => {
 		{ name: 'Copy Trading', path: '/copy-trading/square' },
 		{ name: 'Campaign Center', path: '/activity/act-center', badge: 'NEW' },
 		{ name: 'Task Center', path: '/activity/task-center', badge: 'NEW' },
-		{ name: 'Referral', path: '/referral', dropdown: false },
+		{ name: 'Referral', path: '/referral' },
 	];
 
 	return (
 		<nav className='fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 py-4 flex items-center justify-between border-b border-white/10'>
-			{/* Left Side */}
+			{/* Left */}
 			<div className='flex items-center gap-4'>
 				<Link
 					to='/'
 					className='text-lime-400 font-bold text-xl italic flex items-center gap-1'>
 					<div className='bg-lime-400 rounded-full p-1'></div> Bitunix
 				</Link>
-
-				{/* Desktop Menu */}
 				<div className='hidden lg:flex items-center gap-4'>
 					{navLinks.map((link, index) => (
 						<div
@@ -96,9 +96,7 @@ const Navbar = () => {
 							key={index}>
 							<div className='relative'>
 								{link.dropdown ? (
-									<button
-										tabIndex={0}
-										className='btn btn-ghost btn-sm rounded-btn flex items-center gap-1'>
+									<button className='btn btn-ghost btn-sm rounded-btn flex items-center gap-1'>
 										{link.name}
 										<ChevronDown size={16} />
 										{link.badge && (
@@ -120,11 +118,8 @@ const Navbar = () => {
 									</Link>
 								)}
 							</div>
-
 							{link.dropdown && (
-								<ul
-									tabIndex={0}
-									className='dropdown-content gap-5 menu px-4 py-6 rounded-lg shadow bg-stone-900 text-white rounded-box w-52'>
+								<ul className='dropdown-content gap-5 menu px-4 py-6 rounded-lg shadow bg-stone-900 text-white w-52'>
 									{link.dropdownItems.map((item) => (
 										<Link
 											key={item.path}
@@ -141,20 +136,117 @@ const Navbar = () => {
 				</div>
 			</div>
 
-			{/* Right Side */}
+			{/* Right */}
 			<div className='flex items-center gap-4'>
-				<Link
-					to='/login'
-					className='hidden lg:block'>
-					Log in
-				</Link>
-				<Link
-					to='/register'
-					className='px-6 py-2 rounded-md hover:bg-lime-300 transition-colors bg-lime-400 text-black'>
-					Sign Up
-				</Link>
+				{isAuthenticated ? (
+					<>
+						{/* Assets Icon */}
+						<div className='hidden md:block dropdown dropdown-end'>
+							<div
+								tabIndex={0}
+								role='button'
+								className='btn btn-ghost btn-sm'>
+								<img
+									src='/assets-icon.svg'
+									alt='Assets'
+									className='w-6 h-6 rounded-full'
+								/>
+							</div>
+							<ul className='dropdown-content p-4 shadow bg-stone-800 text-white rounded-box w-64'>
+								<p className='text-sm font-semibold'>Total Assets</p>
+								<p className='text-xl mb-2'>0 BTC</p>
+								<button className='btn btn-sm w-full mb-2'>
+									Campaign Center
+								</button>
+								<button className='btn btn-sm w-full mb-2'>Task Center</button>
+								<li>
+									<Link to='/assets/spot-account'>Spot Account</Link>
+								</li>
+								<li>
+									<Link to='/assets/futures-account'>Futures Account</Link>
+								</li>
+								<li>
+									<Link to='/assets/earn-account'>Earn Account</Link>
+								</li>
+								<li>
+									<Link to='/assets/copy-account'>Copy Account</Link>
+								</li>
+								<li>
+									<Link to='/assets/transaction-history'>
+										Transaction History
+									</Link>
+								</li>
+							</ul>
+						</div>
 
-				{/* Mobile Menu Toggle */}
+						{/* User Icon */}
+						<div className='md:block dropdown dropdown-end'>
+							<div
+								tabIndex={0}
+								role='button'
+								className='btn btn-ghost btn-sm'>
+								<img
+									src='/avatar.svg'
+									alt='User'
+									className='w-6 h-6 rounded-full'
+								/>
+							</div>
+							<ul className='dropdown-content p-4 shadow bg-stone-800 text-white rounded-box w-64'>
+								<p className='text-sm font-medium mb-1'>off****@gmail.com</p>
+								<p className='text-xs mb-3'>UID 952644127</p>
+								<li>
+									<Link to='/assets/rewards'>My Rewards</Link>
+								</li>
+								<li>
+									<Link to='/security'>Security</Link>
+								</li>
+								<li>
+									<Link to='/kyc'>KYC</Link>
+								</li>
+								<li>
+									<Link to='/referral'>Referral Hub</Link>
+								</li>
+								<li>
+									<Link to='/settings'>Settings</Link>
+								</li>
+								<li>
+									<Link to='/api'>API</Link>
+								</li>
+								<li>
+									<button className='text-red-400'>Log out</button>
+								</li>
+							</ul>
+						</div>
+						{/* User Icon */}
+						<div className='md:hidden'>
+							<div
+								tabIndex={0}
+								role='button'
+								onClick={() => setIsUserOpen(true)}
+								className='btn btn-ghost btn-sm'>
+								<img
+									src='/avatar.svg'
+									alt='User'
+									className='w-6 h-6 rounded-full'
+								/>
+							</div>
+						</div>
+					</>
+				) : (
+					<>
+						<Link
+							to='/login'
+							className='hidden lg:block'>
+							Log in
+						</Link>
+						<Link
+							to='/register'
+							className='px-6 py-2 rounded-md hover:bg-lime-300 transition-colors bg-lime-400 text-black'>
+							Sign Up
+						</Link>
+					</>
+				)}
+
 				<button
 					className='lg:hidden'
 					onClick={() => setIsOpen(true)}>
@@ -162,6 +254,53 @@ const Navbar = () => {
 				</button>
 			</div>
 
+			{/* Mobile Drawer */}
+			{isUserOpen && isAuthenticated && (
+				<motion.div
+					initial={{ x: '100%' }}
+					animate={{ x: 0 }}
+					exit={{ x: '100%' }}
+					transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+					className='fixed top-0 right-0 h-full w-full md:w-72 bg-black text-white p-4 z-50 lg:hidden'>
+					<div className='flex justify-between items-center mb-6'>
+						<Link
+							to='/'
+							className='text-lime-400 font-bold text-xl italic flex items-center gap-1'>
+							<div className='bg-lime-400 rounded-full p-1'></div> Bitunix
+						</Link>
+						<button onClick={() => setIsUserOpen(false)}>
+							<X size={24} />
+						</button>
+					</div>
+					{isAuthenticated && (
+						<ul className='flex flex-col gap-4'>
+							<li className='font-medium'>off****@gmail.com</li>
+							<li>UID 952644127</li>
+							<li>
+								<Link to='/assets/rewards'>My Rewards</Link>
+							</li>
+							<li>
+								<Link to='/security'>Security</Link>
+							</li>
+							<li>
+								<Link to='/kyc'>KYC</Link>
+							</li>
+							<li>
+								<Link to='/referral'>Referral Hub</Link>
+							</li>
+							<li>
+								<Link to='/settings'>Settings</Link>
+							</li>
+							<li>
+								<Link to='/api'>API</Link>
+							</li>
+							<li>
+								<button className='text-red-400'>Log out</button>
+							</li>
+						</ul>
+					)}
+				</motion.div>
+			)}
 			{/* Mobile Drawer */}
 			{isOpen && (
 				<motion.div
@@ -204,11 +343,6 @@ const Navbar = () => {
 							) : null
 						)}
 					</ul>
-
-					{/* Optional Floating Button */}
-					<div className='absolute bottom-4 right-4 bg-lime-400 p-3 rounded-full'>
-						{/* Chat/help button if needed */}
-					</div>
 				</motion.div>
 			)}
 		</nav>
