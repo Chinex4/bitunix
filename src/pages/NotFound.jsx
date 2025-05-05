@@ -5,7 +5,7 @@ const NotFound = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className='min-h-screen flex flex-col items-center justify-center bg-black text-white px-4 text-center'>
+		<div className='flex flex-col items-center justify-center bg-black text-white px-4 text-center'>
 			{/* Inline SVG */}
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
