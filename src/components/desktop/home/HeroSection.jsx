@@ -3,7 +3,7 @@ import video from '../../../assets/hero-video.mp4';
 import phoneFrame from '../../../assets/images/phone-frame.png';
 const HeroSection = () => {
 	return (
-		<section className='bg-black text-white px-4 py-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-24 min-h-screen'>
+		<section className='bg-black text-white px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-24'>
 			{/* Left Side */}
 			<div className='w-full lg:w-1/2 flex flex-col gap-6'>
 				<p className='text-lime-400 font-semibold'>
@@ -51,7 +51,7 @@ const HeroSection = () => {
 			</div>
 
 			{/* Right Side (Video inside Phone Frame) */}
-			<div className='hidden md:flex relative w-[240px] h-[522.5px] lg:w-1/2 justify-center mb-10 lg:mb-0'>
+			<div className='hidden md:flex relative md:w-[340px] h-[522.5px] lg:w-1/2 justify-center mb-10 lg:mb-0'>
 				{/* Phone Frame */}
 				<img
 					src={phoneFrame}
@@ -66,7 +66,7 @@ const HeroSection = () => {
 					muted
 					loop
 					playsInline
-					className='absolute top-[12%] w-[190px] h-[400.5px] left-[33.5%] object-cover rounded-[2rem] z-0'
+					className='absolute top-[12%] w-[190px] h-[400.5px] md:left-[22.8%] lg:left-[33.5%] object-cover rounded-[2rem] z-0'
 				/>
 			</div>
 		</section>

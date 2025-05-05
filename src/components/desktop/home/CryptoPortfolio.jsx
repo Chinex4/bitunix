@@ -38,7 +38,7 @@ const CryptoPortfolio = () => {
 	const rows = splitCoins();
 
 	return (
-		<section className='relative bg-stone-900 min-h-screen flex flex-col items-center justify-center px-4 py-12 overflow-hidden'>
+		<section className='relative bg-stone-900 flex flex-col items-center justify-center px-4 py-12 overflow-hidden max-w-7xl mx-auto'>
 			<h2 className='text-white text-3xl md:text-4xl font-bold mb-10 text-center'>
 				Build Your Cryptocurrency Portfolio
 			</h2>

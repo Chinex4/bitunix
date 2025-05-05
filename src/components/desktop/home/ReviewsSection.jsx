@@ -35,7 +35,7 @@ const reviews = [
 
 const ReviewsSection = () => {
   return (
-    <section className="bg-black min-h-screen flex flex-col items-center justify-center py-16 px-4 overflow-hidden">
+    <section className="bg-black flex flex-col items-center justify-center py-16 px-4 overflow-hidden">
       <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-12 text-left md:text-center leading-tight">
         Reviews of Bitunix from Worldwide Media
       </h2>
