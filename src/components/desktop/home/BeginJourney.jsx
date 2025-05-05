@@ -6,7 +6,7 @@ const steps = [
 		title: 'Create your Bitunix account',
 		iconColor: 'bg-lime-400',
 		arrow: true,
-		route: '/create-account',
+		route: '/register',
 		icon: (
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
@@ -21,7 +21,7 @@ const steps = [
 		title: 'Deposit funds',
 		iconColor: 'bg-black',
 		arrow: false,
-		route: '/deposit-funds',
+		route: '/assets/deposit',
 		icon: (
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
@@ -36,7 +36,7 @@ const steps = [
 		title: 'Start trading',
 		iconColor: 'bg-black',
 		arrow: false,
-		route: '/start-trading',
+		route: '/contract-trade/BTC-USDT',
 		icon: (
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
@@ -230,7 +230,7 @@ const BeginJourney = () => {
 			</div>
 
 			{/* Get Started Button */}
-			<Link to='/create-account'>
+			<Link to='/register'>
 				<button className='w-full md:w-auto mt-12 bg-lime-400 hover:bg-lime-500 text-black font-semibold py-3 px-8 rounded-md text-base animate-pulse hover:animate-none transition'>
 					Get Started
 				</button>

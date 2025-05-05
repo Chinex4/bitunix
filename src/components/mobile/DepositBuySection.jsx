@@ -13,7 +13,7 @@ const DepositBuySection = () => {
 			{/* Right: Deposit / Buy */}
 			<div className='w-full md:w-1/3 lg:w-1/4 flex flex-col gap-4'>
 				{/* Deposit Button */}
-				<Link to='/deposit'>
+				<Link to='/assets/deposit'>
 					<button className='w-full border text-xs border-white/20 hover:border-lime-400 text-white font-semibold py-3 px-4 rounded-xl transition flex items-center justify-between gap-2'>
 						<span>Deposit</span>
 						<span className='w-5 h-5'>
@@ -29,7 +29,7 @@ const DepositBuySection = () => {
 				</Link>
 
 				{/* Buy Crypto Button */}
-				<Link to='/buy-crypto'>
+				<Link to='//trade/third-party'>
 					<button className='w-full border text-xs border-white/20 hover:border-lime-400 text-white font-semibold py-3 px-4 rounded-xl transition flex items-center justify-between gap-2'>
 						<span>Buy Crypto</span>
 						<span className='w-5 h-5'>
