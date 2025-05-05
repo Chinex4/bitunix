@@ -14,7 +14,7 @@ import { GiTargeting } from 'react-icons/gi';
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isUserOpen, setIsUserOpen] = useState(false);
-	const [isAuthenticated] = useState(false); // toggle this for testing
+	const [isAuthenticated] = useState(true); // toggle this for testing
 
 	const navLinks = [
 		{
@@ -160,10 +160,16 @@ const Navbar = () => {
 									</Link>
 								</li>
 								<li>
-									<Link to={'/activity/act-center'} className='btn btn-sm w-full mb-2'>
+									<Link
+										to={'/activity/act-center'}
+										className='btn btn-sm w-full mb-2'>
 										Campaign Center
 									</Link>
-									<Link to={'/activity/task-center'}  className='btn btn-sm w-full mb-2'>Task Center</Link>
+									<Link
+										to={'/activity/task-center'}
+										className='btn btn-sm w-full mb-2'>
+										Task Center
+									</Link>
 								</li>
 								<li>
 									<Link to='/assets/spot-account'>Spot Account</Link>
@@ -186,7 +192,7 @@ const Navbar = () => {
 						</div>
 
 						{/* User Icon */}
-						<div className='md:block dropdown dropdown-end'>
+						<div className='hidden md:block dropdown dropdown-end'>
 							<div
 								tabIndex={0}
 								role='button'
@@ -293,26 +299,54 @@ const Navbar = () => {
 					</div>
 					{isAuthenticated && (
 						<ul className='flex flex-col gap-4'>
-							<li className='font-medium'>off****@gmail.com</li>
-							<li>UID 952644127</li>
+							<li className='hover:bg-stone-800 px-4 py-3'>
+								<Link to='/assets/overview'>
+									<p className='text-sm font-semibold'>Total Assets</p>
+									<p className='text-xl mb-2'>0 USDT</p>
+								</Link>
+							</li>
+
+							<li>
+								<Link
+									to={'/activity/act-center'}
+									className='btn btn-sm w-full mb-2'>
+									Campaign Center
+								</Link>
+								<Link
+									to={'/activity/task-center'}
+									className='btn btn-sm w-full mb-2'>
+									Task Center
+								</Link>
+							</li>
+							<li>
+								<Link to='/assets/spot-account'>Spot Account</Link>
+							</li>
+							<li>
+								<Link to='/assets/futures-account'>Futures Account</Link>
+							</li>
+							<li>
+								<Link to='/assets/earn-account'>Earn Account</Link>
+							</li>
+							<li>
+								<Link to='/assets/copy-account'>Copy Account</Link>
+							</li>
+
 							<li>
 								<Link to='/assets/rewards'>My Rewards</Link>
 							</li>
 							<li>
-								<Link to='/security'>Security</Link>
+								<Link to='/account/security'>Security</Link>
 							</li>
 							<li>
-								<Link to='/kyc'>KYC</Link>
+								<Link to='/account/kyc'>KYC</Link>
 							</li>
 							<li>
 								<Link to='/referral'>Referral Hub</Link>
 							</li>
 							<li>
-								<Link to='/settings'>Settings</Link>
+								<Link to='/account/settings'>Settings</Link>
 							</li>
-							<li>
-								<Link to='/api'>API</Link>
-							</li>
+
 							<li>
 								<button className='text-red-400'>Log out</button>
 							</li>
