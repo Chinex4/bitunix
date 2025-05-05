@@ -14,7 +14,7 @@ import { GiTargeting } from 'react-icons/gi';
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isUserOpen, setIsUserOpen] = useState(false);
-	const [isAuthenticated] = useState(true); // toggle this for testing
+	const [isAuthenticated] = useState(false); // toggle this for testing
 
 	const navLinks = [
 		{
@@ -147,18 +147,24 @@ const Navbar = () => {
 								role='button'
 								className='btn btn-ghost btn-sm'>
 								<img
-									src='/assets-icon.svg'
+									src='/wallet.png'
 									alt='Assets'
 									className='w-6 h-6 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content p-4 shadow bg-stone-800 text-white rounded-box w-64'>
-								<p className='text-sm font-semibold'>Total Assets</p>
-								<p className='text-xl mb-2'>0 BTC</p>
-								<button className='btn btn-sm w-full mb-2'>
-									Campaign Center
-								</button>
-								<button className='btn btn-sm w-full mb-2'>Task Center</button>
+							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#000000] text-white rounded-box w-64'>
+								<li className='hover:bg-stone-800 px-4 py-3'>
+									<Link to='/assets/overview'>
+										<p className='text-sm font-semibold'>Total Assets</p>
+										<p className='text-xl mb-2'>0 USDT</p>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/activity/act-center'} className='btn btn-sm w-full mb-2'>
+										Campaign Center
+									</Link>
+									<Link to={'/activity/task-center'}  className='btn btn-sm w-full mb-2'>Task Center</Link>
+								</li>
 								<li>
 									<Link to='/assets/spot-account'>Spot Account</Link>
 								</li>
@@ -171,11 +177,11 @@ const Navbar = () => {
 								<li>
 									<Link to='/assets/copy-account'>Copy Account</Link>
 								</li>
-								<li>
+								{/* <li>
 									<Link to='/assets/transaction-history'>
 										Transaction History
 									</Link>
-								</li>
+								</li> */}
 							</ul>
 						</div>
 
@@ -186,14 +192,27 @@ const Navbar = () => {
 								role='button'
 								className='btn btn-ghost btn-sm'>
 								<img
-									src='/avatar.svg'
+									src='/user-icon.svg'
 									alt='User'
 									className='w-6 h-6 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content p-4 shadow bg-stone-800 text-white rounded-box w-64'>
-								<p className='text-sm font-medium mb-1'>off****@gmail.com</p>
-								<p className='text-xs mb-3'>UID 952644127</p>
+							<ul className='dropdown-content space-y-4 p-4 border rounded-md border-stone-800 bg-[#000000] shadow text-white rounded-box w-64'>
+								<li className='flex gap-4 items-center'>
+									<div>
+										<img
+											src='/user-icon.svg'
+											alt='user'
+											className='size-8 rounded-full'
+										/>
+									</div>
+									<div className='space-y-2'>
+										<p className='text-sm font-medium mb-1'>
+											off****@gmail.com
+										</p>
+										<p className='text-[10px] mb-3'>UID 952644127</p>
+									</div>
+								</li>
 								<li>
 									<Link to='/assets/rewards'>My Rewards</Link>
 								</li>
@@ -209,9 +228,9 @@ const Navbar = () => {
 								<li>
 									<Link to='/settings'>Settings</Link>
 								</li>
-								<li>
+								{/* <li>
 									<Link to='/api'>API</Link>
-								</li>
+								</li> */}
 								<li>
 									<button className='text-red-400'>Log out</button>
 								</li>
@@ -225,7 +244,7 @@ const Navbar = () => {
 								onClick={() => setIsUserOpen(true)}
 								className='btn btn-ghost btn-sm'>
 								<img
-									src='/avatar.svg'
+									src='/user-icon.svg'
 									alt='User'
 									className='w-6 h-6 rounded-full'
 								/>
