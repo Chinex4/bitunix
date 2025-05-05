@@ -44,7 +44,7 @@ const Navbar = () => {
 				},
 				{
 					text: 'Marketplace',
-					path: '/marketplace',
+					path: '/markets',
 					icon: <MdScreenSearchDesktop size={20} />,
 				},
 			],

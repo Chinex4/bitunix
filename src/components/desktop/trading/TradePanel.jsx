@@ -5,7 +5,7 @@ const TradePanel = ({ livePrice }) => {
 	const [quantity, setQuantity] = useState('');
 
 	return (
-		<div className='bg-gray-900 rounded-lg p-4'>
+		<div className='rounded-lg p-4'>
 			<div className='flex justify-between items-center mb-3'>
 				<h2 className='text-xl font-semibold'>Trade</h2>
 				<span className='text-sm text-gray-400'>
@@ -20,18 +20,18 @@ const TradePanel = ({ livePrice }) => {
 						type='number'
 						value={price}
 						onChange={(e) => setPrice(e.target.value)}
-						className='w-full px-3 py-2 bg-gray-800 text-white rounded'
+						className='w-full px-3 py-2 bg-stone-800 text-white rounded'
 						placeholder={livePrice || 'Market Price'}
 					/>
 				</div>
 
 				<div>
-					<label className='block text-sm text-gray-400'>Quantity (BTC)</label>
+					<label className='block text-sm text-stone-400'>Quantity (BTC)</label>
 					<input
 						type='number'
 						value={quantity}
 						onChange={(e) => setQuantity(e.target.value)}
-						className='w-full px-3 py-2 bg-gray-800 text-white rounded'
+						className='w-full px-3 py-2 bg-stone-800 text-white rounded'
 					/>
 				</div>
 

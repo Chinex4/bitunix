@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MarketsSection from '../../components/desktop/opportunities/MarketsSection';
+import { useNavigate } from 'react-router-dom';
 
 const TABS = ['Favorites', 'Futures', 'Spot'];
 
@@ -35,6 +36,7 @@ export default function MarketsPage() {
 	const [marketData, setMarketData] = useState([]);
 	const [favorites, setFavorites] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
 
 	const fetchMarketData = async () => {
 		try {
@@ -106,7 +108,7 @@ export default function MarketsPage() {
 						</button>
 					))}
 				</div>
-	
+
 				{/* Header (visible on md+) */}
 				<div className='hidden md:grid grid-cols-6 gap-2 text-sm text-white/60 mb-3 px-2'>
 					<span>Trading Pair</span>
@@ -116,7 +118,7 @@ export default function MarketsPage() {
 					<span>24H Low</span>
 					<span>24H Volume</span>
 				</div>
-	
+
 				{/* List */}
 				{loading ? (
 					<div className='flex justify-center mt-20'>
@@ -127,7 +129,10 @@ export default function MarketsPage() {
 						{displayedData.map((coin) => (
 							<div
 								key={coin.id}
-								className='bg-[#111] rounded-md px-3 py-3 text-sm'>
+								className='bg-[#111] rounded-md px-3 py-3 text-sm'
+								onClick={() =>
+									navigate(`/contract-trade/${coin.symbol.toUpperCase()}-USDT`)
+								}>
 								{/* Mobile View */}
 								<div className='flex md:hidden justify-between items-center'>
 									<div className='flex items-center gap-2'>
@@ -155,7 +160,7 @@ export default function MarketsPage() {
 										</div>
 									</div>
 								</div>
-	
+
 								{/* Desktop View */}
 								<div className='hidden md:grid grid-cols-6 items-center gap-2'>
 									<div className='flex items-center gap-2'>

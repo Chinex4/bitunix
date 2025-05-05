@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import MobileHome from './pages/mobile/MobileHome';
 import PurchaseCryptoPage from './pages/mobile/PurchaseCryptoPage';
 import MarketsPage from './pages/mobile/MarketsPage';
-import ContractTradePage from './pages/mobile/ContractTradePage';
+import ContractTradePage from './pages/desktop/ContractTradePage';
 import P2PTrading from './pages/desktop/P2PTrading';
 import Opportunities from './pages/desktop/Opportunities';
 import FlashExchange from './pages/desktop/FlashExchange';
@@ -45,7 +45,7 @@ function App() {
 						element={<MarketsPage />}
 					/>
 					<Route
-						path='/contract-trade/BTC-USDT'
+						path='/contract-trade/:symbol'
 						element={<ContractTradePage />}
 					/>
 					<Route

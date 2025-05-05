@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const coinIds = ['bitcoin', 'ethereum', 'tron', 'litecoin'];
 
 const MarketsSection = () => {
 	const [coins, setCoins] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
+
 
 	useEffect(() => {
 		const fetchCoins = async () => {
@@ -55,6 +58,7 @@ const MarketsSection = () => {
 					{coins.map((coin) => (
 						<div
 							key={coin.id}
+							onClick={() => navigate(`/contract-trade/${coin.symbol.toUpperCase()}-USDT`)}
 							className='bg-zinc-900 border border-zinc-700 rounded-lg p-4'>
 							<div className='flex items-center justify-between mb-2'>
 								<div className='flex items-center gap-2'>
@@ -77,7 +81,7 @@ const MarketsSection = () => {
 								</span>
 							</div>
 							<div className='text-2xl font-bold mb-1'>
-								{coin.current_price?.toLocaleString()}
+								$ {coin.current_price?.toLocaleString()}
 							</div>
 							<div className='text-xs text-gray-400'>
 								24H Vol {formatNumber(coin.total_volume)}
