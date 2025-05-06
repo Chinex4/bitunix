@@ -6,7 +6,6 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
-
 	const schema = Yup.object().shape({
 		email: Yup.string()
 			.email('Invalid email address')
@@ -50,9 +49,10 @@ const ForgotPassword = () => {
 					<h2 className='text-3xl font-bold md:text-black text-white'>
 						Forgot Password
 					</h2>
-                    <p className='text-white/50 md:text-black'>
-                        Enter the email you used to register
-                    </p>
+					<p className='text-white px-4 py-2 rounded-lg text-xs bg-blue-300'>
+						*For the security of your assets, you are not allowed to withdraw
+						money within 24 hours after resetting your login password
+					</p>
 
 					{/* Email Input */}
 					<div>
@@ -76,7 +76,6 @@ const ForgotPassword = () => {
 							</p>
 						)}
 					</div>
-
 
 					{/* Submit Button */}
 					<button
