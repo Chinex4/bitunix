@@ -51,10 +51,10 @@ const Navbar = () => {
 		},
 		{ name: 'Futures', path: '/contract-trade/BTC-USDT', dropdown: false },
 		{
-			name: 'Spot',
+			name: 'Convert',
 			dropdown: true,
 			dropdownItems: [
-				{ text: 'Spot', path: '/spot', icon: <GiTargeting size={20} /> },
+				// { text: 'Spot', path: '/spot', icon: <GiTargeting size={20} /> },
 				{
 					text: 'Convert',
 					path: '/flash-exchange',
