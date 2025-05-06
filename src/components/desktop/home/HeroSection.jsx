@@ -1,6 +1,7 @@
 import { FaGoogle, FaApple, FaFacebookF, FaXTwitter } from 'react-icons/fa6';
 import video from '../../../assets/hero-video.mp4';
 import phoneFrame from '../../../assets/images/phone-frame.png';
+import { Link } from 'react-router-dom';
 const HeroSection = () => {
 	return (
 		<section className='bg-black text-white px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-24'>
@@ -20,9 +21,9 @@ const HeroSection = () => {
 						placeholder='Email / Mobile'
 						className='input py-6 rounded-xl input-bordered w-full sm:w-2/3 bg-neutral-800 text-white placeholder-gray-400'
 					/>
-					<button className='btn text-xl px-12 py-6 rounded-xl bg-lime-400 border-none text-black w-full sm:w-auto'>
+					<Link to='/register' className='btn text-xl px-12 py-6 rounded-xl bg-lime-400 border-none text-black w-full sm:w-auto'>
 						Sign up now
-					</button>
+					</Link>
 				</div>
 				{/* Bonus text */}
 				<p className=''>

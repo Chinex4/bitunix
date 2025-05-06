@@ -5,14 +5,12 @@ import * as Yup from 'yup';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
-	const [showPassword, setShowPassword] = useState(false);
+const ForgotPassword = () => {
 
 	const schema = Yup.object().shape({
 		email: Yup.string()
 			.email('Invalid email address')
 			.required('Email is required'),
-		password: Yup.string().required('Password is required'),
 	});
 
 	const {
@@ -24,7 +22,7 @@ const Login = () => {
 	});
 
 	const onSubmit = (data) => {
-		console.log('Login submitted:', data);
+		console.log(data);
 	};
 
 	return (
@@ -50,8 +48,11 @@ const Login = () => {
 					onSubmit={handleSubmit(onSubmit)}
 					className='w-full max-w-md space-y-6'>
 					<h2 className='text-4xl font-bold md:text-black text-white'>
-						Log in
+						Forgot Password
 					</h2>
+                    <p className='text-white/50 md:text-black'>
+                        Enter the email you used to register
+                    </p>
 
 					{/* Email Input */}
 					<div>
@@ -76,64 +77,17 @@ const Login = () => {
 						)}
 					</div>
 
-					{/* Password Input */}
-					<div>
-						<label
-							htmlFor='password'
-							className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
-							Password
-						</label>
-						<div className='relative'>
-							<input
-								id='password'
-								type={showPassword ? 'text' : 'password'}
-								{...register('password')}
-								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
-									errors.password ? 'border-red-500' : 'border-gray-300'
-								}`}
-								placeholder='Please Enter Your Password'
-							/>
-							<button
-								type='button'
-								onClick={() => setShowPassword(!showPassword)}
-								className='absolute right-3 top-2.5 text-gray-400 hover:text-white'>
-								{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-							</button>
-						</div>
-						{errors.password && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.password.message}
-							</p>
-						)}
-					</div>
 
 					{/* Submit Button */}
 					<button
 						type='submit'
 						className='w-full bg-lime-500 hover:bg-lime-600 text-white md:text-black font-medium py-2 rounded-md hover:opacity-90'>
-						Log in
+						Submit
 					</button>
-
-					{/* Links */}
-					<div className='flex justify-between text-sm text-gray-500 md:text-gray-400'>
-						<p>
-							No account yet?{' '}
-							<Link
-								to='/register'
-								className='underline text-white md:text-lime-400 font-semibold'>
-								Sign up
-							</Link>
-						</p>
-						<Link
-							to='/forgot-password'
-							className='underline text-white md:text-lime-400 font-semibold'>
-							Forgot password
-						</Link>
-					</div>
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default Login;
+export default ForgotPassword;

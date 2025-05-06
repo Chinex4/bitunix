@@ -22,6 +22,7 @@ import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
 import AssetsRoutes from './pages/mobile/AssetsRoutes';
 import AccountRoutes from './pages/mobile/AccountRoutes';
+import ForgotPassword from './pages/desktop/ForgotPassword';
 
 function App() {
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -87,6 +88,10 @@ function App() {
 					<Route
 						path='/register'
 						element={<Signup />}
+					/>
+					<Route
+						path='/forgot-password'
+						element={<ForgotPassword />}
 					/>
 					<Route
 						path='/assets/*'
