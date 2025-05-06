@@ -47,7 +47,7 @@ const ForgotPassword = () => {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className='w-full max-w-md space-y-6'>
-					<h2 className='text-4xl font-bold md:text-black text-white'>
+					<h2 className='text-3xl font-bold md:text-black text-white'>
 						Forgot Password
 					</h2>
                     <p className='text-white/50 md:text-black'>
