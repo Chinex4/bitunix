@@ -4,9 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import UserAgreementModal from '../../components/UserAgreement';
+import Policy from '../../components/Policy';
 
 const Signup = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [isAgreementOpen, setAgreementOpen] = useState(false);
+	const [isPolicyOpen, setPolicyOpen] = useState(false);
 
 	const schema = Yup.object().shape({
 		email: Yup.string().email('Invalid email').required('Email is required'),
@@ -117,7 +121,7 @@ const Signup = () => {
 					</div>
 
 					{/* Agreement */}
-					<div className='text-sm md:text-gray-700 text-gray-300 flex items-start gap-2'>
+					<div className='text-sm md:text-black text-gray-300 flex items-start gap-2'>
 						<input
 							type='checkbox'
 							{...register('agreement')}
@@ -125,23 +129,33 @@ const Signup = () => {
 						/>
 						<p>
 							I have read and agree to the{' '}
-							<Link
-								to='/terms'
+							<button
+								onClick={() => setAgreementOpen(true)}
 								className='underline text-lime-400'>
 								Bitunix User Agreement
-							</Link>{' '}
+							</button>{' '}
 							and{' '}
-							<Link
-								href='/privacy'
+							<button
+								onClick={() => setPolicyOpen(true)}
 								className='underline text-lime-400'>
 								Bitunix Privacy Policy
-							</Link>
+							</button>
 							.
 						</p>
 					</div>
 					{errors.agreement && (
 						<p className='text-red-500 text-sm'>{errors.agreement.message}</p>
 					)}
+
+					{/* Modal */}
+					<UserAgreementModal
+						isOpen={isAgreementOpen}
+						onClose={() => setAgreementOpen(false)}
+					/>
+					<Policy
+						isOpen={isPolicyOpen}
+						onClose={() => setPolicyOpen(false)}
+					/>
 
 					{/* Submit */}
 					<button
