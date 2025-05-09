@@ -18,12 +18,7 @@ const DepositBuySection = () => {
 						<span>Deposit</span>
 						<span className='w-5 h-5'>
 							{/* Inline SVG: Deposit Icon */}
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								fill='#A3E635'
-								viewBox='0 0 24 24'>
-								<path d='M12 2a1 1 0 0 1 1 1v14.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 1 1 1.414-1.414L11 17.586V3a1 1 0 0 1 1-1z' />
-							</svg>
+							<img src="/svgIcons/depositIcon.svg" alt="" />
 						</span>
 					</button>
 				</Link>

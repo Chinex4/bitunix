@@ -1,15 +1,16 @@
+import { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMediaQuery } from 'react-responsive';
 
 export default function NewListingsCarousel() {
 	const prevRef = useRef(null);
 	const nextRef = useRef(null);
-	const isMobile = useMediaQuery({maxWidth: 764})
+	const swiperRef = useRef(null);
+	const isMobile = useMediaQuery({ maxWidth: 764 });
 
 	const listings = [
 		{ image: '/listings/ept.webp' },
@@ -21,8 +22,27 @@ export default function NewListingsCarousel() {
 		{ image: '/listings/zora.webp' },
 	];
 
+	useEffect(() => {
+		if (
+			swiperRef.current &&
+			swiperRef.current.params &&
+			swiperRef.current.params.navigation
+		) {
+			swiperRef.current.params.navigation.prevEl = prevRef.current;
+			swiperRef.current.params.navigation.nextEl = nextRef.current;
+
+			// Re-init navigation
+			swiperRef.current.navigation.destroy();
+			swiperRef.current.navigation.init();
+			swiperRef.current.navigation.update();
+		}
+	}, []);
+
 	return (
-		<section className={`${isMobile ? 'w-[200px]' : null} relative bg-black p-4 md:p-6 rounded-lg mb-0 md:mb-24`}>
+		<section
+			className={`${
+				isMobile ? 'w-[200px]' : ''
+			} relative bg-black p-4 md:p-6 rounded-lg mb-0 md:mb-24`}>
 			{/* Top Section */}
 			<div className='hidden md:flex justify-between items-center mb-4'>
 				<div className='text-white flex items-center gap-2'>
@@ -48,16 +68,10 @@ export default function NewListingsCarousel() {
 				}}
 				slidesPerView={1}
 				spaceBetween={10}
-				navigation={{
-					prevEl: prevRef.current,
-					nextEl: nextRef.current,
-				}}
-				onBeforeInit={(swiper) => {
-					swiper.params.navigation.prevEl = prevRef.current;
-					swiper.params.navigation.nextEl = nextRef.current;
+				onSwiper={(swiper) => {
+					swiperRef.current = swiper;
 				}}
 				breakpoints={{
-					
 					640: {
 						slidesPerView: 2,
 						spaceBetween: 20,
@@ -77,7 +91,7 @@ export default function NewListingsCarousel() {
 							<img
 								src={item.image}
 								alt={`listing ${idx}`}
-								className={`w-full h-24 md:h-32 object-cover`}
+								className='w-full h-24 md:h-32 object-cover'
 							/>
 						</div>
 					</SwiperSlide>

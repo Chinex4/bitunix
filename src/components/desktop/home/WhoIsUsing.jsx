@@ -59,7 +59,7 @@ const users = [
 export default function WhoIsUsing() {
 	return (
 		<div className='px-4 md:px-0 py-10 bg-black text-white'>
-			<h2 className='text-left md:text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-10 md:mb-24'>
+			<h2 className='text-left md:text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-10 md:mb-8'>
 				Who is using Bitunix?
 			</h2>
 
@@ -67,6 +67,7 @@ export default function WhoIsUsing() {
 				modules={[Autoplay]}
 				slidesPerView={1.2}
 				spaceBetween={20}
+				
 				loop={true}
 				autoplay={{ delay: 2000, disableOnInteraction: false }}
 				breakpoints={{
@@ -75,10 +76,10 @@ export default function WhoIsUsing() {
 					1280: { slidesPerView: 4 },
 				}}>
 				{users.map((user, index) => (
-					<SwiperSlide key={index}>
+					<SwiperSlide key={index} className='lg:py-24'>
 						<div
 							onClick={() => window.open(user.youtube, '_blank')}
-							className='cursor-pointer bg-[#121212] rounded-xl p-5 flex flex-col justify-between h-[280px] group transition-all hover:scale-105'>
+							className='cursor-pointer border border-[#121212] rounded-xl p-5 flex flex-col justify-between h-[280px] group transition-all duration-300 hover:-translate-y-4'>
 							{/* Top - Image and Name */}
 							<div className='flex items-center space-x-3'>
 								<div className='w-12 h-12 rounded-full overflow-hidden'>
@@ -98,14 +99,23 @@ export default function WhoIsUsing() {
 							</p>
 
 							{/* Bottom - Followers and Arrow */}
-							<div className='flex items-center justify-between mt-6 pt-4 pb-4 px-4 border-t border-white/10 group-hover:bg-lime-400/10 rounded-md transition'>
-								<div className='text-xs text-gray-400'>
+							<div className='flex items-center justify-between mt-6 pt-4 pb-4 px-4 border-t border-white/10 rounded-md transition-all duration-300 group-hover:bg-lime-400 group-hover:text-black'>
+								<div className='text-xs text-inherit'>
 									Followers: {user.followers}
 								</div>
-								<ChevronRight
-									size={18}
-									className='text-gray-400 group-hover:text-lime-400 transition'
-								/>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									fill='none'
+									viewBox='0 0 24 24'
+									strokeWidth={1.5}
+									stroke='currentColor'
+									className='size-6 transition-transform duration-300 group-hover:-rotate-45'>
+									<path
+										strokeLinecap='round'
+										strokeLinejoin='round'
+										d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3'
+									/>
+								</svg>
 							</div>
 						</div>
 					</SwiperSlide>
