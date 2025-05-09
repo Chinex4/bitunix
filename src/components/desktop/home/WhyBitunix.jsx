@@ -62,7 +62,7 @@ const WhyBitunix = () => {
 				{features.map((feature, index) => (
 					<div
 						key={index}
-						className='flex flex-row gap-4 md:flex-col items-center lg:transition-all lg:duration-500 lg:hover:bg-lime-400 lg:hover:text-black lg:hover:-translate-y-3 lg:rounded-lg lg:p-4'>
+						className='flex flex-row gap-4 md:flex-col items-center lg:transition-all lg:duration-500 group lg:hover:bg-lime-400 lg:hover:text-black lg:hover:-translate-y-3 lg:rounded-lg lg:p-4'>
 						<div className='transition duration-500 lg:hover:rotate-12'>
 							{feature.icon}
 						</div>
@@ -70,7 +70,7 @@ const WhyBitunix = () => {
 							<h3 className='text-white lg:hover:text-black text-left md:text-center font-semibold text-lg mb-4 transition-colors duration-300'>
 								{feature.title}
 							</h3>
-							<p className='text-gray-400 lg:hover:text-black text-left md:text-center text-sm leading-relaxed max-w-xs transition-colors duration-300'>
+							<p className='text-gray-400 lg:group-hover:text-black text-left md:text-center text-sm leading-relaxed max-w-xs transition-colors duration-300'>
 								{feature.description}
 							</p>
 						</div>

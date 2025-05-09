@@ -10,10 +10,10 @@ import { Link } from 'react-router-dom';
 
 const GiftsSection = () => {
 	const quickActions = [
-		{ label: 'Copy', path: '/copy-trading/square', icon: <FaCopy size={20} /> },
-		{ label: 'Invite', path: '/referral', icon: <FaUserFriends size={20} /> },
-		{ label: 'Campaign', path: '/activity/act-center', icon: <FaBullhorn size={20} /> },
-		{ label: 'Task', path: '/activity/task-center', icon: <FaTasks size={20} /> },
+		{ label: 'Copy', path: '/copy-trading/square', icon: <img className='size-8' src='/mobile/copyy.webp' alt='copyy'/> },
+		{ label: 'Invite', path: '/referral', icon: <img className='size-8' src='/mobile/invite.webp' alt='invite'/> },
+		{ label: 'Campaign', path: '/activity/act-center', icon: <img className='size-8' src='/mobile/campaign.webp' alt='campaign'/> },
+		{ label: 'Task', path: '/activity/task-center', icon: <img className='size-8' src='/mobile/task.webp' alt='task'/> },
 		// { label: 'Community', path: '/copy-traing/square', icon: <FaUsers size={20} /> },
 	];
 

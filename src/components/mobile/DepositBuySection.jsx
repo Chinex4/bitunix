@@ -16,25 +16,21 @@ const DepositBuySection = () => {
 				<Link to='/assets/deposit'>
 					<button className='w-full border text-xs border-white/20 hover:border-lime-400 text-white font-semibold py-3 px-4 rounded-xl transition flex items-center justify-between gap-2'>
 						<span>Deposit</span>
-						<span className='w-5 h-5'>
+						<span className='w-10'>
 							{/* Inline SVG: Deposit Icon */}
-							<img src="/svgIcons/depositIcon.svg" alt="" />
+							<img src="/begin-journey/deposit2.svg" alt="" />
 						</span>
 					</button>
 				</Link>
 
 				{/* Buy Crypto Button */}
-				<Link to='//trade/third-party'>
+				<Link to='/trade/third-party'>
 					<button className='w-full border text-xs border-white/20 hover:border-lime-400 text-white font-semibold py-3 px-4 rounded-xl transition flex items-center justify-between gap-2'>
 						<span>Buy Crypto</span>
-						<span className='w-5 h-5'>
+						<span className='w-10'>
 							{/* Inline SVG: Buy Crypto Icon */}
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								fill='#A3E635'
-								viewBox='0 0 24 24'>
-								<path d='M4 4h16a1 1 0 0 1 1 1v3h-2V6H5v12h14v-2h2v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm8 5a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2v-2a1 1 0 0 1 1-1z' />
-							</svg>
+							<img src="/begin-journey/trading2.svg" alt="" />
+							
 						</span>
 					</button>
 				</Link>
