@@ -6,6 +6,7 @@ import WhoIsUsing from '../../components/desktop/home/WhoIsUsing'
 import WhyBitunix from '../../components/desktop/home/WhyBitunix'
 import BeginJourney from '../../components/desktop/home/BeginJourney'
 import ReviewsSection from '../../components/desktop/home/ReviewsSection'
+import BitunixApp from '../../components/desktop/home/BitunixApp'
 
 const MobileHome = () => {
   return (
@@ -17,6 +18,7 @@ const MobileHome = () => {
         <WhyBitunix />
         <BeginJourney />
         <ReviewsSection />
+        <BitunixApp />
     </>
   )
 }

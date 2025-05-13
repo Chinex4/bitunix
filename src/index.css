@@ -35,3 +35,36 @@
 .animate-scroll-left {
 	animation: scroll-left 15s linear infinite;
 }
+
+/* Ensure autofill styles are consistently overridden across all states */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	box-shadow: 0 0 0px 1000px transparent inset !important;
+	-webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+	background-color: transparent !important;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Mobile (max-width: 767px) — text color white */
+@media (max-width: 767px) {
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		-webkit-text-fill-color: white !important;
+		color: white !important;
+	}
+}
+
+/* Desktop (min-width: 768px) — text color black */
+@media (min-width: 768px) {
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		-webkit-text-fill-color: black !important;
+		color: black !important;
+	}
+}

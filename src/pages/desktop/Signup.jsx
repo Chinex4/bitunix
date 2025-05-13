@@ -9,14 +9,20 @@ import Policy from '../../components/Policy';
 
 const Signup = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [isAgreementOpen, setAgreementOpen] = useState(false);
 	const [isPolicyOpen, setPolicyOpen] = useState(false);
 
+	// Add to validation schema
 	const schema = Yup.object().shape({
+		name: Yup.string().required('Full name is required'),
 		email: Yup.string().email('Invalid email').required('Email is required'),
 		password: Yup.string()
 			.min(6, 'Minimum 6 characters')
 			.required('Password is required'),
+		confirmPassword: Yup.string()
+			.oneOf([Yup.ref('password'), null], 'Passwords must match')
+			.required('Please confirm your password'),
 		agreement: Yup.boolean().oneOf([true], 'You must accept the terms'),
 	});
 
@@ -59,6 +65,23 @@ const Signup = () => {
 						Sign up
 					</h2>
 
+					{/* Name */}
+					<div>
+						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
+							Full Name
+						</label>
+						<input
+							type='text'
+							{...register('name')}
+							className={`w-full px-4 py-2 border rounded-md md:bg-white bg-transparent md:text-black text-white ${
+								errors.name ? 'border-red-500' : 'border-gray-300'
+							}`}
+							placeholder='Enter your full name'
+						/>
+						{errors.name && (
+							<p className='text-red-500 text-sm mt-1'>{errors.name.message}</p>
+						)}
+					</div>
 					{/* Email */}
 					<div>
 						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
@@ -67,7 +90,7 @@ const Signup = () => {
 						<input
 							type='email'
 							{...register('email')}
-							className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
+							className={`w-full px-4 py-2 border rounded-md md:bg-white bg-transparent md:text-black text-white ${
 								errors.email ? 'border-red-500' : 'border-gray-300'
 							}`}
 							placeholder='Enter email address'
@@ -88,7 +111,7 @@ const Signup = () => {
 							<input
 								type={showPassword ? 'text' : 'password'}
 								{...register('password')}
-								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
+								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-transparent md:text-black text-white ${
 									errors.password ? 'border-red-500' : 'border-gray-300'
 								}`}
 								placeholder='Please Enter Your Password'
@@ -107,6 +130,34 @@ const Signup = () => {
 						)}
 					</div>
 
+					{/* Confirm Password */}
+					<div>
+						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
+							Confirm Password
+						</label>
+						<div className='relative'>
+							<input
+								type={showConfirmPassword ? 'text' : 'password'}
+								{...register('confirmPassword')}
+								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-transparent md:text-black text-white ${
+									errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+								}`}
+								placeholder='Confirm your password'
+							/>
+							<button
+								type='button'
+								onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+								className='absolute right-3 top-2 text-gray-500'>
+								{showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+							</button>
+						</div>
+						{errors.confirmPassword && (
+							<p className='text-red-500 text-sm mt-1'>
+								{errors.confirmPassword.message}
+							</p>
+						)}
+					</div>
+
 					{/* Referral Code */}
 					<div>
 						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
@@ -115,7 +166,7 @@ const Signup = () => {
 						<input
 							type='text'
 							{...register('referral')}
-							className='w-full px-4 py-2 border border-gray-300 rounded-md md:bg-white bg-zinc-900 md:text-black text-white'
+							className='w-full px-4 py-2 border border-gray-300 rounded-md md:bg-white bg-transparent md:text-black text-white'
 							placeholder='Enter code if any'
 						/>
 					</div>
