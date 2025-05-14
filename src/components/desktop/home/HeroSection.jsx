@@ -2,7 +2,11 @@ import { FaGoogle, FaApple, FaFacebookF, FaXTwitter } from 'react-icons/fa6';
 import video from '../../../assets/hero-video.mp4';
 import phoneFrame from '../../../assets/images/phone-frame.png';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 const HeroSection = () => {
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	return (
 		<section className='bg-black text-white px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-24'>
 			{/* Left Side */}
@@ -14,41 +18,56 @@ const HeroSection = () => {
 					Global Crypto <br /> Derivatives Exchange
 				</h1>
 
-				{/* Email / Mobile Input and Button */}
-				<div className='flex flex-col sm:flex-row items-center gap-4'>
-					<input
-						type='text'
-						placeholder='Email / Mobile'
-						className='input py-6 rounded-xl input-bordered w-full sm:w-2/3 bg-neutral-800 text-white placeholder-gray-400'
-					/>
-					<Link to='/register' className='btn text-xl px-12 py-6 rounded-xl bg-lime-400 border-none text-black w-full sm:w-auto'>
-						Sign up now
-					</Link>
-				</div>
-				{/* Bonus text */}
-				<p className=''>
-					Sign up to Win up to{' '}
-					<span className='text-lime-400'>🤑 8000+ USDT</span>
-				</p>
+				{!isAuthenticated ? (
+					<div>
+						{/* Email / Mobile Input and Button */}
+						<div className='flex flex-col sm:flex-row items-center gap-4'>
+							<input
+								type='text'
+								placeholder='Email / Mobile'
+								className='input py-6 rounded-xl input-bordered w-full sm:w-2/3 bg-neutral-800 text-white placeholder-gray-400'
+							/>
+							<Link
+								to='/register'
+								className='btn text-xl px-12 py-6 rounded-xl bg-lime-400 border-none text-black w-full sm:w-auto'>
+								Sign up now
+							</Link>
+						</div>
+						{/* Bonus text */}
+						<p className=''>
+							Sign up to Win up to{' '}
+							<span className='text-lime-400'>🤑 8000+ USDT</span>
+						</p>
 
-				{/* Social icons */}
-				<div className='flex items-center gap-4'>
-					<p className='text-sm'>Or continue with</p>
-					<div className='flex gap-2'>
-						<button className='btn btn-circle bg-neutral-800 border-none'>
-							<FaGoogle className='text-white' />
-						</button>
-						<button className='btn btn-circle bg-neutral-800 border-none'>
-							<FaApple className='text-white' />
-						</button>
-						<button className='btn btn-circle bg-neutral-800 border-none'>
-							<FaFacebookF className='text-white' />
-						</button>
-						<button className='btn btn-circle bg-neutral-800 border-none'>
-							<FaXTwitter className='text-white' />
-						</button>
+						{/* Social icons */}
+						<div className='flex items-center gap-4'>
+							<p className='text-sm'>Or continue with</p>
+							<div className='flex gap-2'>
+								<button className='btn btn-circle bg-neutral-800 border-none'>
+									<FaGoogle className='text-white' />
+								</button>
+								<button className='btn btn-circle bg-neutral-800 border-none'>
+									<FaApple className='text-white' />
+								</button>
+								<button className='btn btn-circle bg-neutral-800 border-none'>
+									<FaFacebookF className='text-white' />
+								</button>
+								<button className='btn btn-circle bg-neutral-800 border-none'>
+									<FaXTwitter className='text-white' />
+								</button>
+							</div>
+						</div>
 					</div>
-				</div>
+				) : (
+					<div>
+						<Link
+							className='w-[250px] flex justify-center space-x-2 text-xl font-semibold items-center bg-lime-400 py-4 px-8 rounded-lg text-black hover:bg-lime-500 duration-300 transition-all'
+							to={'/contract-trade/BTC-USDT'}>
+							<span>Trade Now</span>
+							<ChevronRight />
+						</Link>
+					</div>
+				)}
 			</div>
 
 			{/* Right Side (Video inside Phone Frame) */}

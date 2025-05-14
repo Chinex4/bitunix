@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { RiP2pFill } from 'react-icons/ri';
 import { BsWallet } from 'react-icons/bs';
 import { TbTargetArrow } from 'react-icons/tb';
+import { Eye, EyeOff } from 'lucide-react';
 import {
 	MdOutlineCurrencyExchange,
 	MdScreenSearchDesktop,
@@ -15,6 +16,7 @@ const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isUserOpen, setIsUserOpen] = useState(false);
 	const [isAuthenticated] = useState(true); // toggle this for testing
+	const [showBalance, setShowBalance] = useState(true);
 
 	const navLinks = [
 		{
@@ -153,20 +155,44 @@ const Navbar = () => {
 								/>
 							</div>
 							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#000000] text-white rounded-box w-64'>
-								<li className='hover:bg-stone-800 px-4 py-3'>
-									<Link to='/assets/overview'>
-										<p className='text-sm font-semibold'>Total Assets</p>
-										<p className='text-xl mb-2'>0 USDT</p>
+								<li className='hover:bg-black/80 px-4 py-3'>
+									<Link
+										to='/assets/overview'
+										className='block'>
+										<div className='flex justify-between items-center'>
+											<p className='text-sm font-semibold'>Total Assets</p>
+											<button
+												type='button'
+												onClick={(e) => {
+													e.preventDefault(); // Prevent link redirect
+													setShowBalance((prev) => !prev);
+												}}>
+												{showBalance ? (
+													<Eye
+														size={16}
+														className='text-gray-400'
+													/>
+												) : (
+													<EyeOff
+														size={16}
+														className='text-gray-400'
+													/>
+												)}
+											</button>
+										</div>
+										<p className='text-xl mb-2'>
+											{showBalance ? '0 ' : '**** '}<span className='text-xs'>USDT</span>
+										</p>
 									</Link>
 								</li>
 								<li>
 									<Link
-										to={'/activity/act-center'}
+										to='/activity/act-center'
 										className='btn btn-sm w-full mb-2'>
 										Campaign Center
 									</Link>
 									<Link
-										to={'/activity/task-center'}
+										to='/activity/task-center'
 										className='btn btn-sm w-full mb-2'>
 										Task Center
 									</Link>
@@ -183,11 +209,6 @@ const Navbar = () => {
 								<li>
 									<Link to='/assets/copy-account'>Copy Account</Link>
 								</li>
-								{/* <li>
-									<Link to='/assets/transaction-history'>
-										Transaction History
-									</Link>
-								</li> */}
 							</ul>
 						</div>
 

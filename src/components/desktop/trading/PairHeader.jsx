@@ -13,15 +13,16 @@ const PairHeader = ({ symbol = 'BTCUSDT' }) => {
 		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 
-			setPrice(parseFloat(data.c).toFixed(1)); // lastPrice (c = close price)
+			setPrice(parseFloat(data.c).toLocaleString(undefined, { minimumFractionDigits: 1 })); // lastPrice (c = close price)
 			setStats({
-				change: parseFloat(data.P).toFixed(2), // priceChangePercent
-				markPrice: parseFloat(data.w).toFixed(1), // weightedAvgPrice
-				high: parseFloat(data.h).toFixed(1),
-				low: parseFloat(data.l).toFixed(1),
-				volumeBTC: parseFloat(data.v).toFixed(1), // base asset volume
-				volumeUSDT: parseFloat(data.q).toFixed(1), // quote asset volume
+				change: parseFloat(data.P).toFixed(2),
+				markPrice: parseFloat(data.w).toLocaleString(undefined, { minimumFractionDigits: 1 }),
+				high: parseFloat(data.h).toLocaleString(undefined, { minimumFractionDigits: 1 }),
+				low: parseFloat(data.l).toLocaleString(undefined, { minimumFractionDigits: 1 }),
+				volumeBTC: parseFloat(data.v).toLocaleString(undefined, { minimumFractionDigits: 1 }),
+				volumeUSDT: parseFloat(data.q).toLocaleString(undefined, { minimumFractionDigits: 1 }),
 			});
+			
 		};
 
 		ws.onerror = (err) => {
