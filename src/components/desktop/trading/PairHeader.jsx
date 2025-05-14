@@ -5,29 +5,30 @@ const PairHeader = ({ symbol = 'BTCUSDT' }) => {
 	const [stats, setStats] = useState(null);
 
 	useEffect(() => {
-		const fetchStats = async () => {
-			try {
-				const res = await fetch(
-					`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`
-				);
-				const data = await res.json();
-				setPrice(parseFloat(data.lastPrice).toFixed(1));
-				setStats({
-					change: parseFloat(data.priceChangePercent).toFixed(2),
-					markPrice: parseFloat(data.weightedAvgPrice).toFixed(1),
-					high: parseFloat(data.highPrice).toFixed(1),
-					low: parseFloat(data.lowPrice).toFixed(1),
-					volumeBTC: parseFloat(data.volume).toFixed(1),
-					volumeUSDT: parseFloat(data.quoteVolume).toFixed(1),
-				});
-			} catch (err) {
-				console.error('Failed to fetch stats:', err);
-			}
+		const wsSymbol = symbol.toLowerCase();
+		const ws = new WebSocket(
+			`wss://stream.binance.com:9443/ws/${wsSymbol}@ticker`
+		);
+
+		ws.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+
+			setPrice(parseFloat(data.c).toFixed(1)); // lastPrice (c = close price)
+			setStats({
+				change: parseFloat(data.P).toFixed(2), // priceChangePercent
+				markPrice: parseFloat(data.w).toFixed(1), // weightedAvgPrice
+				high: parseFloat(data.h).toFixed(1),
+				low: parseFloat(data.l).toFixed(1),
+				volumeBTC: parseFloat(data.v).toFixed(1), // base asset volume
+				volumeUSDT: parseFloat(data.q).toFixed(1), // quote asset volume
+			});
 		};
 
-		fetchStats();
-		const interval = setInterval(fetchStats, 5000);
-		return () => clearInterval(interval);
+		ws.onerror = (err) => {
+			console.error('WebSocket error:', err);
+		};
+
+		return () => ws.close();
 	}, [symbol]);
 
 	const baseAsset = symbol.slice(0, symbol.indexOf('USDT')).toUpperCase();
@@ -35,11 +36,6 @@ const PairHeader = ({ symbol = 'BTCUSDT' }) => {
 	return (
 		<div className='text-white bg-[#0b0b0b] flex flex-wrap justify-between items-center gap-4 text-sm font-medium px-4 py-2'>
 			<div className='flex items-center gap-2'>
-				{/* <img
-					src={`/mobile/${baseAsset.toLowerCase()}.png`}
-					alt={baseAsset}
-					className='w-5 h-5'
-				/> */}
 				<span className='text-lg font-bold'>{symbol.toUpperCase()}</span>
 			</div>
 
