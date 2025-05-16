@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RiP2pFill } from 'react-icons/ri';
 import { BsWallet } from 'react-icons/bs';
 import { TbTargetArrow } from 'react-icons/tb';
@@ -10,13 +10,99 @@ import {
 	MdOutlineCurrencyExchange,
 	MdScreenSearchDesktop,
 } from 'react-icons/md';
+import { Bell } from 'lucide-react'; // or any other bell icon
 import { GiTargeting } from 'react-icons/gi';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/auth/authSlice'; // ✅ Update path as needed
 
 const Navbar = () => {
+	const [notifications] = useState([
+		{
+			id: 1,
+			type: 'New Listings',
+			title: '🔥 Civic (CVC) Gets Listed on Bitunix!',
+			content:
+				'The CVC/USDT trading pair will be available on both the spot and perpetual futures markets…',
+			date: '2025-05-16 10:32:30',
+		},
+		{
+			id: 2,
+			type: 'Latest',
+			title: 'Notice on Adjustment to Risk Limits of BABY/USDT Perpetual…',
+			content:
+				'Bitunix will update the risk limits for BABY/USDT perpetual futures trading pair at 10:00 on May 16, 2025 (UTC). This applies to all open and new positions…',
+			date: '2025-05-16 08:58:55',
+		},
+		{
+			id: 3,
+			type: 'New Listings',
+			title: '🚀 NEXPACE (NXPC) Gets Listed on Bitunix!',
+			content:
+				'The NXPC/USDT trading pair will be available on both the spot and perpetual futures markets…',
+			date: '2025-05-15 08:54:55',
+		},
+		{
+			id: 4,
+			type: 'New Listings',
+			title: '📢 Privasea AI (PRAI) Gets Listed on Bitunix!',
+			content:
+				'Privasea AI (PRAI) is getting listed with the PRAI/USDT trading pair on the spot market…',
+			date: '2025-05-15 08:37:52',
+		},
+		{
+			id: 5,
+			type: 'Price Alert',
+			title: '🔔 BTC crossed $70,000!',
+			content: 'Bitcoin price surged past $70,000. Check your portfolio now!',
+			date: '2025-05-15 07:25:00',
+		},
+	]);
+
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.auth.user);
+	const isAuthenticated = !!user;
+	const navigate = useNavigate();
+	const handleLogout = () => {
+		dispatch(logout());
+		localStorage.removeItem('token');
+		navigate('/login');
+		// Optional: redirect or reload if needed
+		// window.location.href = '/login';
+	};
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [isUserOpen, setIsUserOpen] = useState(false);
-	const [isAuthenticated] = useState(true); // toggle this for testing
+	// const [isAuthenticated] = useState(true); // toggle this for testing
 	const [showBalance, setShowBalance] = useState(true);
+	const dropdownRef = useRef(null);
+	const [dropdowns, setDropdowns] = useState({
+		notifications: false,
+		user: false,
+		assets: false,
+	});
+	const [unread, setUnread] = useState(notifications.length);
+
+	const markAllAsRead = () => {
+		setUnread(0);
+	};
+
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setDropdowns({ notifications: false, user: false, assets: false });
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
+
+	const [activeTab, setActiveTab] = useState('All');
+
+	const filteredNotifications =
+		activeTab === 'All'
+			? notifications
+			: notifications.filter((n) => n.type === activeTab);
 
 	const navLinks = [
 		{
@@ -154,7 +240,7 @@ const Navbar = () => {
 									className='w-6 h-6 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#000000] text-white rounded-box w-64'>
+							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64'>
 								<li className='hover:bg-black/80 px-4 py-3'>
 									<Link
 										to='/assets/overview'
@@ -181,19 +267,20 @@ const Navbar = () => {
 											</button>
 										</div>
 										<p className='text-xl mb-2'>
-											{showBalance ? '0 ' : '**** '}<span className='text-xs'>USDT</span>
+											{showBalance ? '0 ' : '**** '}
+											<span className='text-xs'>USDT</span>
 										</p>
 									</Link>
 								</li>
 								<li>
 									<Link
 										to='/activity/act-center'
-										className='btn btn-sm w-full mb-2'>
+										className='btn btn-sm border border-neutral/20 w-full mb-2'>
 										Campaign Center
 									</Link>
 									<Link
 										to='/activity/task-center'
-										className='btn btn-sm w-full mb-2'>
+										className='btn btn-sm border border-neutral/20 w-full mb-2'>
 										Task Center
 									</Link>
 								</li>
@@ -224,7 +311,7 @@ const Navbar = () => {
 									className='w-6 h-6 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content space-y-4 p-4 border rounded-md border-stone-800 bg-[#000000] shadow text-white rounded-box w-64'>
+							<ul className='dropdown-content space-y-4 p-4 border rounded-md border-stone-800 bg-[#121212] shadow text-white rounded-box w-64'>
 								<li className='flex gap-4 items-center'>
 									<div>
 										<img
@@ -259,10 +346,114 @@ const Navbar = () => {
 									<Link to='/api'>API</Link>
 								</li> */}
 								<li>
-									<button className='text-red-400'>Log out</button>
+									<button
+										className='text-red-400'
+										onClick={handleLogout}>
+										Log out
+									</button>
 								</li>
 							</ul>
 						</div>
+
+						{/* Notification Icon */}
+						<div
+							className='relative'
+							ref={dropdownRef}>
+							<button
+								className='btn btn-ghost btn-sm relative'
+								onClick={() =>
+									setDropdowns({
+										notifications: !dropdowns.notifications,
+										assets: false,
+										user: false,
+									})
+								}>
+								<Bell size={20} />
+								{unread > 0 && (
+									<span className='absolute -top-1 -right-1 bg-red-500 text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center'>
+										{unread}
+									</span>
+								)}
+							</button>
+
+							{dropdowns.notifications && (
+								<div className='absolute -right-20 md:right-0 mt-3 w-[300px] md:w-[400px] bg-[#121212] text-white rounded-lg border border-neutral/20 shadow-xl p-4 z-50 max-h-[400px] overflow-y-auto'>
+									<div className='flex justify-between items-center mb-3'>
+										<h3 className='text-lg font-semibold border-b border-gray-600 w-full pb-2'>
+											Messages
+										</h3>
+										<button
+											onClick={markAllAsRead}
+											className='text-[12px] text-lime-400 underline ml-2'>
+											Mark all as read
+										</button>
+									</div>
+
+									{/* Scrollable Tabs */}
+									<div className='relative mb-4'>
+										<button
+											onClick={() => {
+												document.getElementById('tabScroll').scrollLeft -= 100;
+											}}
+											className='absolute left-0 top-0 h-full z-10 px-2 bg-gradient-to-r from-[#121212] to-transparent'>
+											<ChevronLeft
+												size={16}
+												className='text-white'
+											/>
+										</button>
+
+										<div
+											id='tabScroll'
+											className='flex gap-2 overflow-x-auto no-scrollbar text-xs font-medium px-6'>
+											{['All', 'Price Alert', 'New Listings', 'Latest'].map(
+												(tab) => (
+													<button
+														key={tab}
+														onClick={() => setActiveTab(tab)}
+														className={`px-3 py-1 whitespace-nowrap rounded-full border ${
+															activeTab === tab
+																? 'bg-lime-400 text-black'
+																: 'border-gray-600 text-gray-300'
+														}`}>
+														{tab}
+													</button>
+												)
+											)}
+										</div>
+
+										<button
+											onClick={() => {
+												document.getElementById('tabScroll').scrollLeft += 100;
+											}}
+											className='absolute right-0 top-0 h-full z-10 px-2 bg-gradient-to-l from-[#121212] to-transparent'>
+											<ChevronRight
+												size={16}
+												className='text-white'
+											/>
+										</button>
+									</div>
+
+									{filteredNotifications.length === 0 ? (
+										<p className='text-sm text-gray-400'>
+											No notifications for "{activeTab}"
+										</p>
+									) : (
+										filteredNotifications.map((item) => (
+											<div
+												key={item.id}
+												className='pb-2 mb-3 border-b border-gray-700'>
+												<p className='font-semibold'>{item.title}</p>
+												<p className='text-xs text-white/50'>{item.content}</p>
+												<p className='text-[10px] text-gray-500 mt-1'>
+													{item.date}
+												</p>
+											</div>
+										))
+									)}
+								</div>
+							)}
+						</div>
+
 						{/* User Icon */}
 						<div className='md:hidden'>
 							<div
@@ -369,7 +560,11 @@ const Navbar = () => {
 							</li>
 
 							<li>
-								<button className='text-red-400'>Log out</button>
+								<button
+									className='text-red-400'
+									onClick={handleLogout}>
+									Log out
+								</button>
 							</li>
 						</ul>
 					)}

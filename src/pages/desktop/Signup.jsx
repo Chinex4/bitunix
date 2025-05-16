@@ -6,6 +6,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import UserAgreementModal from '../../components/UserAgreement';
 import Policy from '../../components/Policy';
+import { useDispatch, useSelector } from 'react-redux';
+import { signupUser } from '../../redux/auth/authThunk';
 
 const Signup = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -34,8 +36,11 @@ const Signup = () => {
 		resolver: yupResolver(schema),
 	});
 
+	const dispatch = useDispatch();
+	const loading = useSelector((state) => state.auth.loading);
+
 	const onSubmit = (data) => {
-		console.log('Signup submitted:', data);
+		dispatch(signupUser(data));
 	};
 
 	return (
@@ -211,8 +216,34 @@ const Signup = () => {
 					{/* Submit */}
 					<button
 						type='submit'
-						className='w-full bg-lime-500 hover:bg-lime-600 md:text-black text-white font-medium py-2 rounded-md hover:opacity-90'>
-						Sign up
+						disabled={loading}
+						className={`w-full bg-lime-500 hover:bg-lime-600 text-white md:text-black font-medium py-2 rounded-md hover:opacity-90 ${
+							loading && 'opacity-60 cursor-not-allowed'
+						}`}>
+						{loading ? (
+							<div className='flex items-center justify-center gap-2'>
+								<svg
+									className='animate-spin h-4 w-4 text-white md:text-black'
+									xmlns='http://www.w3.org/2000/svg'
+									fill='none'
+									viewBox='0 0 24 24'>
+									<circle
+										className='opacity-25'
+										cx='12'
+										cy='12'
+										r='10'
+										stroke='currentColor'
+										strokeWidth='4'></circle>
+									<path
+										className='opacity-75'
+										fill='currentColor'
+										d='M4 12a8 8 0 018-8v8H4z'></path>
+								</svg>
+								Signing up...
+							</div>
+						) : (
+							'Sign up'
+						)}
 					</button>
 
 					{/* Footer */}

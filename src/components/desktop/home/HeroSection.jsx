@@ -1,12 +1,17 @@
 import { FaGoogle, FaApple, FaFacebookF, FaXTwitter } from 'react-icons/fa6';
 import video from '../../../assets/hero-video.mp4';
 import phoneFrame from '../../../assets/images/phone-frame.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const HeroSection = () => {
-	const [isAuthenticated, setIsAuthenticated] = useState(true);
+	// const [isAuthenticated, setIsAuthenticated] = useState(true);
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.auth.user);
+	const isAuthenticated = !!user;
+	const navigate = useNavigate();
 	return (
 		<section className='bg-black text-white px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-24'>
 			{/* Left Side */}

@@ -23,12 +23,27 @@ import ScrollToTop from './components/ScrollToTop';
 import AssetsRoutes from './pages/mobile/AssetsRoutes';
 import AccountRoutes from './pages/mobile/AccountRoutes';
 import ForgotPassword from './pages/desktop/ForgotPassword';
+import ResetPassword from './pages/desktop/ResetPassword';
+import { Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setUserFromToken } from './redux/auth/authSlice';
+import { useEffect } from 'react';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
 	const isMobile = useMediaQuery({ maxWidth: 767 });
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			dispatch(setUserFromToken(token));
+		}
+	}, [dispatch]);
 	return (
 		<>
 			<ScrollToTop />
+			<Toaster />
 			<Routes>
 				<Route
 					path='/'
@@ -94,13 +109,19 @@ function App() {
 						element={<ForgotPassword />}
 					/>
 					<Route
-						path='/assets/*'
-						element={<AssetsRoutes />}
+						path='/reset-password/:token'
+						element={<ResetPassword />}
 					/>
-					<Route
-						path='/account/*'
-						element={<AccountRoutes />}
-					/>
+					<Route element={<PrivateRoute />}>
+						<Route
+							path='/assets/*'
+							element={<AssetsRoutes />}
+						/>
+						<Route
+							path='/account/*'
+							element={<AccountRoutes />}
+						/>
+					</Route>
 					<Route
 						path='*'
 						element={<NotFound />}

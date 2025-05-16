@@ -17,7 +17,7 @@ const AccountRoutes = () => {
 						path='/'
 						element={
 							<Navigate
-								to='security'
+								to='settings'
 								replace
 							/>
 						}

@@ -3,41 +3,43 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Eye, EyeOff } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/auth/authThunk';
+import { useNavigate, useParams } from 'react-router-dom';
+import { resetPassword } from '../../redux/auth/authThunk';
 
-const Login = () => {
+const ResetPassword = () => {
+	// const isTokenValid = useSelector((state) => state.auth.validToken); // protect route
+	const dispatch = useDispatch();
+	const loading = useSelector((state) => state.auth.loading);
 	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
+
+	const { token } = useParams(); // Assume route is /reset-password/:token
 
 	const schema = Yup.object().shape({
-		email: Yup.string()
-			.email('Invalid email address')
-			.required('Email is required'),
 		password: Yup.string()
 			.min(6, 'Minimum 6 characters')
 			.required('Password is required'),
+		confirmPassword: Yup.string()
+			.oneOf([Yup.ref('password'), null], 'Passwords must match')
+			.required('Please confirm your password'),
 	});
 
 	const {
 		handleSubmit,
 		register,
-		formState: { errors, touchedFields },
+		formState: { errors },
 	} = useForm({
 		resolver: yupResolver(schema),
 	});
-
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const loading = useSelector((state) => state.auth.loading);
 
 	const onSubmit = (data) => {
-		dispatch(loginUser(data)).then((res) => {
-			if (res.meta.requestStatus === 'fulfilled') {
-				navigate('/dashboard'); // or wherever you redirect on login
-			}
-		});
+		dispatch(resetPassword({ token, password: data.password }));
+		navigate('/login');
 	};
+
+	// if (!isTokenValid) return <Navigate to="/404" />; // 🔒 Protected Route (Commented)
 
 	return (
 		<div className='md:min-h-screen grid grid-cols-1 lg:grid-cols-2'>
@@ -56,54 +58,28 @@ const Login = () => {
 				</div>
 			</div>
 
-			{/* Right (Login Form) */}
+			{/* Right (Form) */}
 			<div className='md:bg-white bg-black flex md:items-center justify-center px-6 py-12'>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className='w-full max-w-md space-y-6'>
-					<h2 className='text-4xl font-bold md:text-black text-white'>
-						Log in
+					<h2 className='text-3xl font-bold md:text-black text-white'>
+						Reset Password
 					</h2>
 
-					{/* Email Input */}
+					{/* Password */}
 					<div>
-						<label
-							htmlFor='email'
-							className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
-							Email
-						</label>
-						<input
-							id='email'
-							type='email'
-							{...register('email')}
-							className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
-								errors.email ? 'border-red-500' : 'border-gray-300'
-							}`}
-							placeholder='Enter email address'
-						/>
-						{errors.email && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.email.message}
-							</p>
-						)}
-					</div>
-
-					{/* Password Input */}
-					<div>
-						<label
-							htmlFor='password'
-							className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
-							Password
+						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
+							New Password
 						</label>
 						<div className='relative'>
 							<input
-								id='password'
 								type={showPassword ? 'text' : 'password'}
 								{...register('password')}
 								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
 									errors.password ? 'border-red-500' : 'border-gray-300'
 								}`}
-								placeholder='Please Enter Your Password'
+								placeholder='Enter new password'
 							/>
 							<button
 								type='button'
@@ -115,6 +91,34 @@ const Login = () => {
 						{errors.password && (
 							<p className='text-red-500 text-sm mt-1'>
 								{errors.password.message}
+							</p>
+						)}
+					</div>
+
+					{/* Confirm Password */}
+					<div>
+						<label className='block text-sm md:text-gray-700 text-gray-300 mb-1'>
+							Confirm New Password
+						</label>
+						<div className='relative'>
+							<input
+								type={showConfirm ? 'text' : 'password'}
+								{...register('confirmPassword')}
+								className={`w-full px-4 py-2 border rounded-md md:bg-white bg-zinc-900 md:text-black text-white ${
+									errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+								}`}
+								placeholder='Confirm new password'
+							/>
+							<button
+								type='button'
+								onClick={() => setShowConfirm(!showConfirm)}
+								className='absolute right-3 top-2.5 text-gray-400 hover:text-white'>
+								{showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+							</button>
+						</div>
+						{errors.confirmPassword && (
+							<p className='text-red-500 text-sm mt-1'>
+								{errors.confirmPassword.message}
 							</p>
 						)}
 					</div>
@@ -145,33 +149,16 @@ const Login = () => {
 										fill='currentColor'
 										d='M4 12a8 8 0 018-8v8H4z'></path>
 								</svg>
-								Logging in...
+								Resetting...
 							</div>
 						) : (
-							'Log in'
+							'Reset Password'
 						)}
 					</button>
-
-					{/* Links */}
-					<div className='flex justify-between text-sm text-gray-500 md:text-gray-400'>
-						<p>
-							No account yet?{' '}
-							<Link
-								to='/register'
-								className='underline text-white md:text-lime-400 font-semibold'>
-								Sign up
-							</Link>
-						</p>
-						<Link
-							to='/forgot-password'
-							className='underline text-white md:text-lime-400 font-semibold'>
-							Forgot password
-						</Link>
-					</div>
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default Login;
+export default ResetPassword;

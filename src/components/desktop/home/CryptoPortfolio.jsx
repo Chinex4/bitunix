@@ -37,14 +37,14 @@ const CryptoPortfolio = () => {
 	const rows = coins.length > 0 ? splitCoins() : [];
 
 	return (
-		<section className='relative bg-stone-900 flex flex-col items-center justify-center px-16 py-12 overflow-hidden max-w-7xl mx-auto'>
+		<section className='relative flex flex-col items-center justify-center px-16 py-12 overflow-hidden max-w-7xl mx-auto'>
 			<h2 className='text-white text-3xl md:text-4xl font-bold mb-10 text-center'>
 				Build Your Cryptocurrency Portfolio
 			</h2>
 
 			{/* Gradient Overlays */}
-			<div className='pointer-events-none absolute top-0 left-16 h-full w-32 z-20 bg-gradient-to-r from-stone-900 via-stone-900/70 to-transparent' />
-			<div className='pointer-events-none absolute top-0 right-16 h-full w-32 z-20 bg-gradient-to-l from-stone-900 via-stone-900/70 to-transparent' />
+			<div className='pointer-events-none absolute top-0 left-16 h-full w-32 z-20 bg-gradient-to-r from-black via-black/70 to-transparent' />
+			<div className='pointer-events-none absolute top-0 right-16 h-full w-32 z-20 bg-gradient-to-l from-black via-black/70 to-transparent' />
 
 			{loading ? (
 				<div className='text-white py-10'>Loading coins...</div>

@@ -68,3 +68,14 @@ input:-webkit-autofill:active {
 		color: black !important;
 	}
 }
+
+
+/* Add to your global styles or tailwind.config.css */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
