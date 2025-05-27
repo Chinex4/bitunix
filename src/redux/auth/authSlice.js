@@ -5,6 +5,8 @@ import {
 	loginUser,
 	forgotPassword,
 	resetPassword,
+	verifyEmailOtp,
+	resendOtp,
 } from './authThunk';
 const initialToken = localStorage.getItem('token');
 
@@ -64,6 +66,7 @@ const authSlice = createSlice({
 			})
 			.addCase(forgotPassword.rejected, (state) => {
 				state.loading = false;
+				state.error = action.payload;
 			})
 			// reset password
 			.addCase(resetPassword.pending, (state) => {
@@ -74,6 +77,33 @@ const authSlice = createSlice({
 			})
 			.addCase(resetPassword.rejected, (state) => {
 				state.loading = false;
+				state.error = action.payload;
+			})
+
+			// verify email OTP
+			.addCase(verifyEmailOtp.pending, (state) => {
+				state.loading = true;
+				state.error = null;
+			})
+			.addCase(verifyEmailOtp.fulfilled, (state) => {
+				state.loading = false;
+			})
+			.addCase(verifyEmailOtp.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload;
+			})
+
+			// resend OTP
+			.addCase(resendOtp.pending, (state) => {
+				state.loading = true;
+				state.error = null;
+			})
+			.addCase(resendOtp.fulfilled, (state) => {
+				state.loading = false;
+			})
+			.addCase(resendOtp.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload;
 			});
 	},
 });

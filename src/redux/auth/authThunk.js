@@ -16,6 +16,41 @@ export const signupUser = createAsyncThunk(
 		}
 	}
 );
+export const verifyEmailOtp = createAsyncThunk(
+	'auth/verifyEmailOtp',
+	async ({ email, otp, role }, { rejectWithValue }) => {
+		try {
+			const res = await axios.post('user/verify-email', {
+				email,
+				otp,
+				role,
+			});
+			toast.success('Email verified successfully!');
+			return res.data;
+		} catch (err) {
+			toast.error(err?.response?.data?.message || 'OTP verification failed');
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
+export const resendOtp = createAsyncThunk(
+	'auth/resendOtp',
+	async ({ email, role }, { rejectWithValue }) => {
+		try {
+			const res = await axios.post('user/resend-otp', {
+				email,
+				role,
+				context: 'verify', // or 'reset' if you're doing password reset flow
+			});
+			toast.success('OTP resent to email');
+			return res.data;
+		} catch (err) {
+			toast.error(err?.response?.data?.message || 'Failed to resend OTP');
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
 export const loginUser = createAsyncThunk(
 	'auth/loginUser',
 	async (formData, { rejectWithValue }) => {
@@ -60,4 +95,3 @@ export const resetPassword = createAsyncThunk(
 		}
 	}
 );
-
