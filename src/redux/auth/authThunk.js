@@ -7,11 +7,11 @@ export const signupUser = createAsyncThunk(
 	'auth/signupUser',
 	async (formData, { rejectWithValue }) => {
 		try {
-			const res = await axiosInstance.post('/auth/registerUser', formData);
+			const res = await axiosInstance.post('user/registerUser', formData);
 			toast.success('Signup successful');
 			return res.data;
 		} catch (err) {
-			toast.error(err.response?.data?.message || 'Signup failed');
+			toast.error(err.response?.data?.errors || 'Signup failed');
 			return rejectWithValue(err.response?.data);
 		}
 	}
