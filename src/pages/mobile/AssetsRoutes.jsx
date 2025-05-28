@@ -9,12 +9,29 @@ import CopyAccount from '../assets/CopyAccount';
 import Deposit from '../assets/Deposit';
 import Withdraw from '../assets/Withdraw';
 import Rewards from '../assets/Rewards';
+import SpotTransactions from '../assets/SpotTransactions';
+import FuturesTransactions from '../assets/FuturesTransactions';
+import EarnTransactions from '../assets/EarnTransactions';
 // import other components...
+
+const tabs = [
+	{ name: 'Asset Overview', path: 'overview' },
+	{ name: 'Spot Account', path: 'spot-account' },
+	{ name: 'Futures Account', path: 'futures-account' },
+	{ name: 'Earn Account', path: 'earn-account' },
+	{ name: 'Copy Account', path: 'copy-account' },
+	{ name: 'Deposit', path: 'deposit' },
+	{ name: 'Withdraw', path: 'withdraw' },
+	{ name: 'Spot Transactions', path: 'spot-transactions' },
+	{ name: 'Futures Transactions', path: 'futures-transactions' },
+	{ name: 'Earn Transactions', path: 'earn-transactions' },
+	{ name: 'My Rewards', path: 'rewards' },
+];
 
 const AssetsRoutes = () => {
 	return (
 		<div className='min-h-screen bg-[#0F0F0F] text-white flex flex-col lg:flex-row'>
-			<TabHeader />
+			<TabHeader tabs={tabs} />
 			<div className='flex-1 px-4 py-6 max-w-full lg:max-w-6xl lg:mx-auto'>
 				<Routes>
 					<Route
@@ -53,6 +70,18 @@ const AssetsRoutes = () => {
 					<Route
 						path='withdraw'
 						element={<Withdraw />}
+					/>
+					<Route
+						path='spot-transactions'
+						element={<SpotTransactions />}
+					/>
+					<Route
+						path='futures-transactions'
+						element={<FuturesTransactions />}
+					/>
+					<Route
+						path='earn-transactions'
+						element={<EarnTransactions />}
 					/>
 					{/* <Route
 						path='transaction-history'

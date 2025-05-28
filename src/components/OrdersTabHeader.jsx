@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
-const TabHeader = ({ tabs }) => {
+const OrdersTabHeader = ({ tabs }) => {
 	const { pathname } = useLocation();
 	const scrollRef = useRef(null);
 	const tabRefs = useRef({});
@@ -19,7 +19,7 @@ const TabHeader = ({ tabs }) => {
 
 	useEffect(() => {
 		// Snap active tab into view
-		const activeTab = tabs.find(({ path }) => pathname === `/assets/${path}`);
+		const activeTab = tabs.find(({ path }) => pathname.includes(`/orders/${path}`));
 		if (activeTab && tabRefs.current[activeTab.path]) {
 			tabRefs.current[activeTab.path].scrollIntoView({
 				behavior: 'smooth',
@@ -43,10 +43,10 @@ const TabHeader = ({ tabs }) => {
 						ref={scrollRef}
 						className='flex whitespace-nowrap gap-2 overflow-x-auto hide-scrollbar scroll-smooth'>
 						{tabs.map(({ name, path }) => {
-							const isActive = pathname === `/assets/${path}`;
+							const isActive = pathname.includes(`/orders/${path}`);
 							return (
 								<NavLink
-									to={`/assets/${path}`}
+									to={`/orders/${path}`}
 									key={path}
 									ref={(el) => (tabRefs.current[path] = el)}
 									className={`px-4 py-1.5 rounded-full text-sm border whitespace-nowrap flex items-center ${
@@ -71,10 +71,10 @@ const TabHeader = ({ tabs }) => {
 			{/* Desktop Sidebar Tabs */}
 			<aside className='hidden lg:flex flex-col w-60 shrink-0 pr-6 border-r border-[#333] pt-4'>
 				{tabs.map(({ name, path }) => {
-					const isActive = pathname === `/assets/${path}`;
+					const isActive = pathname.includes(`/orders/${path}`);
 					return (
 						<NavLink
-							to={`/assets/${path}`}
+							to={`/orders/${path}`}
 							key={path}
 							className={`flex items-center gap-2 px-4 py-2 text-sm rounded-md mb-1 ${
 								isActive
@@ -90,4 +90,4 @@ const TabHeader = ({ tabs }) => {
 	);
 };
 
-export default TabHeader;
+export default OrdersTabHeader;

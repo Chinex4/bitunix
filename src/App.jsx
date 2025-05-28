@@ -29,6 +29,8 @@ import { useDispatch } from 'react-redux';
 import { setUserFromToken } from './redux/auth/authSlice';
 import { useEffect } from 'react';
 import PrivateRoute from './components/PrivateRoute';
+import OrdersRoutes from './pages/mobile/OrdersRoutes';
+import VipService from './pages/desktop/VipService';
 
 function App() {
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -117,11 +119,20 @@ function App() {
 							path='/assets/*'
 							element={<AssetsRoutes />}
 						/>
+
 						<Route
 							path='/account/*'
 							element={<AccountRoutes />}
 						/>
 					</Route>
+					<Route
+						path='/orders/*'
+						element={<OrdersRoutes />}
+					/>
+					<Route
+						path='/service/vipservice'
+						element={<VipService />}
+					/>
 					<Route
 						path='*'
 						element={<NotFound />}

@@ -262,7 +262,7 @@ const Navbar = () => {
 									className='size-4 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content p-4 space-y-7 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64 lg:w-[20rem]'>
+							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64 lg:w-[20rem]'>
 								<li className='hover:bg-[#121212]/80 px-4 py-3'>
 									<Link
 										to='/assets/overview'
@@ -357,23 +357,23 @@ const Navbar = () => {
 										<PopoverPanel
 											anchor='left'
 											className='mt-2 flex flex-col space-y-6 bg-[#121212] border border-white/20 px-5 pr-24 py-5 z-50'>
-											<Link to='/analytics'>Future Orders</Link>
-											<Link to='/engagement'>Spot Orders</Link>
-											<Link to='/security'>Third-Party Orders</Link>
-											<Link to='/integrations'>Conversion Records</Link>
-											<Link to='/integrations'>P2P Orders</Link>
-											<Link to='/integrations'>Earn History</Link>
+											<Link to='/orders/future-orders'>Future Orders</Link>
+											<Link to='/orders/spot-orders'>Spot Orders</Link>
+											<Link to='/orders/third-party-orders'>Third-Party Orders</Link>
+											<Link to='/orders/conversion-records'>Conversion Records</Link>
+											<Link to='/orders/p2p-orders'>P2P Orders</Link>
+											<Link to='/orders/earn-history'>Earn History</Link>
 										</PopoverPanel>
 									</Popover>
 								</li>
 
 								<li>
-									<Link to='/assets/copy-account'>
+									<Link to='/assets/spot-transactions'>
 										<span>Transaction History</span>
 									</Link>
 								</li>
 								<li>
-									<Link to='/assets/copy-account'>
+									<Link to='/assets/rewards'>
 										<span>My Rewards</span>
 									</Link>
 								</li>
