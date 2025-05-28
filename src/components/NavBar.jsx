@@ -15,6 +15,17 @@ import { GiTargeting } from 'react-icons/gi';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/auth/authSlice'; // ✅ Update path as needed
+import {
+	Popover,
+	PopoverButton,
+	PopoverPanel,
+	Select,
+} from '@headlessui/react';
+import UserDropdown from './navbar/UserDropdown';
+import SearchBar from './navbar/SearchBar';
+import SearchModal from './navbar/SearchModal';
+import QrDropdown from './navbar/QrDropdown';
+import LanguageCurrencyDropdown from './navbar/LanguageCurrencyDropdown';
 
 const Navbar = () => {
 	const [notifications] = useState([
@@ -61,7 +72,8 @@ const Navbar = () => {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.auth.user);
-	const isAuthenticated = !!user;
+	// const isAuthenticated = !!user;
+	const isAuthenticated = true;
 	const navigate = useNavigate();
 	const handleLogout = () => {
 		dispatch(logout());
@@ -82,6 +94,8 @@ const Navbar = () => {
 		assets: false,
 	});
 	const [unread, setUnread] = useState(notifications.length);
+	const [selectedCurrency, setSelectedCurrency] = useState('USDT');
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
 	const markAllAsRead = () => {
 		setUnread(0);
@@ -177,7 +191,7 @@ const Navbar = () => {
 					className='text-lime-400 font-bold text-xl italic flex items-center gap-1'>
 					<div className='bg-lime-400 rounded-full p-1'></div> Bitunix
 				</Link>
-				<div className='hidden lg:flex items-center gap-4'>
+				<div className='hidden lg:flex items-center gap-1'>
 					{navLinks.map((link, index) => (
 						<div
 							className='dropdown dropdown-hover'
@@ -196,7 +210,7 @@ const Navbar = () => {
 								) : (
 									<Link
 										to={link.path}
-										className='btn btn-ghost btn-sm rounded-btn relative flex items-center gap-1'>
+										className='btn btn-ghost btn-xs  rounded-btn relative flex items-center gap-1 text-xs'>
 										{link.name}
 										{link.badge && (
 											<span className='bg-lime-400 absolute -top-2 -right-3 text-black text-[8px] px-1 py-0.5 rounded'>
@@ -225,9 +239,17 @@ const Navbar = () => {
 			</div>
 
 			{/* Right */}
-			<div className='flex items-center gap-4'>
+			<div className='flex items-center gap-2'>
 				{isAuthenticated ? (
 					<>
+						{/* Search bar */}
+						<div className='hidden lg:flex items-center gap-4'>
+							<SearchBar openModal={() => setIsSearchOpen(true)} />
+							<SearchModal
+								isOpen={isSearchOpen}
+								closeModal={() => setIsSearchOpen(false)}
+							/>
+						</div>
 						{/* Assets Icon */}
 						<div className='hidden md:block dropdown dropdown-end'>
 							<div
@@ -237,16 +259,16 @@ const Navbar = () => {
 								<img
 									src='/wallet.png'
 									alt='Assets'
-									className='w-6 h-6 rounded-full'
+									className='size-4 rounded-full'
 								/>
 							</div>
-							<ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64'>
-								<li className='hover:bg-black/80 px-4 py-3'>
+							<ul className='dropdown-content p-4 space-y-7 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64 lg:w-[20rem]'>
+								<li className='hover:bg-[#121212]/80 px-4 py-3'>
 									<Link
 										to='/assets/overview'
 										className='block'>
 										<div className='flex justify-between items-center'>
-											<p className='text-sm font-semibold'>Total Assets</p>
+											<p className='font-semibold'>Total Assets</p>
 											<button
 												type='button'
 												onClick={(e) => {
@@ -266,94 +288,102 @@ const Navbar = () => {
 												)}
 											</button>
 										</div>
-										<p className='text-xl mb-2'>
-											{showBalance ? '0 ' : '**** '}
-											<span className='text-xs'>USDT</span>
+										<p className='text-2xl mb-2 flex items-center gap-2'>
+											{showBalance ? '0' : '****'}
+											<select
+												value={selectedCurrency}
+												onChange={(e) => setSelectedCurrency(e.target.value)}
+												className='text-sm bg-[#121212] text-white border-none rounded outline-none'>
+												<option value='USDT'>USDT</option>
+												<option value='BTC'>BTC</option>
+											</select>
 										</p>
+										<p className='text-xs text-white/30'>=A$0.00</p>
 									</Link>
 								</li>
-								<li>
+								<li className='flex items-center gap-4 w-full'>
 									<Link
 										to='/activity/act-center'
-										className='btn btn-sm border border-neutral/20 w-full mb-2'>
+										className='btn btn-sm border border-neutral/20 mb-2'>
 										Campaign Center
 									</Link>
 									<Link
 										to='/activity/task-center'
-										className='btn btn-sm border border-neutral/20 w-full mb-2'>
+										className='btn btn-sm border border-neutral/20 mb-2'>
 										Task Center
 									</Link>
 								</li>
 								<li>
-									<Link to='/assets/spot-account'>Spot Account</Link>
+									<Link
+										className='flex justify-between items-center'
+										to='/assets/spot-account'>
+										<span>Spot Account</span>
+										<span>--%</span>
+									</Link>
 								</li>
 								<li>
-									<Link to='/assets/futures-account'>Futures Account</Link>
+									<Link
+										className='flex justify-between items-center'
+										to='/assets/futures-account'>
+										<span>Futures Account</span>
+										<span>--%</span>
+									</Link>
 								</li>
 								<li>
-									<Link to='/assets/earn-account'>Earn Account</Link>
+									<Link
+										className='flex justify-between items-center'
+										to='/assets/earn-account'>
+										<span>Earn Account</span>
+										<span>--%</span>
+									</Link>
 								</li>
 								<li>
-									<Link to='/assets/copy-account'>Copy Account</Link>
+									<Link
+										className='flex justify-between items-center'
+										to='/assets/copy-account'>
+										<span>Copy Account</span>
+										<span>--%</span>
+									</Link>
+								</li>
+
+								<div className='size-[1px] w-full bg-white/10 my-3' />
+
+								<li>
+									<Popover className='relative'>
+										<span className='flex justify-between items-center'>
+											<PopoverButton>Orders Center</PopoverButton>
+											<ChevronRight />
+										</span>
+										<PopoverPanel
+											anchor='left'
+											className='mt-2 flex flex-col space-y-6 bg-[#121212] border border-white/20 px-5 pr-24 py-5 z-50'>
+											<Link to='/analytics'>Future Orders</Link>
+											<Link to='/engagement'>Spot Orders</Link>
+											<Link to='/security'>Third-Party Orders</Link>
+											<Link to='/integrations'>Conversion Records</Link>
+											<Link to='/integrations'>P2P Orders</Link>
+											<Link to='/integrations'>Earn History</Link>
+										</PopoverPanel>
+									</Popover>
+								</li>
+
+								<li>
+									<Link to='/assets/copy-account'>
+										<span>Transaction History</span>
+									</Link>
+								</li>
+								<li>
+									<Link to='/assets/copy-account'>
+										<span>My Rewards</span>
+									</Link>
 								</li>
 							</ul>
 						</div>
 
 						{/* User Icon */}
-						<div className='hidden md:block dropdown dropdown-end'>
-							<div
-								tabIndex={0}
-								role='button'
-								className='btn btn-ghost btn-sm'>
-								<img
-									src='/user-icon.svg'
-									alt='User'
-									className='w-6 h-6 rounded-full'
-								/>
-							</div>
-							<ul className='dropdown-content space-y-4 p-4 border rounded-md border-stone-800 bg-[#121212] shadow text-white rounded-box w-64'>
-								<li className='flex gap-4 items-center'>
-									<div>
-										<img
-											src='/user-icon.svg'
-											alt='user'
-											className='size-8 rounded-full'
-										/>
-									</div>
-									<div className='space-y-2'>
-										<p className='text-sm font-medium mb-1'>
-											off****@gmail.com
-										</p>
-										<p className='text-[10px] mb-3'>UID 952644127</p>
-									</div>
-								</li>
-								<li>
-									<Link to='/assets/rewards'>My Rewards</Link>
-								</li>
-								<li>
-									<Link to='/security'>Security</Link>
-								</li>
-								<li>
-									<Link to='/kyc'>KYC</Link>
-								</li>
-								<li>
-									<Link to='/referral'>Referral Hub</Link>
-								</li>
-								<li>
-									<Link to='/settings'>Settings</Link>
-								</li>
-								{/* <li>
-									<Link to='/api'>API</Link>
-								</li> */}
-								<li>
-									<button
-										className='text-red-400'
-										onClick={handleLogout}>
-										Log out
-									</button>
-								</li>
-							</ul>
-						</div>
+						<UserDropdown />
+
+						<QrDropdown />
 
 						{/* Notification Icon */}
 						<div
@@ -368,7 +398,7 @@ const Navbar = () => {
 										user: false,
 									})
 								}>
-								<Bell size={20} />
+								<Bell size={15} />
 								{unread > 0 && (
 									<span className='absolute -top-1 -right-1 bg-red-500 text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center'>
 										{unread}
@@ -377,7 +407,7 @@ const Navbar = () => {
 							</button>
 
 							{dropdowns.notifications && (
-								<div className='absolute -right-20 md:right-0 mt-3 w-[300px] md:w-[400px] bg-[#121212] text-white rounded-lg border border-neutral/20 shadow-xl p-4 z-50 max-h-[400px] overflow-y-auto'>
+								<div className='absolute -right-20 md:right-0 mt-3 w-[300px] md:w-[500px] bg-[#121212] text-white rounded-lg border border-neutral/20 shadow-xl p-4 z-50 max-h-[400px] overflow-y-auto noo-scrollbar'>
 									<div className='flex justify-between items-center mb-3'>
 										<h3 className='text-lg font-semibold border-b border-gray-600 w-full pb-2'>
 											Messages
@@ -454,6 +484,8 @@ const Navbar = () => {
 							)}
 						</div>
 
+						<LanguageCurrencyDropdown />
+
 						{/* User Icon */}
 						<div className='md:hidden'>
 							<div
@@ -485,7 +517,7 @@ const Navbar = () => {
 				)}
 
 				<button
-					className='lg:hidden'
+					className='md:hidden'
 					onClick={() => setIsOpen(true)}>
 					<Menu size={24} />
 				</button>

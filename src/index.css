@@ -69,7 +69,6 @@ input:-webkit-autofill:active {
 	}
 }
 
-
 /* Add to your global styles or tailwind.config.css */
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
@@ -79,3 +78,18 @@ input:-webkit-autofill:active {
 	scrollbar-width: none;
 }
 
+/* Reduce width */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 4px;
+}
+
+/* Track background */
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* Handle (thumb) */
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background-color: rgba(107, 114, 128, 0.4); /* gray-500 with opacity */
+	border-radius: 4px;
+}
