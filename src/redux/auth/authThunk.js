@@ -1,97 +1,100 @@
-// src/redux/auth/authThunks.js
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../api/axiosInstance';
-import toast from 'react-hot-toast';
+// src/reduxuseruserThunks.js
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../api/axiosInstance";
+import { showSuccess, showError } from "../../utils/toast";
+import { Navigate } from "react-router-dom";
 
 export const signupUser = createAsyncThunk(
-	'auth/signupUser',
-	async (formData, { rejectWithValue }) => {
-		try {
-			const res = await axiosInstance.post('user/registerUser', formData);
-			toast.success('Signup successful');
-			return res.data;
-		} catch (err) {
-			toast.error(err.response?.data?.errors || 'Signup failed');
-			return rejectWithValue(err.response?.data);
-		}
-	}
+  "auth/signupUser",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("user/registerUser", formData);
+      showSuccess("Signup successful");
+      return res.data;
+    } catch (err) {
+      showError(err.response?.data?.errors || "Signup failed");
+      return rejectWithValue(err.response?.data?.errors);
+    }
+  }
 );
-export const verifyEmailOtp = createAsyncThunk(
-	'auth/verifyEmailOtp',
-	async ({ email, otp, role }, { rejectWithValue }) => {
-		try {
-			const res = await axios.post('user/verify-email', {
-				email,
-				otp,
-				role,
-			});
-			toast.success('Email verified successfully!');
-			return res.data;
-		} catch (err) {
-			toast.error(err?.response?.data?.message || 'OTP verification failed');
-			return rejectWithValue(err.response?.data);
-		}
-	}
-);
+ export const verifyEmailOtp = createAsyncThunk(
+  "auth/verifyEmailOtp",
+  async ({ email, otp, createdAt, navigate }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("user/verify-email", {
+        email,
+        otp,
+        createdAt,
+      });
 
+      if (res.status === 200) {
+        showSuccess("Email has been verified successfully");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
+    } catch (err) {
+      showError(err?.response?.data?.errors || "OTP verification failed");
+      return rejectWithValue(err?.response?.data?.errors);
+    }
+  }
+);
 export const resendOtp = createAsyncThunk(
-	'auth/resendOtp',
-	async ({ email, role }, { rejectWithValue }) => {
-		try {
-			const res = await axios.post('user/resend-otp', {
-				email,
-				role,
-				context: 'verify', // or 'reset' if you're doing password reset flow
-			});
-			toast.success('OTP resent to email');
-			return res.data;
-		} catch (err) {
-			toast.error(err?.response?.data?.message || 'Failed to resend OTP');
-			return rejectWithValue(err.response?.data);
-		}
-	}
+  "auth/resendOtp",
+  async ({ email,createdAt}, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("user/resend-otp", { email, createdAt });
+      showSuccess("OTP resent to email");
+      return res.data;
+    } catch (err) {
+      showError(err?.response?.data?.errors || "Failed to resend OTP");
+      return rejectWithValue(err.response?.data?.errors);
+    }
+  }
 );
 export const loginUser = createAsyncThunk(
-	'auth/loginUser',
-	async (formData, { rejectWithValue }) => {
-		try {
-			const res = await axiosInstance.post('/auth/login', formData); // ✅ your backend login route
-			toast.success('Login successful');
-			// localStorage.setItem('token', res.data.token); // optional if you're storing tokens
-			return res.data;
-		} catch (err) {
-			toast.error(err.response?.data?.message || 'Login failed');
-			return rejectWithValue(err.response?.data);
-		}
-	}
+  "auth/loginUser",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("user/login", formData); 
+	  if (res.status === 201) {
+		
+		  showSuccess("Login successful"); 
+		  return res.data;
+	  }
+    } catch (err) {
+      showError(err.response?.data?.errors || "Login failed");
+      return rejectWithValue(err.response?.data?.errors);
+    }
+  }
 );
 
 export const forgotPassword = createAsyncThunk(
-	'auth/forgotPassword',
-	async (email, { rejectWithValue }) => {
-		try {
-			await axiosInstance.post('/auth/forgot-password', { email });
-			toast.success('Reset link sent');
-		} catch (err) {
-			toast.error(err.response?.data?.message || 'Request failed');
-			return rejectWithValue(err.response?.data);
-		}
-	}
+  "auth/forgotPassword",
+  async (email, { rejectWithValue }) => {
+    try {
+      await axiosInstance.post("user/forgot-password", { email });
+      showSuccess("Reset link sent");
+    } catch (err) {
+      showError(err.response?.data?.errors || "Request failed");
+      return rejectWithValue(err.response?.data?.errors);
+    }
+  }
 );
 
 export const resetPassword = createAsyncThunk(
-	'auth/resetPassword',
-	async ({ token, password }, { rejectWithValue }) => {
-		try {
-			const res = await axiosInstance.post('/auth/reset-password', {
-				token,
-				password,
-			});
-			toast.success('Password reset successfully');
-			return res.data;
-		} catch (err) {
-			toast.error(err.response?.data?.message || 'Reset failed');
-			return rejectWithValue(err.response?.data);
-		}
-	}
+  "auth/resetPassword",
+  async ({ token, password }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("user/reset-password", {
+        token,
+        password,
+      });
+      showSuccess("Password reset successfully");
+      return res.data;
+    } catch (err) {
+      showError(err.response?.data?.errors || "Reset failed");
+      return rejectWithValue(err.response?.data?.errors);
+    }
+  }
 );

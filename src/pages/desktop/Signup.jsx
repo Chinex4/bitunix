@@ -16,6 +16,9 @@ const Signup = () => {
 	const [isAgreementOpen, setAgreementOpen] = useState(false);
 	const [isPolicyOpen, setPolicyOpen] = useState(false);
 	const [showVerifyModal, setShowVerifyModal] = useState(false);
+	  const createdAt = new Date().toLocaleString("en-US", {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  });
 	const [userEmail, setUserEmail] = useState('');
 
 	// Add to validation schema
@@ -300,7 +303,7 @@ const Signup = () => {
 					dispatch(verifyEmailOtp({ email: userEmail, otp, role: 'user' }));
 				}}
 				onResend={() => {
-					dispatch(resendOtp({ email: userEmail, role: 'user' }));
+					dispatch(resendOtp({ email: userEmail, createdAt }));
 				}}
 			/>
 		</>

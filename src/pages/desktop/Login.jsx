@@ -9,7 +9,7 @@ import { loginUser } from '../../redux/auth/authThunk';
 
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
-
+ 
 	const schema = Yup.object().shape({
 		email: Yup.string()
 			.email('Invalid email address')
@@ -57,6 +57,13 @@ const Login = () => {
 			</div>
 
 			{/* Right (Login Form) */}
+
+
+
+
+
+
+			
 			<div className='md:bg-white bg-black flex md:items-center justify-center px-6 py-12'>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
