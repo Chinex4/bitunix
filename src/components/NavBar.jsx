@@ -72,15 +72,12 @@ const Navbar = () => {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.auth.user);
-	// const isAuthenticated = !!user;
-	const isAuthenticated = true;
+	const isAuthenticated = !!user;
+	// const isAuthenticated = true;
 	const navigate = useNavigate();
 	const handleLogout = () => {
-		dispatch(logout());
-		localStorage.removeItem('token');
-		navigate('/login');
-		// Optional: redirect or reload if needed
-		// window.location.href = '/login';
+		dispatch(logout()); // 🔁 Reset state and remove token
+		navigate('/login'); // 🔁 Redirect to login or landing
 	};
 
 	const [isOpen, setIsOpen] = useState(false);

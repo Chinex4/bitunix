@@ -14,24 +14,30 @@
 @plugin "daisyui" {
 	themes: black --default, dark --prefersdark, cupcake;
 }
+
 /* hide-scrollbar class */
 .hide-scrollbar {
-	scrollbar-width: none; /* Firefox */
-	-ms-overflow-style: none; /* Internet Explorer 10+ */
+	scrollbar-width: none;
+	/* Firefox */
+	-ms-overflow-style: none;
+	/* Internet Explorer 10+ */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-	display: none; /* Safari and Chrome */
+	display: none;
+	/* Safari and Chrome */
 }
 
 @keyframes scroll-left {
 	0% {
 		transform: translateX(0%);
 	}
+
 	100% {
 		transform: translateX(-50%);
 	}
 }
+
 .animate-scroll-left {
 	animation: scroll-left 15s linear infinite;
 }
@@ -47,8 +53,26 @@ input:-webkit-autofill:active {
 	transition: background-color 5000s ease-in-out 0s;
 }
 
+/* Fix autofill background and text color */
+
+@media screen and (max-width: 500px) {
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus {
+		-webkit-box-shadow: 0 0 0px 1000px #18181b inset !important;
+		/* bg-zinc-900 */
+		-webkit-text-fill-color: #ffffff !important;
+		/* white text */
+		transition: background-color 5000s ease-in-out 0s;
+	}
+}
+
+
+
 /* Mobile (max-width: 767px) — text color white */
 @media (max-width: 767px) {
+
 	input:-webkit-autofill,
 	input:-webkit-autofill:hover,
 	input:-webkit-autofill:focus,
@@ -60,6 +84,7 @@ input:-webkit-autofill:active {
 
 /* Desktop (min-width: 768px) — text color black */
 @media (min-width: 768px) {
+
 	input:-webkit-autofill,
 	input:-webkit-autofill:hover,
 	input:-webkit-autofill:focus,
@@ -73,6 +98,7 @@ input:-webkit-autofill:active {
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
+
 .no-scrollbar {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
@@ -90,6 +116,7 @@ input:-webkit-autofill:active {
 
 /* Handle (thumb) */
 .scrollbar-thin::-webkit-scrollbar-thumb {
-	background-color: rgba(107, 114, 128, 0.4); /* gray-500 with opacity */
+	background-color: rgba(107, 114, 128, 0.4);
+	/* gray-500 with opacity */
 	border-radius: 4px;
 }
