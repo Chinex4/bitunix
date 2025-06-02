@@ -404,7 +404,7 @@ const Navbar = () => {
 							</button>
 
 							{dropdowns.notifications && (
-								<div className='absolute -right-20 md:right-0 mt-3 w-[300px] md:w-[500px] bg-[#121212] text-white rounded-lg border border-neutral/20 shadow-xl p-4 z-50 max-h-[400px] overflow-y-auto noo-scrollbar'>
+								<div className='absolute -right-20 md:right-0 mt-3 w-[350px] md:w-[500px] bg-[#121212] text-white rounded-lg border border-neutral/20 shadow-xl p-4 z-50 max-h-[400px] overflow-y-auto noo-scrollbar'>
 									<div className='flex justify-between items-center mb-3'>
 										<h3 className='text-lg font-semibold border-b border-gray-600 w-full pb-2'>
 											Messages

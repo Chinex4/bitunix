@@ -71,7 +71,7 @@ export default function LanguageCurrencyDropdown() {
 
 	return (
 		<div
-			className='relative'
+			className='relative hidden lg:block'
 			ref={dropdownRef}>
 			{/* Trigger Button */}
 			<button
