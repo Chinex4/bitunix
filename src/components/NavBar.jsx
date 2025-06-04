@@ -1,29 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Copy, Menu, X } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { RiP2pFill } from "react-icons/ri";
 import { BsWallet } from "react-icons/bs";
 import { TbTargetArrow } from "react-icons/tb";
-import { Eye, EyeOff } from "lucide-react";
 import {
   MdOutlineCurrencyExchange,
   MdScreenSearchDesktop,
 } from "react-icons/md";
-import { Bell } from "lucide-react"; // or any other bell icon
-import { GiTargeting } from "react-icons/gi";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/auth/authSlice"; // ✅ Update path as needed
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Select,
-} from "@headlessui/react";
+
 import UserDropdown from "./navbar/UserDropdown";
-import SearchBar from "./navbar/SearchBar";
-import SearchModal from "./navbar/SearchModal";
+
 import QrDropdown from "./navbar/QrDropdown";
 import LanguageCurrencyDropdown from "./navbar/LanguageCurrencyDropdown";
 import toast from "react-hot-toast";
@@ -105,7 +96,7 @@ const Navbar = () => {
   });
   const [unread, setUnread] = useState(notifications.length);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  //   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const markAllAsRead = () => {
     setUnread(0);
@@ -260,7 +251,7 @@ const Navbar = () => {
               setSelectedCurrency={setSelectedCurrency}
             />
 
-            <UserDropdown />
+            <UserDropdown handleCopy={handleCopy} handleLogout={handleLogout} />
 
             <QrDropdown />
 
@@ -296,7 +287,6 @@ const Navbar = () => {
         </button>
       </div>
 
-
       <UserMobileDrawer
         isUserOpen={isUserOpen}
         setIsUserOpen={setIsUserOpen}
@@ -311,7 +301,6 @@ const Navbar = () => {
         handleCopy={handleCopy}
         handleLogout={handleLogout}
       />
-
 
       <MobileNavDrawer
         isOpen={isOpen}

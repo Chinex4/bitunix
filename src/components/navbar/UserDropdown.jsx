@@ -3,18 +3,9 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Copy, Eye, EyeOff } from 'lucide-react';
 
-const UserDropdown = () => {
+const UserDropdown = ({handleLogout, handleCopy}) => {
 	const [uid] = useState('952644127');
 	const [showUID, setShowUID] = useState(false);
-
-	const handleCopy = () => {
-		navigator.clipboard.writeText(uid);
-		toast.success('UID copied!');
-	};
-
-	const handleLogout = () => {
-		toast.success('Logged out');
-	};
 
 	return (
 		<div className='hidden md:block dropdown dropdown-end'>

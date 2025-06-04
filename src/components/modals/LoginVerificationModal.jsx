@@ -105,9 +105,9 @@ const LoginVerificationModal = ({ isOpen, setIsOpen, userEmail, onResend }) => {
                   />
                   <button
                     type='button'
-                    onClick={handleResend}
-                    className='absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-black bg-transparent'
                     disabled={cooldown > 0}
+                    onClick={handleResend}
+                    className='absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-black bg-transparent disabled:text-gray-300 disabled:cursor-not-allowed'
                   >
                     {cooldown > 0 ? `Resend ${cooldown}s` : "Get code"}
                   </button>
