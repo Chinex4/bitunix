@@ -72,6 +72,7 @@ export default function LanguageCurrencyDropdown() {
 	return (
 		<div
 			className='relative hidden md:block'
+
 			ref={dropdownRef}>
 			{/* Trigger Button */}
 			<button

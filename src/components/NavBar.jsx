@@ -296,6 +296,7 @@ const Navbar = () => {
         </button>
       </div>
 
+
       <UserMobileDrawer
         isUserOpen={isUserOpen}
         setIsUserOpen={setIsUserOpen}
@@ -310,6 +311,7 @@ const Navbar = () => {
         handleCopy={handleCopy}
         handleLogout={handleLogout}
       />
+
 
       <MobileNavDrawer
         isOpen={isOpen}
