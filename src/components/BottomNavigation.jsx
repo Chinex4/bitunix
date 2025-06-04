@@ -85,7 +85,7 @@ const BottomNavigation = () => {
 		{
 			path: '/contract-trade/BTC-USDT',
 			label: 'Trade',
-			icon: <img src='/svgIcons/favicon.ico' />,
+			icon: <img src='/favicon.ico' />,
 		},
 		{
 			path: '/copy-trading/square',

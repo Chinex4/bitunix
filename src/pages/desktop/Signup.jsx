@@ -295,7 +295,7 @@ const Signup = () => {
 					</form>
 				</div>
 			</div>
-			<LoginVerificati
+			<VerifyEmailModal
 				isOpen={showVerifyModal}
 				setIsOpen={setShowVerifyModal}
 				userEmail={userEmail}
