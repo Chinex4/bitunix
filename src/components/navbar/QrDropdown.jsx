@@ -16,7 +16,7 @@ const QrDropdown = () => {
 	}, []);
 
 	return (
-		<div className='relative' ref={dropdownRef}>
+		<div className='relative hidden md:block' ref={dropdownRef}>
 			{/* Trigger Icon */}
 			<button
 				className='btn btn-ghost btn-sm'

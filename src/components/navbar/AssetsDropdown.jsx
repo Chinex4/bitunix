@@ -1,99 +1,141 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import { Copy, Eye, EyeOff } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Eye, EyeOff, ChevronRight } from "lucide-react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
-const UserDropdown = () => {
-	const [uid] = useState('952644127');
-	const [showUID, setShowUID] = useState(false);
+const AssetsDropdown = ({
+  showBalance,
+  setShowBalance,
+  selectedCurrency,
+  setSelectedCurrency,
+}) => {
+  return (
+    <div className='hidden md:block dropdown dropdown-end'>
+      <div tabIndex={0} role='button' className='btn btn-ghost btn-sm'>
+        <img src='/wallet.png' alt='Assets' className='size-4 rounded-full' />
+      </div>
 
-	const handleCopy = () => {
-		navigator.clipboard.writeText(uid);
-		toast.success('UID copied!');
-	};
+      <ul className='dropdown-content p-4 space-y-4 shadow border rounded-md border-stone-800 bg-[#121212] text-white rounded-box w-64 lg:w-[20rem]'>
+        <li className='hover:bg-[#121212]/80 px-4 py-3'>
+          <Link to='/assets/overview' className='block'>
+            <div className='flex justify-between items-center'>
+              <p className='font-semibold flex gap-2 items-center'>
+                <img src='/assetss.svg' alt='' />
+                <span>Total Assets</span>
+              </p>
+              <button
+                type='button'
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowBalance((prev) => !prev);
+                }}
+              >
+                {showBalance ?
+                  <Eye size={16} className='text-gray-400' />
+                : <EyeOff size={16} className='text-gray-400' />}
+              </button>
+            </div>
+            <p className='text-2xl mb-2 flex items-center gap-2'>
+              {showBalance ? "0" : "****"}
+              <select
+                value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}
+                className='text-sm bg-[#121212] text-white border-none rounded outline-none'
+              >
+                <option value='USDT'>USDT</option>
+                <option value='BTC'>BTC</option>
+              </select>
+            </p>
+            <p className='text-xs text-white/30'>=A$0.00</p>
+          </Link>
+        </li>
 
-	const handleLogout = () => {
-		toast.success('Logged out');
-	};
+        <li className='flex items-center gap-4 w-full'>
+          <Link
+            to='/activity/act-center'
+            className='btn btn-sm border flex-1 border-neutral/20 mb-2'
+          >
+            Campaign Center
+          </Link>
+          <Link
+            to='/activity/task-center'
+            className='btn btn-sm border flex-1 border-neutral/20 mb-2'
+          >
+            Task Center
+          </Link>
+        </li>
 
-	return (
-		<div className='hidden md:block dropdown dropdown-end'>
-			<div
-				tabIndex={0}
-				role='button'
-				className='btn btn-ghost btn-sm'>
-				<img
-					src='/user-icon.svg'
-					alt='User'
-					className='w-6 h-6 rounded-full'
-				/>
-			</div>
-			<ul className='dropdown-content p-4 space-y-4 shadow border border-stone-800 bg-[#121212] text-white rounded-box w-72'>
-				{/* User Header */}
-				<li className='flex gap-3 items-center'>
-					<img src='/user-icon.svg' alt='user' className='size-9 rounded-full' />
-					<div>
-						<p className='text-sm font-semibold'>off****@gmail.com</p>
-						<div className='flex items-center gap-2 mt-1 text-[11px] text-gray-400'>
-							<span>UID {showUID ? uid : '*******'}</span>
-							<button
-								onClick={() => setShowUID(!showUID)}
-								className='text-white hover:text-emerald-400'>
-								{showUID ? <EyeOff size={12} /> : <Eye size={12} />}
-							</button>
-							<button
-								onClick={handleCopy}
-								className='text-white hover:text-emerald-400'>
-								<Copy size={12} />
-							</button>
-						</div>
-					</div>
-				</li>
+        <li>
+          <Link
+            to='/assets/spot-account'
+            className='flex justify-between items-center'
+          >
+            <span>Spot Account</span>
+            <span>--%</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to='/assets/futures-account'
+            className='flex justify-between items-center'
+          >
+            <span>Futures Account</span>
+            <span>--%</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to='/assets/earn-account'
+            className='flex justify-between items-center'
+          >
+            <span>Earn Account</span>
+            <span>--%</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to='/assets/copy-account'
+            className='flex justify-between items-center'
+          >
+            <span>Copy Account</span>
+            <span>--%</span>
+          </Link>
+        </li>
 
-				{/* VIP Badge */}
-				<li className='flex justify-between items-center bg-[#1d1d1f] border border-white/10 rounded-md px-3 py-2'>
-					<span className='text-white/80 font-semibold'>VIP 0</span>
-					<img src='/hex-icon.svg' alt='vip-badge' className='w-6 h-6' />
-				</li>
+        <div className='size-[1px] w-full bg-white/10 my-3' />
 
-				{/* Divider */}
-				<hr className='border-gray-700 my-2' />
+        <li>
+          <Popover className='relative'>
+            <span className='flex justify-between items-center'>
+              <PopoverButton>Orders Center</PopoverButton>
+              <ChevronRight />
+            </span>
+            <PopoverPanel
+              anchor='left'
+              className='mt-2 flex flex-col space-y-6 bg-[#121212] border border-white/20 px-5 pr-24 py-5 z-50'
+            >
+              <Link to='/orders/future-orders'>Future Orders</Link>
+              <Link to='/orders/spot-orders'>Spot Orders</Link>
+              <Link to='/orders/third-party-orders'>Third-Party Orders</Link>
+              <Link to='/orders/conversion-records'>Conversion Records</Link>
+              <Link to='/orders/p2p-orders'>P2P Orders</Link>
+              <Link to='/orders/earn-history'>Earn History</Link>
+            </PopoverPanel>
+          </Popover>
+        </li>
 
-				{/* Menu Options */}
-				<li>
-					<Link to='/assets/rewards'>My Rewards</Link>
-				</li>
-				<li className='flex items-center justify-between'>
-					<Link to='/security'>Security</Link>
-					<span className='w-2 h-2 bg-red-500 rounded-full' />
-				</li>
-				<li>
-					<Link to='/kyc'>Verification</Link>
-				</li>
-				<li>
-					<Link to='/referral'>Referral Hub</Link>
-				</li>
-				<li>
-					<Link to='/settings'>Settings</Link>
-				</li>
-				<li>
-					<Link to='/api'>API</Link>
-				</li>
-
-				{/* Divider */}
-				<hr className='border-gray-700 my-2' />
-
-				{/* Logout */}
-				<li>
-					<button
-						onClick={handleLogout}
-						className='text-red-400 hover:text-red-300 w-full text-left'>
-						Log out
-					</button>
-				</li>
-			</ul>
-		</div>
-	);
+        <li>
+          <Link to='/assets/spot-transactions'>
+            <span>Transaction History</span>
+          </Link>
+        </li>
+        <li>
+          <Link to='/assets/rewards'>
+            <span>My Rewards</span>
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
 };
 
-export default UserDropdown;
+export default AssetsDropdown;

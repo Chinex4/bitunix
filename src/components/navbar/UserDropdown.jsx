@@ -61,9 +61,9 @@ const UserDropdown = () => {
 						className='flex justify-between items-center bg-[#1d1d1f] border border-white/10 rounded-md px-3 py-2'>
 						<span className='text-white/80 font-semibold'>VIP 0</span>
 						<img
-							src='/hex-icon.svg'
+							src='/vip.svg'
 							alt='vip-badge'
-							className='size-4'
+							className='size-6'
 						/>
 					</Link>
 				</li>
