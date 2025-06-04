@@ -24,6 +24,7 @@ import SearchWrapper from "./navbar/SearchWrapper";
 import AssetsDropdown from "./navbar/AssetsDropdown";
 import NotificationDropdown from "./navbar/NotificationDropdown";
 import MobileUserTrigger from "./navbar/MobileUserTrigger";
+import { fetchLoggedInUser } from "../redux/user/userThunk";
 
 const Navbar = () => {
   const [uid] = useState("952644127");
@@ -83,6 +84,14 @@ const Navbar = () => {
     dispatch(logout()); // 🔁 Reset state and remove token
     navigate("/login"); // 🔁 Redirect to login or landing
   };
+
+  const { user: fetchedUser, loading, error } = useSelector((state) => state.user);
+
+	useEffect(() => {
+		dispatch(fetchLoggedInUser());
+	}, [dispatch]);
+
+  console.log(fetchedUser)
 
   const [isOpen, setIsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
