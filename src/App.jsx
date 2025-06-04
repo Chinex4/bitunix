@@ -69,14 +69,17 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/reset-password/:token/:email/:num' element={<ResetPassword />} />
+          <Route
+            path='/reset-password/:token/:email/:num'
+            element={<ResetPassword />}
+          />
           <Route element={<PrivateRoute />}>
             <Route path='/assets/*' element={<AssetsRoutes />} />
 
             <Route path='/account/*' element={<AccountRoutes />} />
+            <Route path='/orders/*' element={<OrdersRoutes />} />
+            <Route path='/service/vipservice' element={<VipService />} />
           </Route>
-          <Route path='/orders/*' element={<OrdersRoutes />} />
-          <Route path='/service/vipservice' element={<VipService />} />
           <Route path='*' element={<NotFound />} />
         </Route>
         {/* More routes can be added here later */}

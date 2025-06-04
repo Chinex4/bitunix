@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
+import TradeNowButton from '../../ui/TradeNowButton';
 
 const HeroSection = () => {
 	// const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -64,14 +65,7 @@ const HeroSection = () => {
 						</div>
 					</div>
 				) : (
-					<div>
-						<Link
-							className='w-[250px] flex justify-center space-x-2 text-xl font-semibold items-center bg-lime-400 py-4 px-8 rounded-lg text-black hover:bg-lime-500 duration-300 transition-all'
-							to={'/contract-trade/BTC-USDT'}>
-							<span>Trade Now</span>
-							<ChevronRight />
-						</Link>
-					</div>
+					<TradeNowButton />
 				)}
 			</div>
 

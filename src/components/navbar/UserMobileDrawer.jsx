@@ -158,7 +158,7 @@ const UserMobileDrawer = ({
           { path: "/assets/spot-transactions", label: "Transaction History" },
           { path: "/assets/rewards", label: "My Rewards" },
           { path: "/account/security", label: "Security" },
-          { path: "/account/kyc", label: "KYC" },
+          { path: "/account/identity-verification", label: "KYC" },
           { path: "/referral", label: "Referral Hub" },
           { path: "/account/settings", label: "Settings" },
         ].map(({ path, label, percentage }) => (
