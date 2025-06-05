@@ -25,6 +25,7 @@ import AssetsDropdown from "./navbar/AssetsDropdown";
 import NotificationDropdown from "./navbar/NotificationDropdown";
 import MobileUserTrigger from "./navbar/MobileUserTrigger";
 import { fetchLoggedInUser } from "../redux/user/userThunk";
+import useFetchLoggedInUser from "../hooks/useFetchedLoggedInUser";
 
 const Navbar = () => {
   const [uid] = useState("952644127");
@@ -85,11 +86,7 @@ const Navbar = () => {
     navigate("/login"); // 🔁 Redirect to login or landing
   };
 
-  const { user: fetchedUser, loading, error } = useSelector((state) => state.user);
-
-	useEffect(() => {
-		dispatch(fetchLoggedInUser());
-	}, [dispatch]);
+  const {user: fetchedUser, error, loading} = useFetchLoggedInUser()
 
   console.log(fetchedUser)
 
@@ -105,7 +102,6 @@ const Navbar = () => {
   });
   const [unread, setUnread] = useState(notifications.length);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
-  //   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const markAllAsRead = () => {
     setUnread(0);
