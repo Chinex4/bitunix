@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Copy, Eye, EyeOff } from 'lucide-react';
+import { maskEmail } from '../../functions/helper';
 
-const UserDropdown = ({handleLogout, handleCopy}) => {
+
+const UserDropdown = ({ handleLogout, handleCopy }) => {
 	const [uid] = useState('952644127');
 	const [showUID, setShowUID] = useState(false);
+	const [email, setEmail] = useState('astauchiha234@gmail.com');
 
 	return (
 		<div className='hidden md:block dropdown dropdown-end'>
@@ -28,7 +31,7 @@ const UserDropdown = ({handleLogout, handleCopy}) => {
 						className='size-9 rounded-full'
 					/>
 					<div>
-						<p className='text-sm font-semibold'>off****@gmail.com</p>
+						<p className='text-sm font-semibold'>{maskEmail(email)}</p>
 						<div className='flex items-center gap-2 mt-1 text-[11px] text-gray-400'>
 							<span>UID {showUID ? uid : '*******'}</span>
 							<button
@@ -67,11 +70,11 @@ const UserDropdown = ({handleLogout, handleCopy}) => {
 					<Link to='/assets/rewards'>My Rewards</Link>
 				</li>
 				<li className='flex items-center justify-between'>
-					<Link to='/security'>Security</Link>
+					<Link to='/account/security'>Security</Link>
 					<span className='w-2 h-2 bg-red-500 rounded-full' />
 				</li>
 				<li>
-					<Link to='/kyc'>Verification</Link>
+					<Link to='/account/identity-verification'>Verification</Link>
 				</li>
 				<li>
 					<Link to='/referral'>Referral Hub</Link>

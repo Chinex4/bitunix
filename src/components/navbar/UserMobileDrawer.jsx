@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Copy, X, PauseCircle } from "lucide-react";
+import { maskEmail } from "../../functions/helper";
+import { useState } from "react";
 const UserMobileDrawer = ({
   isUserOpen,
   setIsUserOpen,
@@ -16,6 +18,7 @@ const UserMobileDrawer = ({
   handleLogout,
 }) => {
   if (!isUserOpen || !isAuthenticated) return null;
+  const [email] = useState('astauchiha234@gmail.com')
 
   return (
     <motion.div
@@ -46,7 +49,7 @@ const UserMobileDrawer = ({
             className='size-9 rounded-full'
           />
           <div>
-            <p className='text-sm font-semibold'>off****@gmail.com</p>
+            <p className='text-sm font-semibold'>{maskEmail(email)}</p>
             <div className='flex items-center gap-2 mt-1 text-[11px] text-gray-400'>
               <span>UID {showUID ? uid : "*******"}</span>
               <button
