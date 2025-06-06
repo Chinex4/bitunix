@@ -5,10 +5,9 @@ import { Copy, Eye, EyeOff } from 'lucide-react';
 import { maskEmail } from '../../functions/helper';
 
 
-const UserDropdown = ({ handleLogout, handleCopy }) => {
-	const [uid] = useState('952644127');
-	const [showUID, setShowUID] = useState(false);
-	const [email, setEmail] = useState('astauchiha234@gmail.com');
+const UserDropdown = ({ handleLogout, handleCopy, email, uid, showUID, setShowUID }) => {
+	// const [uid] = useState('952644127');
+	// const [showUID, setShowUID] = useState(false);
 
 	return (
 		<div className='hidden md:block dropdown dropdown-end'>
