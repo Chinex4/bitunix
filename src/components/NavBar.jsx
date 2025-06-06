@@ -88,7 +88,7 @@ const Navbar = () => {
 
   const {user: fetchedUser, error, loading} = useFetchLoggedInUser()
 
-  console.log(fetchedUser)
+  // console.log(fetchedUser)
 
   const [isOpen, setIsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
