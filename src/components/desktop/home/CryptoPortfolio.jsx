@@ -91,19 +91,6 @@ const CryptoPortfolio = () => {
 				Trade Now with $10
 			</button>
 
-			{/* <style jsx>{`
-				@keyframes scroll-left {
-					0% {
-						transform: translateX(0%);
-					}
-					100% {
-						transform: translateX(-50%);
-					}
-				}
-				.animate-scroll-left {
-					animation: scroll-left 12s linear infinite;
-				}
-			`}</style> */}
 		</section>
 	);
 };
