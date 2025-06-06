@@ -13,8 +13,8 @@ export const fetchLoggedInUser = createAsyncThunk(
 			return res.data;
 		} catch (error) {
 			if (error.response?.status === 401) {
-				localStorage.removeItem('accessToken');
-				window.location.href = '/login';  
+				// localStorage.removeItem('accessToken');
+				// window.location.href = '/login';  
 				return rejectWithValue('Session expired. Please log in again.');
 			}
 			return rejectWithValue(
