@@ -19,7 +19,7 @@ const useFetchLoggedInUser = () => {
 			.unwrap()
 			.catch((err) => {
 				toast.error(err || 'Session expired. Please log in again.');
-				// navigate('/login');
+				navigate('/login');
 			});
 	}, [dispatch, navigate, location.pathname]);
 
