@@ -7,8 +7,12 @@ import {
 	updateLanguage,
 } from '../../redux/user/userSettingsSlice';
 import { showPromise } from '../../utils/toast'; // adjust import if needed
+import useFetchLoggedInUser from '../../hooks/useFetchedLoggedInUser';
+import { maskEmail } from '../../functions/helper';
 
 const Settings = () => {
+	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
+	const email = fetchedUser?.message?.userDetails.email ?? '';
 	const [openModal, setOpenModal] = useState(null);
 
 	const { nickname, language, status } = useSelector(
@@ -62,7 +66,7 @@ const Settings = () => {
 							profile and social modules.
 						</p>
 						<div className='flex justify-between mt-2'>
-							<span>{nickname || 'hev****@bocapies.com'}</span>
+							<span>{nickname || maskEmail(email)}</span>
 							<button
 								onClick={() => setOpenModal('nickname')}
 								className='text-lime-400 font-medium'>

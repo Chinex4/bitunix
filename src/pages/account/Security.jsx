@@ -10,9 +10,22 @@ import {
 	Upload,
 	ChevronDown,
 	Copy,
+	Eye,
 } from 'lucide-react';
+import useFetchLoggedInUser from '../../hooks/useFetchedLoggedInUser';
+import { maskEmail } from '../../functions/helper';
+import { showSuccess } from '../../utils/toast';
+import { useState } from 'react';
 
 const Security = () => {
+	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
+	const uid = fetchedUser?.message?.userDetails.uid ?? '';
+	const email = fetchedUser?.message?.userDetails.email ?? '';
+	const [showUID, setShowUID] = useState(false);
+	const handleCopy = () => {
+		navigator.clipboard.writeText(uid);
+		showSuccess('UID copied!');
+	};
 	return (
 		<div className='p-4 md:p-8 text-white'>
 			<div className='bg-[#111] p-4 md:p-6 rounded-lg border border-[#222] mb-6'>
@@ -24,13 +37,25 @@ const Security = () => {
 					/>
 					<div>
 						<p className='font-semibold text-sm md:text-base'>
-							hev****@bocapies.com
+							{maskEmail(email)}
 						</p>
 						<span className='bg-green-700 text-xs px-2 py-1 rounded'>
 							Regular User
 						</span>
-						<p className='text-[12px] text-gray-400'>
-							UID: 952948137 <Copy size={12} className='ml-1 inline cursor-pointer text-lime-400' />
+						<p className='text-[14px] text-gray-400 flex items-center gap-3'>
+							<span>UID: {showUID ? uid : '*******'}</span>
+							<div classname='inline-flex items-center gap-2'>
+								<button
+									onClick={() => setShowUID(!showUID)}
+									className='cursor-pointer inline text-white hover:text-lime-400'>
+									{showUID ? <EyeOff size={14} /> : <Eye size={14} />}
+								</button>
+								<Copy
+									onClick={handleCopy}
+									size={14}
+									className='ml-1 inline cursor-pointer text-white hover:text-lime-400'
+								/>
+							</div>
 						</p>
 					</div>
 				</div>
