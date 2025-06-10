@@ -115,9 +115,9 @@ export const loginUser = createAsyncThunk(
         const { accessToken, refreshToken } = res.data.message;
 
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
+        // localStorage.setItem("refreshToken", refreshToken);
 
-        return { accessToken, refreshToken };
+        return { accessToken };
       }
     } catch (err) {
       showError(err.response?.data?.errors || "Login failed");

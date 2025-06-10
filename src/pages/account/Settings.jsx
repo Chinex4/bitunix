@@ -1,11 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { Pencil, Globe, UserCircle2, Palette } from 'lucide-react';
-import { Dialog } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	updateNickname,
+	updateLanguage,
+} from '../../redux/user/userSettingsSlice';
+import { showPromise } from '../../utils/toast'; // adjust import if needed
 
 const Settings = () => {
 	const [openModal, setOpenModal] = useState(null);
 
+	const { nickname, language, status } = useSelector(
+		(state) => state.userSettings
+	);
+	const dispatch = useDispatch();
+
+	const [nicknameInput, setNicknameInput] = useState('');
+	const [languageInput, setLanguageInput] = useState('English');
+
+	useEffect(() => {
+		setNicknameInput(nickname || '');
+		setLanguageInput(language || 'English');
+	}, [nickname, language]);
+
 	const closeModal = () => setOpenModal(null);
+
+	const handleSaveNickname = async () => {
+		await showPromise(dispatch(updateNickname(nicknameInput)).unwrap(), {
+			loading: 'Updating nickname...',
+			success: 'Nickname updated!',
+			error: 'Failed to update nickname',
+		});
+		closeModal();
+	};
+
+	const handleSaveLanguage = async () => {
+		await showPromise(dispatch(updateLanguage(languageInput)).unwrap(), {
+			loading: 'Updating language...',
+			success: 'Language updated!',
+			error: 'Failed to update language',
+		});
+		closeModal();
+	};
 
 	return (
 		<div className='p-4 text-white max-w-3xl mx-auto space-y-8'>
@@ -25,7 +62,7 @@ const Settings = () => {
 							profile and social modules.
 						</p>
 						<div className='flex justify-between mt-2'>
-							<span>hev****@bocapies.com</span>
+							<span>{nickname || 'hev****@bocapies.com'}</span>
 							<button
 								onClick={() => setOpenModal('nickname')}
 								className='text-lime-400 font-medium'>
@@ -91,7 +128,7 @@ const Settings = () => {
 						Language settings for messages, SMS, emails, and push
 					</p>
 					<div className='flex justify-between mt-2'>
-						<span>English</span>
+						<span>{language || 'English'}</span>
 						<button
 							onClick={() => setOpenModal('language')}
 							className='text-lime-400 font-medium'>
@@ -102,20 +139,24 @@ const Settings = () => {
 			</section>
 
 			{/* MODALS */}
-			<Modal
+			<AnimatedModal
 				isOpen={openModal === 'nickname'}
 				onClose={closeModal}
 				title='Change Nickname'>
 				<input
+					value={nicknameInput}
+					onChange={(e) => setNicknameInput(e.target.value)}
 					className='bg-black border border-gray-600 rounded-md p-2 w-full'
 					placeholder='Enter new nickname'
 				/>
-				<button className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
+				<button
+					onClick={handleSaveNickname}
+					className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
 					Save
 				</button>
-			</Modal>
+			</AnimatedModal>
 
-			<Modal
+			<AnimatedModal
 				isOpen={openModal === 'avatar'}
 				onClose={closeModal}
 				title='Change Profile Picture'>
@@ -131,47 +172,76 @@ const Settings = () => {
 				<button className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
 					Save Avatar
 				</button>
-			</Modal>
+			</AnimatedModal>
 
-			<Modal
+			<AnimatedModal
 				isOpen={openModal === 'language'}
 				onClose={closeModal}
 				title='Change Language'>
-				<select className='w-full p-2 bg-black border border-gray-600 rounded-md text-white'>
+				<select
+					value={languageInput}
+					onChange={(e) => setLanguageInput(e.target.value)}
+					className='w-full p-2 bg-black border border-gray-600 rounded-md text-white'>
 					<option>English</option>
 					<option>French</option>
 					<option>German</option>
 					<option>Chinese</option>
 				</select>
-				<button className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
+				<button
+					onClick={handleSaveLanguage}
+					className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
 					Save
 				</button>
-			</Modal>
+			</AnimatedModal>
 		</div>
 	);
 };
 
-// Modal Component
-const Modal = ({ isOpen, onClose, title, children }) => {
-	if (!isOpen) return null;
-
+// Headless UI Animated Modal
+const AnimatedModal = ({ isOpen, onClose, title, children }) => {
 	return (
-		<Dialog
-			open={isOpen}
-			onClose={onClose}
-			className='relative z-50'>
-			<div className='fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center'>
-				<Dialog.Panel className='bg-[#111] p-6 rounded-md w-[90%] max-w-md space-y-4 text-white'>
-					<Dialog.Title className='text-lg font-semibold'>{title}</Dialog.Title>
-					{children}
-					<button
-						onClick={onClose}
-						className='w-full py-2 bg-gray-700 rounded-md text-white mt-2'>
-						Cancel
-					</button>
-				</Dialog.Panel>
-			</div>
-		</Dialog>
+		<Transition
+			show={isOpen}
+			as={Fragment}>
+			<Dialog
+				as='div'
+				className='relative z-50'
+				onClose={onClose}>
+				<Transition.Child
+					as={Fragment}
+					enter='ease-out duration-300'
+					enterFrom='opacity-0'
+					enterTo='opacity-100'
+					leave='ease-in duration-200'
+					leaveFrom='opacity-100'
+					leaveTo='opacity-0'>
+					<div className='fixed inset-0 bg-black/80 backdrop-blur-sm' />
+				</Transition.Child>
+
+				<div className='fixed inset-0 flex items-center justify-center p-4'>
+					<Transition.Child
+						as={Fragment}
+						enter='ease-out duration-300'
+						enterFrom='opacity-0 scale-95'
+						enterTo='opacity-100 scale-100'
+						leave='ease-in duration-200'
+						leaveFrom='opacity-100 scale-100'
+						leaveTo='opacity-0 scale-95'>
+						<Dialog.Panel className='bg-[#111] p-6 rounded-md w-[90%] max-w-md space-y-4 text-white shadow-xl'>
+							<Dialog.Title className='text-lg font-semibold'>
+								{title}
+							</Dialog.Title>
+							{children}
+							<button
+								onClick={onClose}
+								className='w-full py-2 bg-gray-700 rounded-md text-white mt-2'>
+								Cancel
+							</button>
+						</Dialog.Panel>
+					</Transition.Child>
+				</div>
+			</Dialog>
+		</Transition>
 	);
 };
 

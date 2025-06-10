@@ -14,7 +14,7 @@ const refreshToken = localStorage.getItem("refreshToken");
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: accessToken ? { accessToken, refreshToken } : null,
+    user: accessToken ? { accessToken } : null,
     loading: false,
     error: null,
     // token: null,
@@ -25,12 +25,12 @@ const authSlice = createSlice({
       state.token = null;
       state.loading = false;
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      // localStorage.removeItem("refreshToken");
     },
 
     setUserFromToken: (state, action) => {
-      const { accessToken, refreshToken } = action.payload;
-      state.user = { accessToken, refreshToken };
+      const { accessToken } = action.payload;
+      state.user = { accessToken };
     //   state.token = accessToken; // optional: keep this only if your app still uses `token` elsewhere
     },
   },
@@ -56,7 +56,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = {
           accessToken: action.payload.accessToken,
-          refreshToken: action.payload.refreshToken,
         };
         // state.token = action.payload.accessToken; // optional if needed
       })
