@@ -5,6 +5,7 @@ import {
 	Eye,
 	EyeOff,
 	ChevronDown,
+	Wallet,
 	// ArrowsUpDown,
 } from 'lucide-react';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
@@ -31,6 +32,11 @@ const quickLinks = [
 		text: 'Transfer',
 		icon: <img src='/new/exchange.png' alt='transfer' className='size-5 md:size-8' />,
 		route: '',
+	},
+	{
+		text: 'View Wallets',
+		icon: <Wallet className='size-5 md:size-10' />,
+		route: '/assets/view-wallets',
 	},
 ];
 
@@ -101,7 +107,7 @@ const Overview = () => {
 				</div>
 
 				{/* Quick Actions */}
-				<div className='grid grid-cols-4 text-center text-sm'>
+				<div className='grid grid-cols-5 text-center text-sm'>
 					{quickLinks.map((action) =>
 						action.text === 'Transfer' ? (
 							<button

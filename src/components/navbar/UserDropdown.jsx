@@ -79,7 +79,7 @@ const UserDropdown = ({ handleLogout, handleCopy, email, uid, showUID, setShowUI
 					<Link to='/referral'>Referral Hub</Link>
 				</li>
 				<li>
-					<Link to='/settings'>Settings</Link>
+					<Link to='/account/settings'>Settings</Link>
 				</li>
 				<li>
 					<Link to='/api'>API</Link>

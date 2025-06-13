@@ -12,6 +12,8 @@ import Rewards from '../assets/Rewards';
 import SpotTransactions from '../assets/SpotTransactions';
 import FuturesTransactions from '../assets/FuturesTransactions';
 import EarnTransactions from '../assets/EarnTransactions';
+import SyncCryptoToBackend from '../../components/wallets/SyncCryptoToBackend';
+import ViewWallets from '../assets/ViewWallets';
 // import other components...
 
 const tabs = [
@@ -31,6 +33,7 @@ const tabs = [
 const AssetsRoutes = () => {
 	return (
 		<div className='min-h-screen bg-[#0F0F0F] text-white flex flex-col lg:flex-row'>
+			<SyncCryptoToBackend />
 			<TabHeader tabs={tabs} />
 			<div className='flex-1 px-4 py-6 max-w-full lg:max-w-6xl lg:mx-auto'>
 				<Routes>
@@ -70,6 +73,10 @@ const AssetsRoutes = () => {
 					<Route
 						path='withdraw'
 						element={<Withdraw />}
+					/>
+					<Route
+						path='view-wallets'
+						element={<ViewWallets />}
 					/>
 					<Route
 						path='spot-transactions'
