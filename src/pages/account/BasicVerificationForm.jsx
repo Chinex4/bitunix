@@ -4,12 +4,18 @@ import * as Yup from 'yup';
 import { Listbox } from '@headlessui/react';
 import { useState } from 'react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import CountrySelector from '../../components/ui/CountrySelector';
+import IdentityPrepModal from '../../components/ui/modals/IdentityPrepModal';
+import UploadIDPage from './UploadIDPage';
+import { getDateYearsAgo } from '../../utils/getDateYearsAgo';
 
-const countries = ['Nigeria', 'Ghana', 'South Africa'];
-const documentTypes = ['National ID', 'Driver’s License', 'Passport'];
+const documentTypes = ['ID Card', 'Driver’s License', 'Passport', 'Others'];
 
 const schema = Yup.object().shape({
-	country: Yup.string().required('Country is required'),
+	country: Yup.object({
+		name: Yup.string().required('Country name is required'),
+		flag: Yup.string().required('Flag is required'),
+	}).required('Country is required'),
 	documentType: Yup.string().required('Document type is required'),
 	idNumber: Yup.string().required('ID number is required'),
 	firstName: Yup.string().required('First name is required'),
@@ -19,11 +25,15 @@ const schema = Yup.object().shape({
 
 export default function BasicVerificationForm() {
 	const [touched, setTouched] = useState(false);
+	const [showPrepModal, setShowPrepModal] = useState(false);
+	const [proceedToUpload, setProceedToUpload] = useState(false);
+	const [formData, setFormData] = useState(null);
 
 	const {
 		control,
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors, isValid },
 	} = useForm({
 		resolver: yupResolver(schema),
@@ -38,12 +48,30 @@ export default function BasicVerificationForm() {
 		},
 	});
 
+	const selectedDocType = watch('documentType');
+
 	const onSubmit = (data) => {
-		console.log('Submitted:', data);
+		setFormData(data);
+		if (data.documentType === 'ID Card') {
+			setShowPrepModal(true); // open modal
+		} else {
+			setProceedToUpload(true); // skip modal
+		}
 	};
 
+	if (proceedToUpload) {
+		return (
+			<UploadIDPage
+				data={formData}
+				onBack={() => {
+					setProceedToUpload(false);
+				}}
+			/>
+		);
+	}
+
 	return (
-		<div className='max-w-2xl mx-auto text-white px-4 py-6 space-y-6'>
+		<div className='max-w-6xl mx-auto text-white px-4 py-6 space-y-6'>
 			<h2 className='text-2xl font-bold'>Basic Verification</h2>
 			<div className='bg-[#1a1a1a] p-3 text-sm text-gray-400 rounded-md'>
 				⚠ Make sure that the information entered matches the documents to be
@@ -53,44 +81,11 @@ export default function BasicVerificationForm() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className='space-y-4'>
-				{/* Country */}
-				<div>
-					<label className='block text-sm mb-1'>Country / Region</label>
-					<Controller
-						name='country'
-						control={control}
-						render={({ field }) => (
-							<Listbox
-								value={field.value}
-								onChange={(value) => {
-									field.onChange(value);
-									setTouched(true);
-								}}>
-								<div className='relative'>
-									<Listbox.Button className='w-full bg-zinc-900 border border-gray-700 text-left px-4 py-2 rounded-md text-sm'>
-										{field.value || 'Select your country'}
-										<ChevronUpDownIcon className='w-4 h-4 absolute right-2 top-2.5 text-gray-400' />
-									</Listbox.Button>
-									<Listbox.Options className='absolute z-10 mt-1 w-full bg-zinc-800 border border-gray-700 rounded-md text-sm'>
-										{countries.map((c) => (
-											<Listbox.Option
-												key={c}
-												value={c}
-												className='px-4 py-2 hover:bg-zinc-700 cursor-pointer'>
-												{c}
-											</Listbox.Option>
-										))}
-									</Listbox.Options>
-								</div>
-							</Listbox>
-						)}
-					/>
-					{errors.country && (
-						<p className='text-red-500 text-sm mt-1'>
-							{errors.country.message}
-						</p>
-					)}
-				</div>
+				<CountrySelector
+					control={control}
+					errors={errors}
+					setTouched={setTouched}
+				/>
 
 				{/* Document Type */}
 				<div>
@@ -131,13 +126,11 @@ export default function BasicVerificationForm() {
 					)}
 				</div>
 
-				{/* ID Number */}
+				{/* ID Fields */}
 				<div>
 					<label className='block text-sm mb-1'>ID Number</label>
 					<input
-						{...register('idNumber', {
-							onChange: () => setTouched(true),
-						})}
+						{...register('idNumber', { onChange: () => setTouched(true) })}
 						className='w-full bg-zinc-900 border border-gray-700 px-4 py-2 rounded-md text-sm'
 						placeholder='Enter your ID number'
 					/>
@@ -148,14 +141,11 @@ export default function BasicVerificationForm() {
 					)}
 				</div>
 
-				{/* Name */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div>
 						<label className='block text-sm mb-1'>First Name</label>
 						<input
-							{...register('firstName', {
-								onChange: () => setTouched(true),
-							})}
+							{...register('firstName', { onChange: () => setTouched(true) })}
 							className='w-full bg-zinc-900 border border-gray-700 px-4 py-2 rounded-md text-sm'
 							placeholder='Enter your first name'
 						/>
@@ -168,9 +158,7 @@ export default function BasicVerificationForm() {
 					<div>
 						<label className='block text-sm mb-1'>Last Name</label>
 						<input
-							{...register('lastName', {
-								onChange: () => setTouched(true),
-							})}
+							{...register('lastName', { onChange: () => setTouched(true) })}
 							className='w-full bg-zinc-900 border border-gray-700 px-4 py-2 rounded-md text-sm'
 							placeholder='Enter your last name'
 						/>
@@ -182,15 +170,14 @@ export default function BasicVerificationForm() {
 					</div>
 				</div>
 
-				{/* Date of Birth */}
 				<div>
 					<label className='block text-sm mb-1'>Date of Birth</label>
 					<input
 						type='date'
-						{...register('dateOfBirth', {
-							onChange: () => setTouched(true),
-						})}
+						{...register('dateOfBirth', { onChange: () => setTouched(true) })}
 						className='w-full bg-zinc-900 border border-gray-700 px-4 py-2 rounded-md text-sm'
+						max={getDateYearsAgo(18)} // no younger than 18
+						min={getDateYearsAgo(120)} // no older than 120
 					/>
 					{errors.dateOfBirth && (
 						<p className='text-red-500 text-sm mt-1'>
@@ -199,11 +186,10 @@ export default function BasicVerificationForm() {
 					)}
 				</div>
 
-				{/* Submit Button */}
 				<button
 					type='submit'
 					disabled={!isValid || !touched}
-					className={`w-full py-2 rounded-md font-semibold ${
+					className={`w-full lg:w-auto lg:px-8 py-2 rounded-md font-semibold ${
 						!isValid || !touched
 							? 'bg-zinc-700 text-gray-400 cursor-not-allowed'
 							: 'bg-lime-500 text-black hover:bg-lime-600'
@@ -211,6 +197,15 @@ export default function BasicVerificationForm() {
 					Next
 				</button>
 			</form>
+
+			<IdentityPrepModal
+				isOpen={showPrepModal}
+				onClose={() => setShowPrepModal(false)}
+				onProceed={() => {
+					setShowPrepModal(false);
+					setProceedToUpload(true);
+				}}
+			/>
 		</div>
 	);
 }

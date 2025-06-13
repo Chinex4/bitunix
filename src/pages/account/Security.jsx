@@ -11,6 +11,7 @@ import {
 	ChevronDown,
 	Copy,
 	Eye,
+	ChevronRight,
 } from 'lucide-react';
 import useFetchLoggedInUser from '../../hooks/useFetchedLoggedInUser';
 import { maskEmail } from '../../functions/helper';
@@ -19,15 +20,15 @@ import { useState } from 'react';
 
 const Security = () => {
 	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
-	const uid = fetchedUser?.message?.userDetails.uid ?? '';
 	const email = fetchedUser?.message?.userDetails.email ?? '';
+	const uid = fetchedUser?.message?.userDetails.uid ?? '';
 	const [showUID, setShowUID] = useState(false);
 	const handleCopy = () => {
 		navigator.clipboard.writeText(uid);
 		showSuccess('UID copied!');
 	};
 	return (
-		<div className='p-4 md:p-8 text-white'>
+		<div className='p-4 md:p-8 text-white max-w-6xl'>
 			<div className='bg-[#111] p-4 md:p-6 rounded-lg border border-[#222] mb-6'>
 				<div className='flex items-center gap-4 mb-4'>
 					<img
@@ -42,7 +43,7 @@ const Security = () => {
 						<span className='bg-green-700 text-xs px-2 py-1 rounded'>
 							Regular User
 						</span>
-						<p className='text-[14px] text-gray-400 flex items-center gap-3'>
+						<p className='text-[14px] text-neutral flex items-center gap-3'>
 							<span>UID: {showUID ? uid : '*******'}</span>
 							<div classname='inline-flex items-center gap-2'>
 								<button
@@ -59,10 +60,22 @@ const Security = () => {
 						</p>
 					</div>
 				</div>
-				<p className='text-sm text-gray-300 mb-1'>2FA Security Level</p>
-				<p className='text-red-500 font-bold text-sm mb-2'>Low</p>
-				<div className='w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-2'>
-					<div className='w-1/5 h-full bg-red-500'></div>
+				<div>
+					<p className='text-sm text-white font-semibold'>
+						2FA Security Level{' '}
+						<span className='text-red-500 font-semibold ml-1'>Low</span>
+					</p>
+
+					<div className='relative flex h-3 w-full rounded-full overflow-hidden mt-2'>
+						{/* Active segment with arrow */}
+						<div className='relative z-10 flex-1 bg-red-600 shadow-[0_0_8px_rgba(255,0,0,0.6)]'>
+							<div className='absolute right-0 top-0 h-full w-3 skew-x-[-30deg] bg-red-600'></div>
+						</div>
+
+						{/* Inactive segments */}
+						<div className='flex-1 bg-zinc-800'></div>
+						<div className='flex-1 bg-zinc-800'></div>
+					</div>
 				</div>
 			</div>
 
@@ -74,7 +87,7 @@ const Security = () => {
 							<ShieldCheck className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Google Authenticator</p>
-								<p className='text-xs text-gray-400'>
+								<p className='text-xs text-neutral'>
 									Protect your account and transactions.
 								</p>
 							</div>
@@ -89,7 +102,7 @@ const Security = () => {
 							<Smartphone className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Mobile Verification</p>
-								<p className='text-xs text-gray-400'>
+								<p className='text-xs text-neutral'>
 									Protect your account and transactions.
 								</p>
 							</div>
@@ -104,7 +117,19 @@ const Security = () => {
 							<Mail className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Email Verification</p>
+								<p className='text-neutral text-xs'>
+									Protect your account and transactions.
+								</p>
 							</div>
+						</div>
+						<div className='flex items-center gap-2 text-xs text-gray-400'>
+							<span>{maskEmail(email)} |</span>
+							<span>Disable |</span>
+							<Link
+								to='/account/security/modify-email'
+								className='text-lime-400 hover:text-lime-300 cursor-pointer '>
+								Change
+							</Link>
 						</div>
 					</div>
 				</div>
@@ -118,10 +143,14 @@ const Security = () => {
 							<Lock className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Login Password</p>
-								<p className='text-xs text-gray-400'>Protect your account</p>
+								<p className='text-xs text-neutral'>Protect your account</p>
 							</div>
 						</div>
-						<button className='text-lime-400 text-xs underline'>Change</button>
+						<Link
+							to='/account/security/modify-password'
+							className='text-lime-400 text-xs underline cursor-pointer'>
+							Change
+						</Link>
 					</div>
 
 					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
@@ -129,14 +158,16 @@ const Security = () => {
 							<EyeOff className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Anti-Phishing Code</p>
-								<p className='text-xs text-gray-400'>
+								<p className='text-xs text-neutral'>
 									Included in all official Bitunix emails.
 								</p>
 							</div>
 						</div>
-						<button className='text-lime-400 border border-lime-400 text-xs px-3 py-1 rounded'>
+						<Link
+							to={'/account/security/set-phish-code'}
+							className='text-lime-400 border cursor-pointer border-lime-400 text-xs px-3 py-1 rounded'>
 							Set up
-						</button>
+						</Link>
 					</div>
 				</div>
 			</div>
@@ -148,7 +179,7 @@ const Security = () => {
 						<Upload className='text-lime-400' />
 						<div>
 							<p className='font-semibold text-sm'>One-step Withdrawal</p>
-							<p className='text-xs text-gray-400'>
+							<p className='text-xs text-neutral'>
 								Allows withdrawal of small crypto amounts without passing 2FA.
 							</p>
 						</div>
@@ -172,12 +203,12 @@ const Security = () => {
 							<Settings className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Device Management</p>
-								<p className='text-xs text-gray-400'>
+								<p className='text-xs text-neutral'>
 									Manage authorized devices
 								</p>
 							</div>
 						</div>
-						<ChevronDown className='text-gray-400 w-4 h-4' />
+						<ChevronRight className='text-lime-400 hover:text-lime-300 size-6' />
 					</div>
 
 					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
@@ -185,12 +216,17 @@ const Security = () => {
 							<LogOut className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Account Activity</p>
-								<p className='text-xs text-gray-400'>Suspicious activity?</p>
+								<div className='flex items-center gap-3'>
+									<p className='text-xs text-neutral'>Suspicious activity?</p>
+									<Link
+										to='/account/security/disable-account'
+										className='text-xs text-lime-400 underline'>
+										Disable account
+									</Link>
+								</div>
 							</div>
 						</div>
-						<span className='text-xs text-lime-400 underline'>
-							Disable account
-						</span>
+						<ChevronRight className='text-lime-400 hover:text-lime-300 size-6' />
 					</div>
 				</div>
 			</div>
