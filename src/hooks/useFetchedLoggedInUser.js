@@ -13,7 +13,6 @@ const useFetchLoggedInUser = () => {
 
   useEffect(() => {
     const skipPaths = ["/login", "/register", "/forgot-password"];
-    console.log(location.pathname);
     if (skipPaths.includes(location.pathname)) return;
     dispatch(fetchLoggedInUser())
       .unwrap()
