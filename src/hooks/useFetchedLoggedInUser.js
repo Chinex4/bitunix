@@ -11,19 +11,7 @@ const useFetchLoggedInUser = () => {
 
 	const { user, error, loading } = useSelector((state) => state.user);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const skipPaths = ["/login", "/register", "/forgot-password"];
-    if (skipPaths.includes(location.pathname)) return;
-    dispatch(fetchLoggedInUser())
-      .unwrap()
-      .catch((err) => {
-        toast.error(err || "Session expired. Please log in again.");
-		localStorage.removeItem('accessToken');
-        navigate('/login');
-      });
-  }, [dispatch, navigate, location]);
-=======
+
 	useEffect(() => {
 		const skipPaths = ['/login', '/register', '/forgot-password'];
 		// console.log(location.pathname);
@@ -37,7 +25,7 @@ const useFetchLoggedInUser = () => {
 				navigate('/login');
 			});
 	}, [dispatch, navigate, location]);
->>>>>>> 865177c5e7af4b5c3e0677905388028b616f4b9f
+
 
 	return { user, error, loading };
 };

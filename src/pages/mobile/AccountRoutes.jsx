@@ -4,6 +4,7 @@ import AccountHeader from '../../components/AccountHeader';
 import Security from '../account/Security';
 import IdentityVerification from '../account/IdentiyVerification';
 import Settings from '../account/Settings';
+import BasicVerificationForm from '../account/BasicVerificationForm';
 
 // import other components...
 
@@ -29,6 +30,10 @@ const AccountRoutes = () => {
 					<Route
 						path='identity-verification'
 						element={<IdentityVerification />}
+					/>
+					<Route
+						path='basic-verification'
+						element={<BasicVerificationForm />}
 					/>
 					<Route
 						path='settings'

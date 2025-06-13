@@ -57,6 +57,7 @@ const authSlice = createSlice({
         state.user = {
           accessToken: action.payload.accessToken,
         };
+        // state.tempToken = action.payload.accessToken
         // state.token = action.payload.accessToken; // optional if needed
       })
       .addCase(loginUser.rejected, (state, action) => {
