@@ -17,6 +17,7 @@ import useFetchLoggedInUser from '../../hooks/useFetchedLoggedInUser';
 import { maskEmail } from '../../functions/helper';
 import { showSuccess } from '../../utils/toast';
 import { useState } from 'react';
+import WithdrawalSecurity from './WithdrawalSecurity';
 
 const Security = () => {
 	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
@@ -66,9 +67,9 @@ const Security = () => {
 						<span className='text-red-500 font-semibold ml-1'>Low</span>
 					</p>
 
-					<div className='relative flex h-3 w-full rounded-full overflow-hidden mt-2'>
+					<div className='relative flex h-[18px] w-[500px] rounded-full overflow-hidden mt-2 gap-2'>
 						{/* Active segment with arrow */}
-						<div className='relative z-10 flex-1 bg-red-600 shadow-[0_0_8px_rgba(255,0,0,0.6)]'>
+						<div className='relative z-10 flex-1 bg-red-600 shadow-2xl shadow-red-400'>
 							<div className='absolute right-0 top-0 h-full w-3 skew-x-[-30deg] bg-red-600'></div>
 						</div>
 
@@ -82,12 +83,12 @@ const Security = () => {
 			<div className='mb-6'>
 				<h2 className='text-lg font-semibold mb-4'>Verification Methods</h2>
 				<div className='space-y-4'>
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<div className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<ShieldCheck className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Google Authenticator</p>
-								<p className='text-xs text-neutral'>
+								<p className='text-xs text-white/35'>
 									Protect your account and transactions.
 								</p>
 							</div>
@@ -97,12 +98,12 @@ const Security = () => {
 						</button>
 					</div>
 
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<div className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<Smartphone className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Mobile Verification</p>
-								<p className='text-xs text-neutral'>
+								<p className='text-xs text-white/35'>
 									Protect your account and transactions.
 								</p>
 							</div>
@@ -112,12 +113,12 @@ const Security = () => {
 						</button>
 					</div>
 
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<div className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<Mail className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Email Verification</p>
-								<p className='text-neutral text-xs'>
+								<p className='text-white/35 text-xs'>
 									Protect your account and transactions.
 								</p>
 							</div>
@@ -138,12 +139,12 @@ const Security = () => {
 			<div className='mb-6'>
 				<h2 className='text-lg font-semibold mb-4'>Password</h2>
 				<div className='space-y-4'>
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<div className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<Lock className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Login Password</p>
-								<p className='text-xs text-neutral'>Protect your account</p>
+								<p className='text-xs text-white/35'>Protect your account</p>
 							</div>
 						</div>
 						<Link
@@ -153,12 +154,12 @@ const Security = () => {
 						</Link>
 					</div>
 
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<div className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<EyeOff className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Anti-Phishing Code</p>
-								<p className='text-xs text-neutral'>
+								<p className='text-xs text-white/35'>
 									Included in all official Bitunix emails.
 								</p>
 							</div>
@@ -172,52 +173,31 @@ const Security = () => {
 				</div>
 			</div>
 
-			<div className='mb-6'>
-				<h2 className='text-lg font-semibold mb-4'>Withdrawal Security</h2>
-				<div className='flex flex-col gap-2 bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
-					<div className='flex items-center gap-3'>
-						<Upload className='text-lime-400' />
-						<div>
-							<p className='font-semibold text-sm'>One-step Withdrawal</p>
-							<p className='text-xs text-neutral'>
-								Allows withdrawal of small crypto amounts without passing 2FA.
-							</p>
-						</div>
-					</div>
-					<Link
-						to='#'
-						className='text-xs text-lime-400 underline ml-7'>
-						Address management
-					</Link>
-					<button className='text-lime-400 border border-lime-400 text-xs px-3 py-1 rounded ml-7 w-max'>
-						Enable
-					</button>
-				</div>
-			</div>
+			<WithdrawalSecurity />
 
 			<div className='mb-10'>
 				<h2 className='text-lg font-semibold mb-4'>Account Activity</h2>
 				<div className='space-y-4'>
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<Link to='/account/security/device-management' className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<Settings className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Device Management</p>
-								<p className='text-xs text-neutral'>
+								<p className='text-xs text-white/35'>
 									Manage authorized devices
 								</p>
 							</div>
 						</div>
 						<ChevronRight className='text-lime-400 hover:text-lime-300 size-6' />
-					</div>
+					</Link>
 
-					<div className='flex justify-between items-center bg-[#1A1A1A] p-4 rounded-lg border border-[#333]'>
+					<Link to='/account/security/account-activity' className='flex justify-between items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>
 						<div className='flex items-center gap-3'>
 							<LogOut className='text-lime-400' />
 							<div>
 								<p className='font-semibold text-sm'>Account Activity</p>
 								<div className='flex items-center gap-3'>
-									<p className='text-xs text-neutral'>Suspicious activity?</p>
+									<p className='text-xs text-white/35'>Suspicious activity?</p>
 									<Link
 										to='/account/security/disable-account'
 										className='text-xs text-lime-400 underline'>
@@ -227,7 +207,7 @@ const Security = () => {
 							</div>
 						</div>
 						<ChevronRight className='text-lime-400 hover:text-lime-300 size-6' />
-					</div>
+					</Link>
 				</div>
 			</div>
 		</div>

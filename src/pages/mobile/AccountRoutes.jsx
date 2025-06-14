@@ -8,6 +8,8 @@ import BasicVerificationForm from '../account/BasicVerificationForm';
 import ChangeEmail from '../account/ChangeEmail';
 import ChangePassword from '../account/ChangePassword';
 import SetAntiPhishingCode from '../account/SetAntiPhishingCode';
+import DeviceManagement from '../account/Devicemanagement';
+import AccountActivity from '../account/AcountActivity';
 
 // import other components...
 
@@ -53,6 +55,14 @@ const AccountRoutes = () => {
 					<Route
 						path='/security/disable-account'
 						element={<SetAntiPhishingCode />}
+					/>
+					<Route
+						path='/security/device-management'
+						element={<DeviceManagement />}
+					/>
+					<Route
+						path='/security/account-activity'
+						element={<AccountActivity />}
 					/>
 					<Route
 						path='settings'
