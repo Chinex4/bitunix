@@ -13,7 +13,7 @@ import {
 import LoginVerificationModal from "../../components/modals/LoginVerificationModal";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);npmm
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const [showVerifyModal, setShowVerifyModal] = useState(false);
