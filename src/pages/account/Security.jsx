@@ -41,10 +41,12 @@ const Security = () => {
 						<p className='font-semibold text-sm md:text-base'>
 							{maskEmail(email)}
 						</p>
+						<div>
+
 						<span className='bg-green-700 text-xs px-2 py-1 rounded'>
 							Regular User
 						</span>
-						<p className='text-[14px] text-neutral flex items-center gap-3'>
+						<p className='text-[14px] text-white/70 mt-2 flex items-center gap-3'>
 							<span>UID: {showUID ? uid : '*******'}</span>
 							<div classname='inline-flex items-center gap-2'>
 								<button
@@ -59,6 +61,7 @@ const Security = () => {
 								/>
 							</div>
 						</p>
+						</div>
 					</div>
 				</div>
 				<div>
