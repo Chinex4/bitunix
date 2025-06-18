@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import GoBack from '../../components/ui/GoBack';
 
 export default function DisableAccount() {
-	const navigate = useNavigate();
 	const [confirmed, setConfirmed] = useState(false);
 
 	const handleDisable = () => {

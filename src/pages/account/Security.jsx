@@ -103,9 +103,9 @@ const Security = () => {
                 </p>
               </div>
             </div>
-            <button className='text-lime-400 border border-lime-400 text-xs px-3 py-1 rounded'>
+            <Link to={'/account/security/bind-mobile'} className='text-lime-400 border border-lime-400 text-xs px-3 py-1 rounded'>
               Set up
-            </button>
+            </Link>
           </div>
 
           <div className='flex flex-col lg:flex-row justify-between lg:items-center bg-[#1A1A1A] hover:bg-black/80 transition-all duration-300 p-4 rounded-lg border border-[#333]'>

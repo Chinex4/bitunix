@@ -44,7 +44,7 @@ function App() {
       user?.allowOtp === true ||
       (user?.allowOtp === null && user?.confirmOtp === false)
     ) {
-      // dispatch(logout());
+      dispatch(logout());
       // console.log("log out");
     }
   }, [dispatch, user]);

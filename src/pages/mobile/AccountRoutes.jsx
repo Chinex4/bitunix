@@ -12,6 +12,7 @@ import DeviceManagement from '../account/Devicemanagement';
 import AccountActivity from '../account/AcountActivity';
 import BindGoogleAuthenticator from '../account/BindGoogleAuthentication';
 import DisableAccount from '../account/DisableAccount';
+import BindMobile from '../account/BindMobile';
 
 // import other components...
 
@@ -45,6 +46,10 @@ const AccountRoutes = () => {
 					<Route
 						path='/security/bind-google-auth'
 						element={<BindGoogleAuthenticator />}
+					/>
+					<Route
+						path='/security/bind-mobile'
+						element={<BindMobile />}
 					/>
 					<Route
 						path='/security/modify-email'
