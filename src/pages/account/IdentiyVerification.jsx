@@ -76,7 +76,7 @@ const IdentityVerification = () => {
 						</p>
 					</div>
 
-					<Link to={'/account/basic-verification'} className='px-8 bg-lime-400 hover:bg-lime-500 text-black rounded-md py-2 font-semibold'>
+					<Link to={'/account/basic-verification'} className='px-8 bg-lime-400 hover:bg-lime-500 text-black rounded-md py-2 font-semibold text-center'>
 						Verify
 					</Link>
 				</div>

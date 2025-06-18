@@ -13,7 +13,7 @@ const accessToken = localStorage.getItem("accessToken");
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: accessToken ? { accessToken, confirmOtp: false, otpIsAllowed: true } : null,
+    user: accessToken ? { accessToken, confirmOtp: false, allowOtp: true } : null,
     loading: false,
     error: null,
     // token: null,
@@ -56,7 +56,7 @@ const authSlice = createSlice({
         state.user = {
           accessToken: action.payload.accessToken,
           confirmOtp: action.payload.confirmOtp,
-          otpIsAllowed: action.payload.check,
+          allowOtp: action.payload.allowOtp,
         };
         // state.tempToken = action.payload.accessToken
         // state.token = action.payload.accessToken; // optional if needed

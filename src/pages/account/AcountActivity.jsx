@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import GoBack from '../../components/ui/GoBack';
 
 const activity = [
 	{
@@ -72,11 +73,7 @@ export default function AccountActivity() {
 			{/* Header & Back Button */}
 			<div className='flex items-center justify-between mb-6'>
 				<div className='flex items-center gap-2'>
-					<button
-						onClick={() => navigate(-1)}
-						className='text-gray-300 hover:text-white'>
-						<ArrowLeft size={20} />
-					</button>
+					<GoBack />
 					<h2 className='text-2xl font-bold'>Account Activity</h2>
 				</div>
 				<p className='text-sm text-gray-400 hidden sm:block'>

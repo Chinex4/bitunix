@@ -10,6 +10,8 @@ import ChangePassword from '../account/ChangePassword';
 import SetAntiPhishingCode from '../account/SetAntiPhishingCode';
 import DeviceManagement from '../account/Devicemanagement';
 import AccountActivity from '../account/AcountActivity';
+import BindGoogleAuthenticator from '../account/BindGoogleAuthentication';
+import DisableAccount from '../account/DisableAccount';
 
 // import other components...
 
@@ -41,6 +43,10 @@ const AccountRoutes = () => {
 						element={<BasicVerificationForm />}
 					/>
 					<Route
+						path='/security/bind-google-auth'
+						element={<BindGoogleAuthenticator />}
+					/>
+					<Route
 						path='/security/modify-email'
 						element={<ChangeEmail />}
 					/>
@@ -54,7 +60,7 @@ const AccountRoutes = () => {
 					/>
 					<Route
 						path='/security/disable-account'
-						element={<SetAntiPhishingCode />}
+						element={<DisableAccount />}
 					/>
 					<Route
 						path='/security/device-management'

@@ -8,6 +8,7 @@ import CountrySelector from '../../components/ui/CountrySelector';
 import IdentityPrepModal from '../../components/ui/modals/IdentityPrepModal';
 import UploadIDPage from './UploadIDPage';
 import { getDateYearsAgo } from '../../utils/getDateYearsAgo';
+import GoBack from '../../components/ui/GoBack';
 
 const documentTypes = ['ID Card', 'Driver’s License', 'Passport', 'Others'];
 
@@ -72,6 +73,7 @@ export default function BasicVerificationForm() {
 
 	return (
 		<div className='max-w-6xl mx-auto text-white px-4 py-6 space-y-6'>
+			<GoBack />
 			<h2 className='text-2xl font-bold'>Basic Verification</h2>
 			<div className='bg-[#1a1a1a] p-3 text-sm text-gray-400 rounded-md'>
 				⚠ Make sure that the information entered matches the documents to be

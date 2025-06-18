@@ -46,11 +46,12 @@ const Login = () => {
     const formData = { ...data, createdAt };
     dispatch(loginUser(formData)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        const { check, confirmOtp } = res.payload;
-        if (check === true || check === null && confirmOtp === 'false') {
+        const { allowOtp, confirmOtp } = res.payload;       
+        if (allowOtp === "true" || allowOtp === null && confirmOtp === 'false') {
           setShowVerifyModal(true);
           setUserEmail(formData.email);
-        } else {
+        } 
+        else {
           navigate("/");
         }
       }

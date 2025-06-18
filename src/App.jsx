@@ -38,12 +38,16 @@ function App() {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-useEffect(() => {
-  if (user?.otpIsAllowed === true || user?.otpIsAllowed === null  && user?.confirmOtp === false) {
-    dispatch(logout());
-  }
-}, [dispatch, user]);
-
+  // console.log(user);
+  useEffect(() => {
+    if (
+      user?.allowOtp === true ||
+      (user?.allowOtp === null && user?.confirmOtp === false)
+    ) {
+      // dispatch(logout());
+      // console.log("log out");
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");

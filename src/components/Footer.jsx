@@ -26,7 +26,7 @@ const Footer = () => {
 				</div>
 
 				{/* Links Grid */}
-				<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 w-full'>
+				<div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 w-full'>
 					{/* About */}
 					<div className='flex flex-col gap-2'>
 						<h4 className='text-white font-semibold mb-2'>About</h4>
@@ -141,7 +141,7 @@ const Footer = () => {
 					<div className='flex flex-col gap-2'>
 						<h4 className='text-white font-semibold mb-2'>Partners</h4>
 						<Link
-							to='#'
+							to='/referral'
 							className='hover:text-white text-sm'>
 							Referral
 						</Link>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import GoBack from '../../components/ui/GoBack';
 
 export default function DisableAccount() {
 	const navigate = useNavigate();
@@ -14,15 +15,7 @@ export default function DisableAccount() {
 	return (
 		<div className='max-w-2xl mx-auto text-white px-4 py-6'>
 			{/* Go Back */}
-			<button
-				onClick={() => navigate(-1)}
-				className='mb-4 flex items-center text-gray-300 hover:text-white'>
-				<ArrowLeft
-					className='mr-2'
-					size={18}
-				/>
-				<span className='text-sm'>Back</span>
-			</button>
+			<GoBack />
 
 			<h2 className='text-2xl font-bold mb-4'>Disable account</h2>
 
