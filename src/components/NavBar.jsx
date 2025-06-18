@@ -79,7 +79,7 @@ const Navbar = () => {
 	]);
 
 	const dispatch = useDispatch();
-	const user = useSelector((state) => state.auth.user);
+	const user = localStorage.getItem('accessToken');
 	const isAuthenticated = !!user;
 	// const isAuthenticated = true;
 	const navigate = useNavigate();

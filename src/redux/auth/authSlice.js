@@ -58,6 +58,7 @@ const authSlice = createSlice({
           confirmOtp: action.payload.confirmOtp,
           otpIsAllowed: action.payload.check,
         };
+        // state.tempToken = action.payload.accessToken
         // state.token = action.payload.accessToken; // optional if needed
       })
       .addCase(loginUser.rejected, (state, action) => {

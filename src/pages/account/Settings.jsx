@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useRef } from 'react';
 import { Pencil, Globe, UserCircle2, Palette } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,11 +9,55 @@ import {
 import { showPromise } from '../../utils/toast'; // adjust import if needed
 import useFetchLoggedInUser from '../../hooks/useFetchedLoggedInUser';
 import { maskEmail } from '../../functions/helper';
+import Cropper from 'react-easy-crop';
+import { Tab } from '@headlessui/react';
+import { getCroppedImg } from '../../utils/cropImageUtil';
+
+const avatarList = Array.from(
+	{ length: 16 },
+	(_, i) => `/avatars/a${i + 1}.png`
+);
 
 const Settings = () => {
 	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
 	const email = fetchedUser?.message?.userDetails.email ?? '';
 	const [openModal, setOpenModal] = useState(null);
+
+	const fileInputRef = useRef();
+	const [selectedTab, setSelectedTab] = useState(0);
+	const [selectedAvatar, setSelectedAvatar] = useState(null);
+	const [uploadedImage, setUploadedImage] = useState(null);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+	const [crop, setCrop] = useState({ x: 0, y: 0 });
+	const [zoom, setZoom] = useState(1);
+
+	const onSelectFile = (e) => {
+		const file = e.target.files[0];
+		if (file && file.type.startsWith('image/')) {
+			const reader = new FileReader();
+			reader.onload = () => setUploadedImage(reader.result);
+			reader.readAsDataURL(file);
+		}
+	};
+
+	const onCropComplete = (_, croppedPixels) => {
+		setCroppedAreaPixels(croppedPixels);
+	};
+
+	const handleAvatarSave = async () => {
+		if (selectedTab === 0 && selectedAvatar) {
+			console.log('Selected Avatar:', selectedAvatar);
+		} else if (uploadedImage && croppedAreaPixels) {
+			const croppedImage = await getCroppedImg(
+				uploadedImage,
+				croppedAreaPixels
+			);
+			console.log('Cropped Uploaded Image:', croppedImage);
+		}
+		closeModal();
+	};
+
+	const isSaveEnabled = selectedAvatar || uploadedImage;
 
 	const { nickname, language, status } = useSelector(
 		(state) => state.userSettings
@@ -49,71 +93,58 @@ const Settings = () => {
 	};
 
 	return (
-		<div className='p-4 text-white max-w-3xl mx-auto space-y-8'>
+		<div className='p-4 text-white max-w-6xl mx-auto space-y-8'>
 			{/* Profile Section */}
-			<section>
+			<section classname=''>
 				<h2 className='text-xl font-bold mb-4'>Profile</h2>
 
 				<div className='space-y-6'>
 					{/* Nickname */}
-					<div className='bg-[#111] p-4 rounded-md space-y-1'>
-						<div className='flex items-center gap-3 text-lime-400'>
-							<UserCircle2 size={20} />
-							<h3 className='font-semibold text-white'>Nickname</h3>
+					<div className='bg-[#111] p-4 rounded-md space-y-1 flex justify-between items-center'>
+						<div>
+							<div className='flex items-center gap-3 text-lime-400'>
+								<UserCircle2 size={20} />
+								<h3 className='font-semibold text-white'>Nickname</h3>
+							</div>
+							<p className='text-gray-400 text-xs'>
+								Customize your Bitunix nickname, which will be displayed in your
+								profile and social modules.
+							</p>
 						</div>
-						<p className='text-gray-400 text-sm'>
-							Customize your Bitunix nickname, which will be displayed in your
-							profile and social modules.
-						</p>
-						<div className='flex justify-between mt-2'>
-							<span>{nickname || maskEmail(email)}</span>
+						<div className='flex justify-between mt-2 text-xs gap-1 items-center'>
+							<span>{nickname || maskEmail(email)} | </span>
 							<button
 								onClick={() => setOpenModal('nickname')}
 								className='text-lime-400 font-medium'>
+								{' '}
 								Change
 							</button>
 						</div>
 					</div>
 
 					{/* Profile Picture */}
-					<div className='bg-[#111] p-4 rounded-md space-y-1'>
-						<div className='flex items-center gap-3 text-lime-400'>
-							<UserCircle2 size={20} />
-							<h3 className='font-semibold text-white'>Profile</h3>
-						</div>
-						<p className='text-gray-400 text-sm'>
-							Personalize your profile by choosing from provided avatars.
-						</p>
-						<div className='flex justify-between items-center mt-2'>
-							<div className='rounded-full bg-lime-400 w-8 h-8 flex items-center justify-center text-black font-bold'>
-								U
+					<div className='bg-[#111] p-4 rounded-md space-y-1 flex justify-between items-center'>
+						<div>
+							<div className='flex items-center gap-3 text-lime-400'>
+								<UserCircle2 size={20} />
+								<h3 className='font-semibold text-white'>Profile</h3>
 							</div>
+							<p className='text-gray-400 text-xs'>
+								Personalize your profile by choosing from provided avatars.
+							</p>
+						</div>
+						<div className='flex justify-between mt-2 text-xs gap-1 items-center'>
+							<img
+								className='size-10 rounded-full '
+								src={selectedAvatar || uploadedImage}
+								alt=''
+							/>
 							<button
 								onClick={() => setOpenModal('avatar')}
 								className='text-lime-400 font-medium'>
 								Change
 							</button>
 						</div>
-					</div>
-				</div>
-			</section>
-
-			{/* Settings Section */}
-			<section>
-				<h2 className='text-xl font-bold mb-4'>Settings</h2>
-
-				{/* Color Settings */}
-				<div className='bg-[#111] p-4 rounded-md space-y-1'>
-					<div className='flex items-center gap-3 text-lime-400'>
-						<Palette size={20} />
-						<h3 className='font-semibold text-white'>Color Settings</h3>
-					</div>
-					<p className='text-gray-400 text-sm'>K-line color</p>
-					<div className='flex justify-between mt-2'>
-						<span>
-							Green Up / Red Down <span className='text-red-500'>↓</span>
-						</span>
-						<span className='text-lime-400 font-medium'>Default</span>
 					</div>
 				</div>
 			</section>
@@ -151,31 +182,135 @@ const Settings = () => {
 					value={nicknameInput}
 					onChange={(e) => setNicknameInput(e.target.value)}
 					className='bg-black border border-gray-600 rounded-md p-2 w-full'
-					placeholder='Enter new nickname'
+					placeholder='Maximum 20 Characters'
 				/>
-				<button
-					onClick={handleSaveNickname}
-					className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
-					Save
-				</button>
+				<p className='text-xs text-neutral'>
+					Nicknames will be used in the personal profile, copy tradings, and
+					various activity pages, and will be visible to other users. Nicknames
+					can only be changed once per 1 day(s). Bitunix will review the
+					nickname change request. If it contains insulting words, politically
+					sensitive words, etc., it will not be approved. Bitunix reserves the
+					right to change nicknames that are not in compliance with the law or
+					to impose punishments such as account bans. Nickname review will take
+					some time, you can not repeat the submission of changes during the
+					review process, please wait patiently.
+				</p>
+				<div className='flex items-center gap-2 mt-4'>
+					<button
+						onClick={closeModal}
+						className='w-full py-2 bg-neutral-700 hover:bg-neutral-600 text-black font-semibold rounded-md'>
+						Cancel
+					</button>
+					<button
+						onClick={handleSaveNickname}
+						className='w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
+						Save
+					</button>
+				</div>
 			</AnimatedModal>
 
 			<AnimatedModal
 				isOpen={openModal === 'avatar'}
 				onClose={closeModal}
 				title='Change Profile Picture'>
-				<div className='grid grid-cols-4 gap-3'>
-					{[...Array(8)].map((_, i) => (
-						<div
-							key={i}
-							className='w-12 h-12 bg-lime-400 rounded-full flex items-center justify-center font-bold text-black'>
-							{i + 1}
-						</div>
-					))}
+				<Tab.Group
+					selectedIndex={selectedTab}
+					onChange={setSelectedTab}>
+					<Tab.List className='flex border-b mb-4'>
+						<Tab
+							className={({ selected }) =>
+								`py-2 px-4 ${
+									selected
+										? 'border-b-2 border-white font-bold'
+										: 'text-gray-400'
+								}`
+							}>
+							Select an avatar
+						</Tab>
+						<Tab
+							className={({ selected }) =>
+								`py-2 px-4 ${
+									selected
+										? 'border-b-2 border-white font-bold'
+										: 'text-gray-400'
+								}`
+							}>
+							Upload image
+						</Tab>
+					</Tab.List>
+
+					<Tab.Panels>
+						<Tab.Panel>
+							<div className='grid grid-cols-4 gap-3 mb-4'>
+								{avatarList.map((src, i) => (
+									<img
+										key={i}
+										src={src}
+										alt={`avatar-${i}`}
+										onClick={() => setSelectedAvatar(src)}
+										className={`w-16 h-16 rounded-full cursor-pointer border-2 ${
+											selectedAvatar === src
+												? 'border-lime-400'
+												: 'border-transparent'
+										}`}
+									/>
+								))}
+							</div>
+						</Tab.Panel>
+
+						<Tab.Panel>
+							{!uploadedImage ? (
+								<div
+									className='border border-dashed border-gray-400 py-[7rem] text-center rounded-md cursor-pointer'
+									onClick={() => fileInputRef.current.click()}>
+									<input
+										type='file'
+										accept='image/*'
+										className='hidden'
+										ref={fileInputRef}
+										onChange={onSelectFile}
+									/>
+									<p>Upload an Image or Drag and Drop</p>
+									<p className='text-xs mt-1 text-gray-400'>
+										Supports JPG, PNG, and GIF formats, up to 10 MB
+									</p>
+								</div>
+							) : (
+								<div className='relative w-full h-64 bg-black mb-4'>
+									<Cropper
+										image={uploadedImage}
+										crop={crop}
+										zoom={zoom}
+										aspect={1}
+										cropShape='round'
+										showGrid={false}
+										onCropChange={setCrop}
+										onZoomChange={setZoom}
+										onCropComplete={onCropComplete}
+									/>
+								</div>
+							)}
+						</Tab.Panel>
+					</Tab.Panels>
+				</Tab.Group>
+
+				<div className='flex justify-end gap-3 mt-4'>
+					<button
+						onClick={closeModal}
+						className='px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600'>
+						Cancel
+					</button>
+					<button
+						disabled={!isSaveEnabled}
+						onClick={handleAvatarSave}
+						className={`px-4 py-2 rounded-md font-semibold ${
+							isSaveEnabled
+								? 'bg-lime-400 text-black hover:bg-lime-500'
+								: 'bg-gray-500 cursor-not-allowed text-white'
+						}`}>
+						Save
+					</button>
 				</div>
-				<button className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>
-					Save Avatar
-				</button>
 			</AnimatedModal>
 
 			<AnimatedModal
@@ -236,11 +371,11 @@ const AnimatedModal = ({ isOpen, onClose, title, children }) => {
 								{title}
 							</Dialog.Title>
 							{children}
-							<button
+							{/* <button
 								onClick={onClose}
 								className='w-full py-2 bg-gray-700 rounded-md text-white mt-2'>
 								Cancel
-							</button>
+							</button> */}
 						</Dialog.Panel>
 					</Transition.Child>
 				</div>

@@ -4,6 +4,12 @@ import AccountHeader from '../../components/AccountHeader';
 import Security from '../account/Security';
 import IdentityVerification from '../account/IdentiyVerification';
 import Settings from '../account/Settings';
+import BasicVerificationForm from '../account/BasicVerificationForm';
+import ChangeEmail from '../account/ChangeEmail';
+import ChangePassword from '../account/ChangePassword';
+import SetAntiPhishingCode from '../account/SetAntiPhishingCode';
+import DeviceManagement from '../account/Devicemanagement';
+import AccountActivity from '../account/AcountActivity';
 
 // import other components...
 
@@ -29,6 +35,34 @@ const AccountRoutes = () => {
 					<Route
 						path='identity-verification'
 						element={<IdentityVerification />}
+					/>
+					<Route
+						path='basic-verification'
+						element={<BasicVerificationForm />}
+					/>
+					<Route
+						path='/security/modify-email'
+						element={<ChangeEmail />}
+					/>
+					<Route
+						path='/security/modify-password'
+						element={<ChangePassword />}
+					/>
+					<Route
+						path='/security/set-phish-code'
+						element={<SetAntiPhishingCode />}
+					/>
+					<Route
+						path='/security/disable-account'
+						element={<SetAntiPhishingCode />}
+					/>
+					<Route
+						path='/security/device-management'
+						element={<DeviceManagement />}
+					/>
+					<Route
+						path='/security/account-activity'
+						element={<AccountActivity />}
 					/>
 					<Route
 						path='settings'

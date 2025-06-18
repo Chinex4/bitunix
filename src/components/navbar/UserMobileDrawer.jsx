@@ -7,6 +7,7 @@ const UserMobileDrawer = ({
   isUserOpen,
   setIsUserOpen,
   isAuthenticated,
+  email,
   uid,
   showUID,
   setShowUID,
@@ -18,7 +19,7 @@ const UserMobileDrawer = ({
   handleLogout,
 }) => {
   if (!isUserOpen || !isAuthenticated) return null;
-  const [email] = useState('astauchiha234@gmail.com')
+  // const [email] = useState('astauchiha234@gmail.com')
 
   return (
     <motion.div
