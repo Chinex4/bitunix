@@ -34,7 +34,7 @@ const FAQ = ({ showHeader = true }) => {
 	return (
 		<section className='max-w-7xl mx-auto mt-12 px-4'>
 			{showHeader && (
-				<h2 className='mb-4 md:mb-8 text-2xl md:text-3xl lg:text-4xl font-bold text-left md:text-center '>
+				<h2 className='mb-4 md:mb-8 text-xl md:text-2xl lg:text-4xl font-bold text-left md:text-center '>
 					Frequently Asked Questions
 				</h2>
 			)}

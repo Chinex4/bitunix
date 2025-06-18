@@ -41,8 +41,8 @@ function App() {
   // console.log(user);
   useEffect(() => {
     if (
-      user?.allowOtp === true ||
-      (user?.allowOtp === null && user?.confirmOtp === false)
+      user?.allowOtp === "true" ||
+      (user?.allowOtp === "null" && user?.confirmOtp === "false")
     ) {
       dispatch(logout());
       // console.log("log out");
