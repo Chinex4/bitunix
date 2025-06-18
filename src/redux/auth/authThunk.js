@@ -112,12 +112,12 @@ export const loginUser = createAsyncThunk(
         }
         // showSuccess("Login successful");
 
-        const { accessToken, refreshToken } = res.data.message;
+        const { accessToken, confirmOtp, check } = res.data.message;
 
         localStorage.setItem("accessToken", accessToken);
         // localStorage.setItem("refreshToken", refreshToken);
 
-        return { accessToken };
+        return { accessToken, confirmOtp, check };
       }
     } catch (err) {
       showError(err.response?.data?.errors || "Login failed");

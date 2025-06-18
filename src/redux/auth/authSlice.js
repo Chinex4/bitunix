@@ -9,12 +9,11 @@ import {
   resendOtp,
 } from "./authThunk";
 const accessToken = localStorage.getItem("accessToken");
-const refreshToken = localStorage.getItem("refreshToken");
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: accessToken ? { accessToken } : null,
+    user: accessToken ? { accessToken, confirmOtp: false, otpIsAllowed: true } : null,
     loading: false,
     error: null,
     // token: null,
@@ -56,6 +55,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = {
           accessToken: action.payload.accessToken,
+          confirmOtp: action.payload.confirmOtp,
+          otpIsAllowed: action.payload.check,
         };
         // state.token = action.payload.accessToken; // optional if needed
       })

@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   generateLoginOtp,
   loginUser,
-  resendOtp,
+  // resendOtp,
 } from "../../redux/auth/authThunk";
 import LoginVerificationModal from "../../components/modals/LoginVerificationModal";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
@@ -30,7 +31,7 @@ const Login = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors, touchedFields },
+    formState: { errors, touchedFields:_ },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -45,9 +46,13 @@ const Login = () => {
     const formData = { ...data, createdAt };
     dispatch(loginUser(formData)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        // If successful, show modal
-        setUserEmail(formData.email);
-        setShowVerifyModal(true);
+        const { check, confirmOtp } = res.payload;
+        if (check === true || check === null && confirmOtp === 'false') {
+          setShowVerifyModal(true);
+          setUserEmail(formData.email);
+        } else {
+          navigate("/");
+        }
       }
     });
   };
