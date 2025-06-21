@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import countryList from 'react-select-country-list';
-import FAQ from '../../components/FAQ';
+import { CreditCard } from 'lucide-react';
 
 const coinOptions = [
 	{ value: 'USDT', label: 'USDT', icon: '🟢' },
@@ -26,11 +26,6 @@ const paymentMethods = [
 	{ value: 'ApplePay', label: 'Apple Pay' },
 ];
 
-const providerOptions = [
-	{ value: 'coinify', label: 'Coinify' },
-	{ value: 'moonpay', label: 'MoonPay' },
-];
-
 const coinIdMap = {
 	USDT: 'tether',
 	BTC: 'bitcoin',
@@ -43,14 +38,12 @@ export default function PurchaseCrypto() {
 	const [selectedCoin, setSelectedCoin] = useState(coinOptions[0]);
 	const [selectedCurrency, setSelectedCurrency] = useState(fiatOptions[0]);
 	const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0]);
-	const [provider, setProvider] = useState(providerOptions[0]);
 	const [rate, setRate] = useState(1);
 	const [country, setCountry] = useState(null);
 
 	const countries = countryList().getData();
 	const received = (amount / rate).toFixed(8);
 
-	// Fetch exchange rate from CoinGecko
 	useEffect(() => {
 		const fetchRate = async () => {
 			try {
@@ -76,7 +69,6 @@ export default function PurchaseCrypto() {
 		if (selectedCoin && selectedCurrency) fetchRate();
 	}, [selectedCoin, selectedCurrency]);
 
-	// Auto-detect country
 	useEffect(() => {
 		axios.get('https://ipapi.co/json/').then((res) => {
 			const code = res.data.currency;
@@ -93,8 +85,8 @@ export default function PurchaseCrypto() {
 	const customStyles = {
 		control: (base) => ({
 			...base,
-			background: '#1b1b1b',
-			border: 'none',
+			background: '#111',
+			border: '1px solid #333',
 			color: 'white',
 		}),
 		menu: (base) => ({
@@ -109,105 +101,97 @@ export default function PurchaseCrypto() {
 			color: '#fff',
 			cursor: 'pointer',
 		}),
+		singleValue: (base) => ({
+			...base,
+			color: 'white',
+		}),
 	};
 
 	return (
-		<div className='min-h-screen bg-black text-white px-4 py-8'>
-			<section className='max-w-md mx-auto bg-[#121212] rounded-2xl p-6'>
-				<h1 className='text-2xl font-bold text-center mb-2'>
-					Purchase Crypto Via Third-Party
-				</h1>
-				<p className='text-sm text-center text-gray-400 mb-6'>
-					Buy crypto like BTC or ETH safely with 30+ fiat currencies.
-				</p>
-
-				{/* Pay Amount */}
-				<div className='mb-4'>
-					<label className='text-sm mb-1 block'>Pay</label>
-					<div className='flex items-center gap-2'>
-						<input
-							type='number'
-							value={amount}
-                            placeholder='10 - 54,178.66'
-							onChange={(e) => setAmount(e.target.value)}
-							className='w-full px-3 py-2 rounded-xl bg-black border border-white/10 text-white outline-none'
-						/>
-						<Select
-							options={fiatOptions}
-							value={selectedCurrency}
-							onChange={setSelectedCurrency}
-							className='text-sm w-32'
-							styles={customStyles}
-						/>
-					</div>
+		<div className='min-h-screen bg-black text-white flex items-center justify-center px-6 py-10'>
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl w-full'>
+				{/* Left Content */}
+				<div className='flex flex-col justify-center'>
+					<h1 className='text-3xl font-bold mb-4'>
+						Purchase Crypto Via <br /> Third-Party
+					</h1>
+					<p className='text-gray-400 text-sm mb-8 max-w-sm'>
+						You can buy cryptocurrencies such as BTC, ETH and other
+						cryptocurrencies through safe and reliable payment methods with 30+
+						fiat currencies supported.
+					</p>
+					<img
+						src='/third-party/third-party.webp'
+						alt='Crypto illustration'
+						className='w-72 object-contain'
+					/>
 				</div>
 
-				{/* Receive Coin */}
-				<div className='mb-4'>
-					<label className='text-sm mb-1 block'>Receive</label>
-					<div className='flex items-center gap-2'>
-						<div className='flex-1 px-3 py-2 rounded-xl bg-black border border-white/10'>
-							{received}
+				{/* Right Form */}
+				<div className='bg-[#111] border border-[#2c2c2c] p-6 rounded-xl w-full max-w-md'>
+					{/* Pay Section */}
+					<div className='mb-5'>
+						<label className='text-xs text-gray-400 mb-1 block'>Pay</label>
+						<div className='flex items-center gap-2'>
+							<input
+								type='number'
+								value={amount}
+								placeholder='10 - 54,178.66'
+								onChange={(e) => setAmount(e.target.value)}
+								className='w-full px-3 py-2 rounded-lg bg-black border border-white/10 text-white outline-none'
+							/>
+							<Select
+								options={fiatOptions}
+								value={selectedCurrency}
+								onChange={setSelectedCurrency}
+								className='text-sm w-32'
+								styles={customStyles}
+							/>
 						</div>
+					</div>
+
+					{/* Receive Section */}
+					<div className='mb-5'>
+						<label className='text-xs text-gray-400 mb-1 block'>Receive</label>
+						<div className='flex items-center gap-2'>
+							<div className='flex-1 px-3 py-2 rounded-lg bg-black border border-white/10 text-white text-sm'>
+								{received}
+							</div>
+							<Select
+								options={coinOptions}
+								value={selectedCoin}
+								onChange={setSelectedCoin}
+								formatOptionLabel={(option) => (
+									<div className='flex items-center gap-2'>
+										<span>{option.icon}</span>
+										{option.label}
+									</div>
+								)}
+								className='text-sm w-32'
+								styles={customStyles}
+							/>
+						</div>
+					</div>
+
+					{/* Payment Method */}
+					<div className='mb-6'>
+						<label className='text-xs text-gray-400 mb-1 block'>
+							Payment method
+						</label>
 						<Select
-							options={coinOptions}
-							value={selectedCoin}
-							onChange={setSelectedCoin}
-							formatOptionLabel={(option) => (
-								<div className='flex items-center gap-2'>
-									<span>{option.icon}</span>
-									{option.label}
-								</div>
-							)}
-							className='text-sm w-32'
+							options={paymentMethods}
+							value={paymentMethod}
+							onChange={setPaymentMethod}
+							className='text-sm'
 							styles={customStyles}
 						/>
 					</div>
+
+					{/* Buy Button */}
+					<button className='w-full bg-[#2c2c2c] text-gray-400 py-3 rounded-lg font-semibold cursor-not-allowed'>
+						Buy
+					</button>
 				</div>
-
-				{/* Country Selection */}
-				<div className='mb-4'>
-					<label className='text-sm mb-1 block'>Country</label>
-					<Select
-						options={countries}
-						value={country}
-						onChange={setCountry}
-						className='text-sm'
-						styles={customStyles}
-					/>
-				</div>
-
-				{/* Payment Method */}
-				<div className='mb-4'>
-					<label className='text-sm mb-1 block'>Payment Method</label>
-					<Select
-						options={paymentMethods}
-						value={paymentMethod}
-						onChange={setPaymentMethod}
-						styles={customStyles}
-					/>
-				</div>
-
-				{/* Provider */}
-				<div className='mb-6'>
-					<label className='text-sm mb-1 block'>Provider</label>
-					<Select
-						options={providerOptions}
-						value={provider}
-						onChange={setProvider}
-						styles={customStyles}
-					/>
-				</div>
-
-				{/* Buy Button */}
-				<button className='w-full bg-lime-400 hover:bg-lime-500 text-black py-3 rounded-xl font-semibold transition'>
-					Buy
-				</button>
-			</section>
-
-			{/* FAQ Section */}
-			<div className='mt-16'>
-				<FAQ />
 			</div>
 		</div>
 	);

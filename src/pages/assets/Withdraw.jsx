@@ -85,7 +85,7 @@ export default function Withdraw() {
   return (
     <>
       <div className='flex flex-col md:flex-row gap-24 max-w-7xl mx-auto text-[11px]'>
-        <div className='basis-[70%] p-4 md:p-6 lg:p-8 text-white max-w-7xl mx-auto'>
+        <div className='md:basis-[70%] p-4 md:p-6 lg:p-8 text-white max-w-7xl mx-auto'>
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-bold mb-6'>
             Withdrawal
           </h2>

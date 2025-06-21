@@ -89,7 +89,7 @@ const P2PTrading = () => {
               {offers.map((offer, index) => (
                 <div
                   key={index}
-                  className="bg-zinc-800 rounded-lg p-4 md:grid md:grid-cols-6 gap-2 items-center"
+                  className="border-b border-b-zinc-800 rounded-lg p-4 md:grid md:grid-cols-6 gap-2 items-center"
                 >
                   <div className="md:col-span-2 font-semibold">
                     {offer.merchant}
