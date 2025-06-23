@@ -204,11 +204,11 @@ const Navbar = () => {
 							key={index}>
 							<div className='relative'>
 								{link.dropdown ? (
-									<button className='btn btn-ghost btn-sm rounded-btn flex items-center gap-1'>
+									<button className='btn btn-ghost btn-sm text-[10px] rounded-btn flex items-center gap-1 px-2'>
 										{link.name}
 										<ChevronDown size={16} />
 										{link.badge && (
-											<span className='bg-lime-400 absolute -top-2 -right-3 text-black text-[8px] px-1 py-0.5 rounded'>
+											<span className='bg-lime-400 absolute -top-1 -right-3 text-black text-[6px] px-1 py-0.5 rounded'>
 												{link.badge}
 											</span>
 										)}
@@ -216,10 +216,10 @@ const Navbar = () => {
 								) : (
 									<Link
 										to={link.path}
-										className='btn btn-ghost btn-xs  rounded-btn relative flex items-center gap-1 text-xs'>
+										className='btn btn-ghost btn-xs px-2 rounded-btn relative flex items-center gap-1 text-[10px]'>
 										{link.name}
 										{link.badge && (
-											<span className='bg-lime-400 absolute -top-2 -right-3 text-black text-[8px] px-1 py-0.5 rounded'>
+											<span className='bg-lime-400 absolute -top-1 -right-3 text-black text-[6px] px-1 py-0.5 rounded'>
 												{link.badge}
 											</span>
 										)}
@@ -227,7 +227,7 @@ const Navbar = () => {
 								)}
 							</div>
 							{link.dropdown && (
-								<ul className='dropdown-content gap-5 menu px-4 py-6 rounded-lg shadow bg-stone-900 text-white w-52'>
+								<ul className='dropdown-content gap-5 menu px-4 py-6 rounded-lg shadow bg-[#0D0D0D] text-white w-52'>
 									{link.dropdownItems.map((item) => (
 										<Link
 											key={item.path}

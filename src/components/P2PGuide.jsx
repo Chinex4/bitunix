@@ -7,19 +7,19 @@ const guideData = {
 			title: 'Place Order',
 			description:
 				'Select a price, payment method and cryptocurrency offer from the marketplace that meets your requirements, enter the purchase amount and quantity and place your order. After placing your order, your crypto assets will be held in safe custody by the platform.',
-			icon: <DollarSign size={60} />,
+			icon: <img src={'/P2P/1.svg'}/>,
 		},
 		{
 			title: 'Accept Crypto',
 			description:
 				'After the seller confirms that the payment has been received, the cryptocurrency in custody will be released to your account immediately. You can view the received cryptos by checking your funding account.',
-			icon: <Wallet size={60} />,
+			icon: <img src={'/P2P/2.svg'}/>,
 		},
 		{
 			title: 'Release Crypto',
 			description:
 				'The crypto currency will be released to the buyer only after the full payment from the buyer has been confirmed.',
-			icon: <HandCoins size={60} />,
+			icon: <img src={'/P2P/3.svg'}/>,
 		},
 	],
 	sell: [
@@ -27,19 +27,19 @@ const guideData = {
 			title: 'Post Offer',
 			description:
 				'List your offer by choosing the cryptocurrency, setting your price and preferred payment method. Make sure your offer is competitive and clear.',
-			icon: <DollarSign size={60} />,
+			icon: <img src={'/P2P/1.svg'}/>,
 		},
 		{
 			title: 'Confirm Payment',
 			description:
 				'Once the buyer sends the payment, check and confirm receipt in your bank or wallet before releasing the cryptocurrency.',
-			icon: <Wallet size={60} />,
+			icon: <img src={'/P2P/5.svg'}/>,
 		},
 		{
 			title: 'Complete Trade',
 			description:
 				'After confirming the buyer’s payment, release the crypto. The transaction is completed and your balance is updated.',
-			icon: <HandCoins size={60} />,
+			icon: <img src={'/P2P/4.svg'}/>,
 		},
 	],
 };
@@ -76,7 +76,7 @@ const P2PGuide = () => {
 			</div>
 
 			{/* Card Container */}
-			<div className='bg-zinc-900 rounded-lg p-6 md:p-10 space-y-6 md:space-y-0 md:grid md:grid-cols-3 gap-8 border border-zinc-700'>
+			<div className='bg-[#0D0D0D] rounded-lg p-6 md:p-10 space-y-6 md:space-y-0 md:grid md:grid-cols-3 gap-8 border border-zinc-700'>
 				{guideData[activeTab].map((item, idx) => (
 					<div
 						key={idx}

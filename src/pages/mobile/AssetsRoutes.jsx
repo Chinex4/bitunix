@@ -32,8 +32,8 @@ const tabs = [
 
 const AssetsRoutes = () => {
 	return (
-		<div className='min-h-screen bg-[#0F0F0F] text-white flex flex-col lg:flex-row'>
-			<SyncCryptoToBackend />
+		<div className='min-h-screen bg-[#0F0F0F] text-white flex flex-col lg:flex-row text-sm'>
+			{/* <SyncCryptoToBackend /> */}
 			<TabHeader tabs={tabs} />
 			<div className='flex-1 px-4 py-6 max-w-full lg:max-w-6xl lg:mx-auto'>
 				<Routes>
