@@ -1,21 +1,95 @@
-import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
-const futuresAssets = [
-	{ symbol: 'usdt', name: 'Tether' },
-	{ symbol: 'bnb', name: 'Binance Coin' },
-	{ symbol: 'btc', name: 'Bitcoin' },
-	{ symbol: 'doge', name: 'Dogecoin' },
-	{ symbol: 'eth', name: 'Ethereum' },
-	{ symbol: 'fdusd', name: 'First Digital USD' },
-];
+const PER_PAGE_OPTIONS = [20, 50, 100];
 
 const FuturesAccount = () => {
-	const [activeTab, setActiveTab] = useState('Assets');
+	const [coins, setCoins] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [perPage, setPerPage] = useState(20);
+
+	const fetchCoins = async () => {
+		const cacheKey = `futures_cache_${perPage}`;
+		const timeKey = `futures_cache_time_${perPage}`;
+		const cached = localStorage.getItem(cacheKey);
+		const cachedTime = localStorage.getItem(timeKey);
+
+		if (
+			cached &&
+			cachedTime &&
+			Date.now() - parseInt(cachedTime) < 10 * 60 * 1000
+		) {
+			setCoins(JSON.parse(cached));
+			setLoading(false);
+			return;
+		}
+
+		try {
+			setLoading(true);
+			let all = [];
+			const pages = Math.ceil(986 / perPage);
+
+			for (let page = 1; page <= pages; page++) {
+				const res = await fetch(
+					`https://pro-api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}`,
+					{
+						headers: {
+							'x-cg-pro-api-key': import.meta.env.VITE_COINGECKO_API_KEY,
+						},
+					}
+				);
+				const data = await res.json();
+				all = [...all, ...data];
+			}
+
+			setCoins(all);
+			localStorage.setItem(cacheKey, JSON.stringify(all));
+			localStorage.setItem(timeKey, Date.now().toString());
+		} catch (err) {
+			console.error('Failed to fetch futures coins', err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchCoins();
+	}, [perPage]);
+
+	const totalPages = Math.ceil(coins.length / perPage);
+
+	useEffect(() => {
+		if (currentPage > totalPages) {
+			setCurrentPage(totalPages || 1);
+		}
+	}, [currentPage, totalPages]);
+
+	const paginatedCoins = coins.slice(
+		(currentPage - 1) * perPage,
+		currentPage * perPage
+	);
+
+	const getPageNumbers = () => {
+		const pages = new Set();
+
+		if (totalPages <= 7) {
+			for (let i = 1; i <= totalPages; i++) pages.add(i);
+		} else {
+			pages.add(1);
+			if (currentPage > 4) pages.add('...');
+			const start = Math.max(2, currentPage - 1);
+			const end = Math.min(totalPages - 1, currentPage + 1);
+			for (let i = start; i <= end; i++) pages.add(i);
+			if (currentPage < totalPages - 3) pages.add('...');
+			pages.add(totalPages);
+		}
+
+		return Array.from(pages);
+	};
 
 	return (
 		<div className='space-y-6'>
-			{/* Header Section */}
 			<div className='flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4'>
 				<h2 className='text-2xl font-bold'>Futures Account</h2>
 				<button className='bg-lime-400 text-black px-5 py-2 rounded text-sm w-fit'>
@@ -23,130 +97,113 @@ const FuturesAccount = () => {
 				</button>
 			</div>
 
-			{/* Balance Summary */}
-			<div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-				{/* Total Assets */}
-				<div>
-					<p className='text-sm text-gray-400'>Total Assets</p>
-					<h3 className='text-xl font-bold mt-1'>0.00 USDT</h3>
-					<p className='text-xs text-gray-500'>≈ A$0.00</p>
-				</div>
-
-				{/* Today's PnL */}
-				<div>
-					<p className='text-sm text-gray-400'>
-						Today's PnL
-						<span className='ml-2 bg-green-800 text-green-300 text-xs px-2 py-0.5 rounded'>
-							PnL Analysis
-						</span>
-					</p>
-					<h3 className='text-xl font-bold mt-1'>--</h3>
-					<p className='text-xs text-gray-500'>≈ --</p>
-				</div>
-
-				{/* Unrealized PnL */}
-				<div>
-					<p className='text-sm text-gray-400'>Total Unrealized PnL</p>
-					<h3 className='text-xl font-bold mt-1'>0.00 USDT</h3>
-					<p className='text-xs text-gray-500'>≈ A$0.00</p>
-				</div>
-			</div>
-
-			{/* Tabs */}
-			<div className='flex items-center gap-6 border-b border-[#333] text-sm mt-4'>
-				{['Assets', 'Positions'].map((tab) => (
-					<button
-						key={tab}
-						className={`pb-2 ${
-							activeTab === tab
-								? 'border-b-2 border-white font-semibold'
-								: 'text-gray-400'
-						}`}
-						onClick={() => setActiveTab(tab)}>
-						{tab}
-					</button>
-				))}
-			</div>
-
-			{/* Desktop Table */}
-			{activeTab === 'Assets' && (
-				<div className='hidden lg:block overflow-x-auto'>
-					<table className='w-full text-sm text-left mt-4 border-collapse'>
+			{/* Table */}
+			{loading ? (
+				<div className='text-center py-10 text-white'>Loading...</div>
+			) : (
+				<div className='overflow-x-auto text-sm'>
+					<table className='w-full mt-4 border-collapse'>
 						<thead>
 							<tr className='text-gray-400 border-b border-[#333]'>
-								<th className='py-3'>Coin</th>
-								<th className='py-3'>Currency Equity</th>
-								<th className='py-3'>Wallet Balance</th>
-								<th className='py-3'>Available</th>
-								<th className='py-3'>In Use</th>
-								<th className='py-3'>Futures Bonus</th>
-								<th className='py-3'>Action</th>
+								<th className='py-3 px-2'>Coin</th>
+								<th className='py-3 px-2'>Currency Equity</th>
+								<th className='py-3 px-2'>Wallet Balance</th>
+								<th className='py-3 px-2'>Available</th>
+								<th className='py-3 px-2'>In Use</th>
+								<th className='py-3 px-2'>Futures Bonus</th>
+								<th className='py-3 px-2'>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							{futuresAssets.map((asset) => (
+							{paginatedCoins.map((coin) => (
 								<tr
-									key={asset.symbol}
+									key={coin.id}
 									className='border-b border-[#222] hover:bg-[#111]'>
 									<td className='py-3 px-3'>
-										<div className='font-semibold flex items-center gap-2'>
+										<div className='flex items-center gap-2'>
 											<img
-												className='size-6 rounded-full'
-												src={`/assets/${asset.symbol}.png`}
-												alt=''
+												className='w-5 h-5'
+												src={coin.image}
+												alt={coin.symbol}
 											/>
-
-											<div className='text-sm text-white'>{asset.name}</div>
+											<span className='text-white font-semibold'>
+												{coin.name}
+											</span>
 										</div>
 									</td>
-									<td className='py-3'>0.00</td>
-									<td className='py-3'>0.00</td>
-									<td className='py-3'>0.00</td>
-									<td className='py-3'>0.00</td>
-									<td className='py-3'>0.00</td>
-									<td className='py-3 text-lime-400'>
+									<td className='py-3 px-2'>0.00</td>
+									<td className='py-3 px-2'>0.00</td>
+									<td className='py-3 px-2'>0.00</td>
+									<td className='py-3 px-2'>0.00</td>
+									<td className='py-3 px-2'>0.00</td>
+									<td className='py-3 px-2 text-lime-400'>
 										<button>Transfer</button>
 									</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
-				</div>
-			)}
 
-			{/* Mobile Cards */}
-			{activeTab === 'Assets' && (
-				<div className='space-y-4 lg:hidden'>
-					{futuresAssets.map((asset) => (
-						<div
-							key={asset.symbol}
-							className='bg-[#1A1A1A] rounded p-4 text-sm'>
-							<div className='flex justify-between items-center mb-2'>
-								<div className='font-semibold flex items-center gap-2'>
-									<img
-										className='size-6 rounded-full'
-										src={`/assets/${asset.symbol}.png`}
-										alt=''
+					{/* Pagination Controls */}
+					{/* Pagination Controls */}
+					<div className='flex justify-between items-center text-[11px] text-white mt-6'>
+						<div className='flex items-center gap-4'>
+							<span>Display per page</span>
+							{PER_PAGE_OPTIONS.map((opt) => (
+								<label
+									key={opt}
+									className='flex items-center gap-1'>
+									<input
+										type='radio'
+										name='perPage'
+										checked={perPage === opt}
+										onChange={() => {
+											setPerPage(opt);
+											setCurrentPage(1);
+										}}
 									/>
-
-									<div className='text-sm text-white'>{asset.name}</div>
-								</div>
-								<button className='text-lime-400 text-xs'>Transfer</button>
-							</div>
-							<div className='grid grid-cols-2 gap-y-1 text-xs text-gray-400'>
-								<div>Currency Equity:</div>
-								<div>0.00</div>
-								<div>Wallet Balance:</div>
-								<div>0.00</div>
-								<div>Available:</div>
-								<div>0.00</div>
-								<div>In Use:</div>
-								<div>0.00</div>
-								<div>Futures Bonus:</div>
-								<div>0.00</div>
-							</div>
+									{opt}
+								</label>
+							))}
 						</div>
-					))}
+
+						<div className='flex items-center gap-2'>
+							<button
+								disabled={currentPage === 1}
+								onClick={() => setCurrentPage((prev) => prev - 1)}
+								className='px-2 py-1 border rounded disabled:opacity-40'>
+								Prev
+							</button>
+
+							{getPageNumbers().map((page, i) =>
+								page === '...' ? (
+									<span
+										key={`ellipsis-${i}`}
+										className='px-2 text-gray-400'>
+										...
+									</span>
+								) : (
+									<button
+										key={`page-${page}`}
+										onClick={() => setCurrentPage(page)}
+										className={`px-3 py-1 rounded ${
+											currentPage === page
+												? 'bg-white text-black'
+												: 'text-gray-400'
+										}`}>
+										{page}
+									</button>
+								)
+							)}
+
+							<button
+								disabled={currentPage === totalPages}
+								onClick={() => setCurrentPage((prev) => prev + 1)}
+								className='px-2 py-1 border rounded disabled:opacity-40'>
+								Next
+							</button>
+						</div>
+					</div>
 				</div>
 			)}
 		</div>

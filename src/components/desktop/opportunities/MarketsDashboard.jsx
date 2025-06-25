@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+const CACHE_KEY = 'coingecko_markets_data';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 const sectionStyle = 'bg-zinc-900 p-4 rounded-lg border border-zinc-700';
 const labelStyle = 'text-gray-400 text-sm';
 const headingStyle = 'text-white font-semibold mb-2';
@@ -17,9 +21,27 @@ const MarketsDashboard = () => {
 			try {
 				setLoading(true);
 
+				// Check cache
+				const cached = localStorage.getItem(CACHE_KEY);
+				if (cached) {
+					const { data, timestamp } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_DURATION) {
+						setSpotCoins(data);
+						setFuturesCoins(
+							[...data].sort(() => 0.5 - Math.random()).slice(0, 100)
+						);
+						setLoading(false);
+						return;
+					}
+				}
+
+				// Fetch from CoinGecko Pro
 				const res = await axios.get(
-					'https://api.coingecko.com/api/v3/coins/markets',
+					'https://pro-api.coingecko.com/api/v3/coins/markets',
 					{
+						headers: {
+							'x-cg-pro-api-key': API_KEY,
+						},
 						params: {
 							vs_currency: 'usd',
 							order: 'volume_desc',
@@ -32,11 +54,16 @@ const MarketsDashboard = () => {
 				);
 
 				setSpotCoins(res.data);
-				// Simulate Futures using shuffled spot data
 				const simulatedFutures = [...res.data]
 					.sort(() => 0.5 - Math.random())
 					.slice(0, 100);
 				setFuturesCoins(simulatedFutures);
+
+				// Cache data
+				localStorage.setItem(
+					CACHE_KEY,
+					JSON.stringify({ data: res.data, timestamp: Date.now() })
+				);
 			} catch (err) {
 				console.error('Failed to fetch market data', err);
 			} finally {

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 const HeatmapSection = () => {
 	const [data, setData] = useState([]);
 	const [interval, setInterval] = useState('24h');
@@ -12,13 +15,30 @@ const HeatmapSection = () => {
 		'7d': 'price_change_percentage_7d_in_currency',
 	};
 
+	const CACHE_KEY = (intv) => `heatmap_data_${intv}`;
+
 	useEffect(() => {
 		const fetchHeatmapData = async () => {
 			try {
 				setLoading(true);
+
+				const cacheKey = CACHE_KEY(interval);
+				const cached = localStorage.getItem(cacheKey);
+				if (cached) {
+					const { data, timestamp } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_DURATION) {
+						setData(data);
+						setLoading(false);
+						return;
+					}
+				}
+
 				const res = await axios.get(
-					'https://api.coingecko.com/api/v3/coins/markets',
+					'https://pro-api.coingecko.com/api/v3/coins/markets',
 					{
+						headers: {
+							'x-cg-pro-api-key': API_KEY,
+						},
 						params: {
 							vs_currency: 'usd',
 							order: 'volume_desc',
@@ -29,7 +49,12 @@ const HeatmapSection = () => {
 						},
 					}
 				);
+
 				setData(res.data);
+				localStorage.setItem(
+					cacheKey,
+					JSON.stringify({ data: res.data, timestamp: Date.now() })
+				);
 			} catch (error) {
 				console.error('Heatmap fetch failed:', error);
 			} finally {

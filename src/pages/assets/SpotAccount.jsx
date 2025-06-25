@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import MyLoader from '../../components/ui/Loader';
+import axios from 'axios';
 
 const PER_PAGE_OPTIONS = [20, 50, 100];
 
@@ -11,49 +12,49 @@ const SpotAccount = () => {
 	const [perPage, setPerPage] = useState(20);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [loading, setLoading] = useState(true);
-
 	const navigate = useNavigate();
-
-	// useEffect(() => {
-	// 	const fetchCoins = async () => {
-	// 		setLoading(true);
-	// 		let allCoins = [];
-	// 		const proxy = 'https://cors-anywhere.herokuapp.com/';
-	// 		const baseUrl =
-	// 			'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=';
-
-	// 		try {
-	// 			const pages = Math.ceil(986 / 50);
-	// 			const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-	// 			for (let i = 1; i <= pages; i++) {
-	// 				const res = await fetch(proxy + baseUrl + i);
-	// 				const data = await res.json();
-	// 				allCoins = allCoins.concat(data);
-	// 				await sleep(1000); // Wait 1 second per request (adjust as needed)
-	// 			}
-
-	// 			setCoins(allCoins.slice(0, 986));
-	// 		} catch (err) {
-	// 			console.error('Failed to fetch coins:', err);
-	// 		} finally {
-	// 			setLoading(false);
-	// 		}
-	// 	};
-
-	// 	fetchCoins();
-	// }, []);
 
 	useEffect(() => {
 		const fetchCoins = async () => {
-			setLoading(true);
-			const proxy = 'https://cors-anywhere.herokuapp.com/';
-			const url = `${proxy}https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1`;
-
 			try {
-				const res = await fetch(url);
-				const data = await res.json();
-				setCoins(data); // just 100 coins
+				setLoading(true);
+				const cached = localStorage.getItem('cached_spot_coins');
+				const cachedTime = localStorage.getItem('cached_spot_coins_time');
+
+				if (
+					cached &&
+					cachedTime &&
+					Date.now() - parseInt(cachedTime) < 10 * 60 * 1000
+				) {
+					setCoins(JSON.parse(cached));
+					setLoading(false);
+					return;
+				}
+
+				let allCoins = [];
+				const totalPages = Math.ceil(986 / 250);
+
+				for (let page = 1; page <= totalPages; page++) {
+					const res = await axios.get(
+						'https://pro-api.coingecko.com/api/v3/coins/markets',
+						{
+							params: {
+								vs_currency: 'usd',
+								order: 'market_cap_desc',
+								per_page: 250,
+								page,
+							},
+							headers: {
+								'x-cg-pro-api-key': import.meta.env.VITE_COINGECKO_API_KEY,
+							},
+						}
+					);
+					allCoins = allCoins.concat(res.data);
+				}
+
+				setCoins(allCoins);
+				localStorage.setItem('cached_spot_coins', JSON.stringify(allCoins));
+				localStorage.setItem('cached_spot_coins_time', Date.now().toString());
 			} catch (err) {
 				console.error('Failed to fetch coins:', err);
 			} finally {
@@ -84,36 +85,30 @@ const SpotAccount = () => {
 	};
 
 	const getPageNumbers = () => {
-		const range = [];
+		const pages = new Set();
+
 		if (totalPages <= 7) {
-			for (let i = 1; i <= totalPages; i++) range.push(i);
+			for (let i = 1; i <= totalPages; i++) pages.add(i);
 		} else {
-			if (currentPage <= 4) {
-				range.push(1, 2, 3, 4, 5, '...', totalPages);
-			} else if (currentPage >= totalPages - 3) {
-				range.push(
-					1,
-					'...',
-					totalPages - 4,
-					totalPages - 3,
-					totalPages - 2,
-					totalPages - 1,
-					totalPages
-				);
-			} else {
-				range.push(
-					1,
-					'...',
-					currentPage - 1,
-					currentPage,
-					currentPage + 1,
-					'...',
-					totalPages
-				);
-			}
+			pages.add(1);
+			if (currentPage > 4) pages.add('...');
+			const start = Math.max(2, currentPage - 1);
+			const end = Math.min(totalPages - 1, currentPage + 1);
+
+			for (let i = start; i <= end; i++) pages.add(i);
+
+			if (currentPage < totalPages - 3) pages.add('...');
+			pages.add(totalPages);
 		}
-		return range;
+
+		return Array.from(pages);
 	};
+
+	useEffect(() => {
+		if (currentPage > totalPages) {
+			setCurrentPage(totalPages || 1);
+		}
+	}, [currentPage, totalPages]);
 
 	return (
 		<div className='space-y-6'>
@@ -141,7 +136,9 @@ const SpotAccount = () => {
 					<button className='bg-lime-400 text-black px-4 py-2 rounded text-sm'>
 						Deposit
 					</button>
-					<Link to={'/assets/withdraw'} className='bg-[#1A1A1A] text-white px-4 py-2 rounded text-sm'>
+					<Link
+						to={'/assets/withdraw'}
+						className='bg-[#1A1A1A] text-white px-4 py-2 rounded text-sm'>
 						Withdraw
 					</Link>
 					<Link className='bg-[#1A1A1A] text-white px-4 py-2 rounded text-sm'>
@@ -215,7 +212,9 @@ const SpotAccount = () => {
 													onClick={() => handleWithdraw(coin.symbol)}>
 													Withdraw
 												</button>
-												<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'>Trade</button>
+												<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'>
+													Trade
+												</button>
 											</div>
 										</td>
 									</tr>
@@ -248,26 +247,32 @@ const SpotAccount = () => {
 								</div>
 								<div className='flex justify-between gap-y-1 text-xs text-gray-400'>
 									<div>
-									  <p>Available:</p>
-  									<p>Withdrawing:</p>
-  									<p>P2P Frozen:</p>
-  									<p>In Order:</p>
+										<p>Available:</p>
+										<p>Withdrawing:</p>
+										<p>P2P Frozen:</p>
+										<p>In Order:</p>
 									</div>
 									<div>
-									  <p>0.00000000</p>
-  									<p>0.00000000</p>
-  									<p>0.00000000</p>
-  									<p>0.00000000</p>
+										<p>0.00000000</p>
+										<p>0.00000000</p>
+										<p>0.00000000</p>
+										<p>0.00000000</p>
 									</div>
 								</div>
 								<div className='flex gap-3 mt-3 text-lime-400 text-xs'>
-									<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer' onClick={() => handleDeposit(token.symbol)}>
+									<button
+										className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'
+										onClick={() => handleDeposit(token.symbol)}>
 										Deposit
 									</button>
-									<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer' onClick={() => handleWithdraw(token.symbol)}>
+									<button
+										className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'
+										onClick={() => handleWithdraw(token.symbol)}>
 										Withdraw
 									</button>
-									<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'>Trade</button>
+									<button className='hover:text-lime-400/40 transition-colors duration-300 cursor-pointer'>
+										Trade
+									</button>
 								</div>
 							</div>
 						))}
@@ -305,13 +310,13 @@ const SpotAccount = () => {
 							{getPageNumbers().map((page, i) =>
 								page === '...' ? (
 									<span
-										key={i}
+										key={`ellipsis-${i}`}
 										className='px-2 text-gray-400'>
 										...
 									</span>
 								) : (
 									<button
-										key={page}
+										key={`page-${page}`}
 										onClick={() => setCurrentPage(page)}
 										className={`px-3 py-1 rounded ${
 											currentPage === page
@@ -322,6 +327,7 @@ const SpotAccount = () => {
 									</button>
 								)
 							)}
+
 							<button
 								disabled={currentPage === totalPages}
 								onClick={() => setCurrentPage((prev) => prev + 1)}

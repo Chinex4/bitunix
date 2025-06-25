@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+const CACHE_KEY = 'cached_coin_data';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 const CryptoPortfolio = () => {
 	const [coins, setCoins] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -9,11 +13,38 @@ const CryptoPortfolio = () => {
 	useEffect(() => {
 		const fetchCoins = async () => {
 			try {
+				setLoading(true);
+
+				// Check localStorage for cached data
+				const cached = localStorage.getItem(CACHE_KEY);
+				if (cached) {
+					const { data, timestamp } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_DURATION) {
+						setCoins(data);
+						setLoading(false);
+						return;
+					}
+				}
+
+				// Fetch from API
 				const response = await fetch(
-					'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false'
+					'https://pro-api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false',
+					{
+						headers: {
+							'x-cg-pro-api-key': API_KEY,
+						},
+					}
 				);
+
+				if (!response.ok) throw new Error('API error');
 				const data = await response.json();
 				setCoins(data);
+
+				// Cache result
+				localStorage.setItem(
+					CACHE_KEY,
+					JSON.stringify({ data, timestamp: Date.now() })
+				);
 			} catch (err) {
 				console.error('Failed to fetch coins:', err);
 				setError(true);
@@ -21,6 +52,7 @@ const CryptoPortfolio = () => {
 				setLoading(false);
 			}
 		};
+
 		fetchCoins();
 	}, []);
 
@@ -90,7 +122,6 @@ const CryptoPortfolio = () => {
 			<button className='mt-14 bg-lime-400 hover:bg-lime-500 text-black font-semibold py-3 px-6 rounded-md text-sm z-20'>
 				Trade Now with $10
 			</button>
-
 		</section>
 	);
 };

@@ -1,8 +1,11 @@
-// Same imports...
 import { ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import axios from 'axios';
+
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+const CACHE_KEY = 'coingecko_trending_data';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export default function TrendingCryptos() {
 	const [activeTab, setActiveTab] = useState('Popular Futures');
@@ -21,8 +24,28 @@ export default function TrendingCryptos() {
 			try {
 				setLoading(true);
 
-				const [futuresRes, spotRes, gainersRes] = await Promise.all([
-					axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+				// Check cache
+				const cached = localStorage.getItem(CACHE_KEY);
+				if (cached) {
+					const { data, timestamp } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_DURATION) {
+						setCryptoData(data);
+						setLastUpdated(timestamp);
+						setLoading(false);
+						return;
+					}
+				}
+
+				// Fetch from API
+				const headers = {
+					headers: {
+						'x-cg-pro-api-key': API_KEY,
+					},
+				};
+
+				const [futures, spot, gainers] = await Promise.all([
+					axios.get('https://pro-api.coingecko.com/api/v3/coins/markets', {
+						...headers,
 						params: {
 							vs_currency: 'usd',
 							order: 'open_interest_desc',
@@ -31,7 +54,8 @@ export default function TrendingCryptos() {
 							sparkline: true,
 						},
 					}),
-					axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+					axios.get('https://pro-api.coingecko.com/api/v3/coins/markets', {
+						...headers,
 						params: {
 							vs_currency: 'usd',
 							order: 'volume_desc',
@@ -40,7 +64,8 @@ export default function TrendingCryptos() {
 							sparkline: true,
 						},
 					}),
-					axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+					axios.get('https://pro-api.coingecko.com/api/v3/coins/markets', {
+						...headers,
 						params: {
 							vs_currency: 'usd',
 							order: 'price_change_percentage_24h_desc',
@@ -51,24 +76,35 @@ export default function TrendingCryptos() {
 					}),
 				]);
 
-				setCryptoData({
-					'Popular Futures': futuresRes.data,
-					'Popular Spot': spotRes.data,
-					Gainers: gainersRes.data,
-				});
+				const result = {
+					'Popular Futures': futures.data,
+					'Popular Spot': spot.data,
+					Gainers: gainers.data,
+				};
 
+				// Update state and cache
+				setCryptoData(result);
 				setLastUpdated(Date.now());
-				setLoading(false);
+				localStorage.setItem(
+					CACHE_KEY,
+					JSON.stringify({ data: result, timestamp: Date.now() })
+				);
 			} catch (error) {
 				console.error('Failed to fetch crypto data', error);
+			} finally {
 				setLoading(false);
 			}
 		}
 
 		fetchCryptoData();
+
 		const intervalId = setInterval(fetchCryptoData, 30000);
 		return () => clearInterval(intervalId);
 	}, []);
+
+	const displayedData = useMemo(() => {
+		return cryptoData[activeTab] || [];
+	}, [cryptoData, activeTab]);
 
 	return (
 		<div className='bg-black p-4 md:p-6 rounded-lg'>
@@ -77,9 +113,7 @@ export default function TrendingCryptos() {
 				<h2 className='text-3xl lg:text-4xl font-bold text-white'>
 					Trending Cryptocurrencies
 				</h2>
-				<a
-					href='#'
-					className='text-sm text-white hover:underline flex items-center'>
+				<a href='#' className='text-sm text-white hover:underline flex items-center'>
 					View More <ChevronRight className='ml-1' />
 				</a>
 			</div>
@@ -100,7 +134,7 @@ export default function TrendingCryptos() {
 				))}
 			</div>
 
-			{/* Table Head for desktop */}
+			{/* Table Head */}
 			<div className='hidden md:grid grid-cols-7 text-white/50 text-xs mb-3'>
 				<div>Trading Pairs</div>
 				<div>Last Price</div>
@@ -111,20 +145,20 @@ export default function TrendingCryptos() {
 				<div></div>
 			</div>
 
-			{/* Table Rows */}
+			{/* Data Rows */}
 			{loading ? (
 				<div className='flex justify-center items-center py-10'>
 					<div className='animate-spin rounded-full h-12 w-12 border-t-4 border-lime-400 border-solid'></div>
 				</div>
 			) : (
 				<div className='space-y-4'>
-					{cryptoData[activeTab]?.map((crypto) => {
+					{displayedData.map((crypto) => {
 						const isUp = crypto.price_change_percentage_24h >= 0;
 						return (
 							<div
 								key={crypto.id}
 								className='grid grid-cols-3 md:grid-cols-7 items-center text-white text-sm p-3 rounded-lg hover:bg-[#1b1b1b] transition'>
-								{/* Pair */}
+								{/* Coin Info */}
 								<div className='flex items-center gap-2'>
 									<img
 										src={crypto.image}
@@ -134,32 +168,27 @@ export default function TrendingCryptos() {
 									{crypto.symbol.toUpperCase()}USDT
 								</div>
 
-								{/* Price */}
 								<div className='text-xs md:text-sm text-right md:text-left'>
 									${crypto.current_price.toLocaleString()}
 								</div>
 
-								{/* 24H Change with badge */}
 								<div className='text-right md:text-left'>
 									<span
-										className={` inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+										className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
 											isUp ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
 										}`}>
 										{crypto.price_change_percentage_24h?.toFixed(2)}%
 									</span>
 								</div>
 
-								{/* High */}
 								<div className='hidden md:block text-xs'>
 									${crypto.high_24h?.toLocaleString()}
 								</div>
 
-								{/* Volume */}
 								<div className='hidden md:block text-xs'>
 									${crypto.total_volume?.toLocaleString()}
 								</div>
 
-								{/* Sparkline */}
 								<div className='hidden md:block w-24 h-8'>
 									<Sparklines data={crypto.sparkline_in_7d?.price}>
 										<SparklinesLine
@@ -172,7 +201,6 @@ export default function TrendingCryptos() {
 									</Sparklines>
 								</div>
 
-								{/* Trade Button */}
 								<div className='hidden md:block'>
 									<button className='bg-gray-800 px-4 py-1 rounded text-white text-xs hover:bg-lime-400'>
 										Trade
@@ -184,6 +212,7 @@ export default function TrendingCryptos() {
 				</div>
 			)}
 
+			{/* Timestamp */}
 			<div className='text-right text-white/50 text-xs mt-4'>
 				Last updated {Math.floor((Date.now() - lastUpdated) / 1000)}s ago
 			</div>

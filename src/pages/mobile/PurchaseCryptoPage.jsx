@@ -4,6 +4,8 @@ import axios from 'axios';
 import countryList from 'react-select-country-list';
 import { CreditCard } from 'lucide-react';
 
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+
 const coinOptions = [
 	{ value: 'USDT', label: 'USDT', icon: '🟢' },
 	{ value: 'BTC', label: 'BTC', icon: '🟠' },
@@ -47,19 +49,16 @@ export default function PurchaseCrypto() {
 	useEffect(() => {
 		const fetchRate = async () => {
 			try {
-				const res = await axios.get(
-					`https://api.coingecko.com/api/v3/simple/price`,
-					{
-						params: {
-							ids: coinIdMap[selectedCoin.value],
-							vs_currencies: selectedCurrency.value.toLowerCase(),
-						},
-					}
-				);
-				const price =
-					res.data[coinIdMap[selectedCoin.value]][
-						selectedCurrency.value.toLowerCase()
-					];
+				const res = await axios.get('https://pro-api.coingecko.com/api/v3/simple/price', {
+					headers: {
+						'x-cg-pro-api-key': API_KEY,
+					},
+					params: {
+						ids: coinIdMap[selectedCoin.value],
+						vs_currencies: selectedCurrency.value.toLowerCase(),
+					},
+				});
+				const price = res.data[coinIdMap[selectedCoin.value]][selectedCurrency.value.toLowerCase()];
 				setRate(price);
 			} catch (error) {
 				console.error('Failed to fetch rate:', error);
@@ -75,9 +74,7 @@ export default function PurchaseCrypto() {
 			const match = fiatOptions.find((opt) => opt.value === code);
 			if (match) setSelectedCurrency(match);
 
-			const countryMatch = countries.find(
-				(c) => c.label === res.data.country_name
-			);
+			const countryMatch = countries.find((c) => c.label === res.data.country_name);
 			if (countryMatch) setCountry(countryMatch);
 		});
 	}, []);
@@ -117,8 +114,7 @@ export default function PurchaseCrypto() {
 					</h1>
 					<p className='text-gray-400 text-sm mb-8 max-w-sm'>
 						You can buy cryptocurrencies such as BTC, ETH and other
-						cryptocurrencies through safe and reliable payment methods with 30+
-						fiat currencies supported.
+						cryptocurrencies through safe and reliable payment methods with 30+ fiat currencies supported.
 					</p>
 					<img
 						src='/third-party/third-party.webp'
@@ -175,9 +171,7 @@ export default function PurchaseCrypto() {
 
 					{/* Payment Method */}
 					<div className='mb-6'>
-						<label className='text-xs text-gray-400 mb-1 block'>
-							Payment method
-						</label>
+						<label className='text-xs text-gray-400 mb-1 block'>Payment method</label>
 						<Select
 							options={paymentMethods}
 							value={paymentMethod}

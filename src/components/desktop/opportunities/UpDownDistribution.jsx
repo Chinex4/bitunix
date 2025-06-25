@@ -11,6 +11,10 @@ import {
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
+const CACHE_KEY = 'updown_distribution_data';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 const RANGE_BUCKETS = [
 	{ label: '≥10%', min: 10, color: 'green' },
 	{ label: '7.5%-10%', min: 7.5, max: 10, color: 'green' },
@@ -34,9 +38,24 @@ const UpDownDistribution = () => {
 			try {
 				setLoading(true);
 
+				// Check cache
+				const cached = localStorage.getItem(CACHE_KEY);
+				if (cached) {
+					const { data, timestamp } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_DURATION) {
+						setBuckets(data);
+						setLoading(false);
+						return;
+					}
+				}
+
+				// Fetch from CoinGecko Pro
 				const res = await axios.get(
-					'https://api.coingecko.com/api/v3/coins/markets',
+					'https://pro-api.coingecko.com/api/v3/coins/markets',
 					{
+						headers: {
+							'x-cg-pro-api-key': API_KEY,
+						},
 						params: {
 							vs_currency: 'usd',
 							order: 'volume_desc',
@@ -62,6 +81,12 @@ const UpDownDistribution = () => {
 				});
 
 				setBuckets(filledBuckets);
+
+				// Cache result
+				localStorage.setItem(
+					CACHE_KEY,
+					JSON.stringify({ data: filledBuckets, timestamp: Date.now() })
+				);
 			} catch (err) {
 				console.error('Failed to fetch distribution', err);
 			} finally {
