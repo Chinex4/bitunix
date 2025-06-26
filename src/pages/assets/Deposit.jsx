@@ -48,6 +48,7 @@ const Deposit = () => {
 	const [selectedCoin, setSelectedCoin] = useState(null);
 	const [copied, setCopied] = useState(false);
 	const [showModal, setShowModal] = useState(false);
+	const [isInputFocused, setIsInputFocused] = useState(false);
 
 	const [availableNetworks, setAvailableNetworks] = useState([]);
 	const [selectedNetwork, setSelectedNetwork] = useState(null);
@@ -155,10 +156,12 @@ const Deposit = () => {
 						<input
 							value={searchInput}
 							onChange={(e) => setSearchInput(e.target.value)}
+							onFocus={() => setIsInputFocused(true)}
+							onBlur={() => setTimeout(() => setIsInputFocused(false), 150)} // delayed to allow click
 							placeholder='Search for a coin'
 							className='w-full bg-[#1A1A1A] border border-gray-700 px-3 py-2 rounded'
 						/>
-						{searchInput && filteredCoins.length > 0 && (
+						{(isInputFocused || searchInput) && filteredCoins.length > 0 && (
 							<ul className='absolute z-10 bg-[#111] border border-gray-700 w-full mt-1 rounded max-h-60 overflow-auto'>
 								{filteredCoins.map((coin) => (
 									<li

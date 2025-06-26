@@ -27,6 +27,7 @@ export default function Withdraw() {
 	const [selectedNetwork, setSelectedNetwork] = useState(null);
 	const [withdrawalAddress, setWithdrawalAddress] = useState('');
 	const [withdrawAmount, setWithdrawAmount] = useState('');
+	const [isInputFocused, setIsInputFocused] = useState(false);
 
 	const fetchCoins = async () => {
 		const cached = localStorage.getItem('cached_withdraw_coins');
@@ -122,10 +123,12 @@ export default function Withdraw() {
 						<input
 							value={searchInput}
 							onChange={(e) => setSearchInput(e.target.value)}
+							onFocus={() => setIsInputFocused(true)}
+							onBlur={() => setTimeout(() => setIsInputFocused(false), 150)} // delayed to allow click
 							placeholder='Search for a coin'
 							className='w-full bg-[#1A1A1A] border border-gray-700 px-3 py-2 rounded'
 						/>
-						{searchInput && filteredCoins.length > 0 && (
+						{(isInputFocused || searchInput) && filteredCoins.length > 0 && (
 							<ul className='absolute z-10 bg-[#111] border border-gray-700 w-full mt-1 rounded max-h-60 overflow-auto'>
 								{filteredCoins.map((coin) => (
 									<li
