@@ -12,6 +12,22 @@ import { maskEmail } from '../../functions/helper';
 import Cropper from 'react-easy-crop';
 import { Tab } from '@headlessui/react';
 import { getCroppedImg } from '../../utils/cropImageUtil';
+import axiosInstance from '../../api/axiosInstance';
+import { Listbox } from '@headlessui/react';
+import { Check, ChevronDown } from 'lucide-react';
+
+const languages = [
+	'English',
+	'French',
+	'German',
+	'Chinese',
+	'Spanish',
+	'Arabic',
+	'Portuguese',
+	'Hindi',
+	'Russian',
+	'Japanese',
+];
 
 const avatarList = Array.from(
 	{ length: 16 },
@@ -20,7 +36,10 @@ const avatarList = Array.from(
 
 const Settings = () => {
 	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
-	const email = fetchedUser?.message?.userDetails.email ?? '';
+	const username = fetchedUser?.message?.userDetails?.username;
+	const email = fetchedUser?.message?.userDetails?.email;
+	const userNickname = username || email;
+
 	const [openModal, setOpenModal] = useState(null);
 
 	const fileInputRef = useRef();
@@ -45,16 +64,29 @@ const Settings = () => {
 	};
 
 	const handleAvatarSave = async () => {
-		if (selectedTab === 0 && selectedAvatar) {
-			console.log('Selected Avatar:', selectedAvatar);
-		} else if (uploadedImage && croppedAreaPixels) {
-			const croppedImage = await getCroppedImg(
-				uploadedImage,
-				croppedAreaPixels
-			);
-			console.log('Cropped Uploaded Image:', croppedImage);
+		try {
+			let payload = {};
+			if (selectedTab === 0 && selectedAvatar) {
+				payload = { avatar: selectedAvatar };
+			} else if (uploadedImage && croppedAreaPixels) {
+				const croppedImage = await getCroppedImg(
+					uploadedImage,
+					croppedAreaPixels
+				);
+				payload = { avatar: croppedImage };
+			}
+
+			if (Object.keys(payload).length) {
+				await showPromise(axiosInstance.patch('/user/updateAvatar', payload), {
+					loading: 'Updating profile picture...',
+					success: 'Profile picture updated!',
+					error: 'Failed to update profile picture',
+				});
+			}
+			closeModal();
+		} catch (err) {
+			console.error(err);
 		}
-		closeModal();
 	};
 
 	const isSaveEnabled = selectedAvatar || uploadedImage;
@@ -75,12 +107,22 @@ const Settings = () => {
 	const closeModal = () => setOpenModal(null);
 
 	const handleSaveNickname = async () => {
-		await showPromise(dispatch(updateNickname(nicknameInput)).unwrap(), {
-			loading: 'Updating nickname...',
-			success: 'Nickname updated!',
-			error: 'Failed to update nickname',
-		});
-		closeModal();
+		try {
+			await showPromise(
+				axiosInstance.patch('/user/updateNickname', {
+					nickname: nicknameInput,
+				}),
+				{
+					loading: 'Updating nickname...',
+					success: 'Nickname updated!',
+					error: 'Failed to update nickname',
+				}
+			);
+			dispatch(updateNickname(nicknameInput));
+			closeModal();
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	const handleSaveLanguage = async () => {
@@ -95,7 +137,7 @@ const Settings = () => {
 	return (
 		<div className='p-4 text-white max-w-6xl mx-auto space-y-8'>
 			{/* Profile Section */}
-			<section classname=''>
+			<section className=''>
 				<h2 className='text-xl font-bold mb-4'>Profile</h2>
 
 				<div className='space-y-6'>
@@ -112,7 +154,13 @@ const Settings = () => {
 							</p>
 						</div>
 						<div className='flex justify-between mt-2 text-xs gap-1 items-center'>
-							<span>{nickname || maskEmail(email)} | </span>
+							<span>
+								{userNickname?.includes('@')
+									? maskEmail(userNickname)
+									: userNickname}{' '}
+								|{' '}
+							</span>
+
 							<button
 								onClick={() => setOpenModal('nickname')}
 								className='text-lime-400 font-medium'>
@@ -317,15 +365,38 @@ const Settings = () => {
 				isOpen={openModal === 'language'}
 				onClose={closeModal}
 				title='Change Language'>
-				<select
-					value={languageInput}
-					onChange={(e) => setLanguageInput(e.target.value)}
-					className='w-full p-2 bg-black border border-gray-600 rounded-md text-white'>
-					<option>English</option>
-					<option>French</option>
-					<option>German</option>
-					<option>Chinese</option>
-				</select>
+				<div className='relative w-full'>
+					<Listbox
+						value={languageInput}
+						onChange={setLanguageInput}>
+						<div className='relative'>
+							<Listbox.Button className='w-full p-2 bg-black border border-gray-600 rounded-md text-white flex justify-between items-center'>
+								<span>{languageInput}</span>
+								<ChevronDown className='w-4 h-4' />
+							</Listbox.Button>
+							<Listbox.Options className='absolute z-10 mt-2 w-full max-h-60 overflow-y-auto bg-[#111] text-white border border-gray-600 rounded-md shadow-lg'>
+								{languages.map((lang, idx) => (
+									<Listbox.Option
+										key={idx}
+										value={lang}
+										className={({ active }) =>
+											`cursor-pointer px-4 py-2 text-sm ${
+												active ? 'bg-lime-400 text-black' : ''
+											}`
+										}>
+										{({ selected }) => (
+											<div className='flex justify-between items-center'>
+												<span>{lang}</span>
+												{selected && <Check className='w-4 h-4' />}
+											</div>
+										)}
+									</Listbox.Option>
+								))}
+							</Listbox.Options>
+						</div>
+					</Listbox>
+				</div>
+
 				<button
 					onClick={handleSaveLanguage}
 					className='mt-4 w-full py-2 bg-lime-400 text-black font-semibold rounded-md'>

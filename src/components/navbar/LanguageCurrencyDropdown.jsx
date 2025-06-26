@@ -27,7 +27,7 @@ const currencies = [
 	'AUD – A$',
 	'BBD – Bds$',
 	'BGN – лв',
-	'BHD – .د.ب',
+	'BHD – د.ب',
 	'BRL – R$',
 	'CAD – C$',
 	'CHF – Fr',
@@ -43,6 +43,37 @@ const currencies = [
 	'GBP – £',
 	'GTQ – Q',
 	'HKD – HKD',
+	'HUF – Ft',
+	'IDR – Rp',
+	'ILS – ₪',
+	'ISK – Kr',
+	'JMD – J$',
+	'JOD – JD',
+	'JPY – ¥',
+	'KES – KSh',
+	'KWD – د.ك',
+	'KYD – CI$',
+	'MXN – Mex$',
+	'MYR – RM',
+	'NOK – Kr',
+	'NZD – NZ$',
+	'OMR – ر.ع.',
+	'PEN – S/.',
+	'PHP – ₱',
+	'PLN – zł',
+	'RON – L',
+	'SAR – ر.س',
+	'SEK – Kr',
+	'SGD – S$',
+	'THB – ฿',
+	'TRY – ₺',
+	'TWD – NT$',
+	'USD – $',
+	'UYU – $U',
+	'VUV – Vt',
+	'XCD – EC$',
+	'XPF – ₣',
+	'ZAR – R',
 ];
 
 export default function LanguageCurrencyDropdown() {
@@ -72,7 +103,6 @@ export default function LanguageCurrencyDropdown() {
 	return (
 		<div
 			className='relative hidden md:block'
-
 			ref={dropdownRef}>
 			{/* Trigger Button */}
 			<button
@@ -145,7 +175,7 @@ export default function LanguageCurrencyDropdown() {
 
 									{/* Tabs */}
 									<Tab.Group>
-										<Tab.List className='flex border-b border-gray-700 mb-4'>
+										<Tab.List className='flex border-b border-gray-700 mb-4 text-sm'>
 											<Tab
 												className={({ selected }) =>
 													`px-4 py-2 outline-none ${
@@ -169,7 +199,7 @@ export default function LanguageCurrencyDropdown() {
 										</Tab.List>
 										<Tab.Panels>
 											<Tab.Panel>
-												<div className='grid grid-cols-2 md:grid-cols-4 gap-3 text-sm max-h-[400px] overflow-y-auto pr-2'>
+												<div className='grid grid-cols-2 md:grid-cols-4 gap-3 text-[12px] max-h-[400px] overflow-y-auto pr-2'>
 													{languages.map((lang, i) => (
 														<div
 															key={i}
@@ -185,7 +215,7 @@ export default function LanguageCurrencyDropdown() {
 												</div>
 											</Tab.Panel>
 											<Tab.Panel>
-												<div className='grid grid-cols-2 md:grid-cols-3 gap-3 text-sm max-h-[400px] overflow-y-auto pr-2'>
+												<div className='max-h-[400px] overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 gap-3 text-[12px]'>
 													{currencies.map((curr, i) => (
 														<div
 															key={i}
