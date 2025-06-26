@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, Fragment } from 'react';
 import { Dialog, Tab, Transition } from '@headlessui/react';
 import { Menu, X } from 'lucide-react';
+import axiosInstance from '../../api/axiosInstance';
 
 const languages = [
 	'English',
@@ -94,10 +95,48 @@ export default function LanguageCurrencyDropdown() {
 		return () => document.removeEventListener('mousedown', handleClickOutside);
 	}, []);
 
-	const handleSelect = (type, value) => {
-		if (type === 'language') setSelectedLanguage(value);
-		else setSelectedCurrency(value);
+	const handleSelect = async (type, value) => {
+		if (type === 'language') {
+			setSelectedLanguage(value);
+			const langCode = langCodeFromName(value);
+			i18n.changeLanguage(langCode);
+
+			await showPromise(
+				axiosInstance.post('/user/updateLanguage', { language: langCode }),
+				{
+					loading: 'Saving language...',
+					success: 'Language saved successfully!',
+					error: 'Failed to save language.',
+				}
+			);
+		} else {
+			setSelectedCurrency(value);
+			// You can add showPromise here if you save currency too
+		}
+
 		setModalOpen(false);
+	};
+
+	const langCodeFromName = (name) => {
+		const mapping = {
+			English: 'en',
+			Русский: 'ru',
+			'Tiếng Việt': 'vi',
+			日本語: 'ja',
+			Italiano: 'it',
+			Deutsch: 'de',
+			'Français (International)': 'fr',
+			'Español (Internacional)': 'es',
+			'Português (Portugal)': 'pt-PT',
+			'Português (Brasil)': 'pt-BR',
+			فارسی: 'fa',
+			'Bahasa Indonesia': 'id',
+			Hindi: 'hi',
+			Polski: 'pl',
+			Uzbek: 'uz',
+			繁體中文: 'zh-TW',
+		};
+		return mapping[name] || 'en';
 	};
 
 	return (
