@@ -75,7 +75,7 @@ const Settings = () => {
         const filename = selectedAvatar.split("/").pop(); // a1.png
 
         // 2. Send it as an actual file
-        formData.append("avatarFile", blob, filename);
+        formData.append("documents", blob, filename);
       } else if (rawImageFile && croppedAreaPixels) {
         // 3. For uploaded and cropped image
         const croppedBlob = await getCroppedImg(
@@ -83,7 +83,7 @@ const Settings = () => {
           croppedAreaPixels,
           true
         );
-        formData.append("avatarFile", croppedBlob, rawImageFile.name);
+        formData.append("documents", croppedBlob, rawImageFile.name);
       }
 
       // 4. POST to PHP backend with proper multipart headers
