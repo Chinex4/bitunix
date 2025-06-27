@@ -91,7 +91,11 @@ const ContractTradePage = () => {
         </div>
       </div>
 
-      <TradeTabs />
+
+      {/* Trade Tabs component */}
+      <div className='mt-12 px-2 lg:px-4'>
+        <TradeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
     </div>
   );
 };
