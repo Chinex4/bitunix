@@ -86,7 +86,7 @@ const TradePanel = ({ livePrice, loading }) => {
             </div>
 
             {/* Price */}
-            <div className="flex items-center bg-[#0f0f0f] px-3 py-2 rounded">
+            <div className="flex items-center bg-[#0f0f0f] px-3 py-2 rounded overflow-hidden">
               <input
                 type="number"
                 value={price}
@@ -94,7 +94,7 @@ const TradePanel = ({ livePrice, loading }) => {
                   setIsManualPrice(true);
                   setPrice(e.target.value);
                 }}
-                className="bg-transparent flex-1 text-[16px] font-semibold outline-none"
+                className="bg-transparent flex-1 min-w-0 text-[16px] font-semibold outline-none"
               />
               <div className="flex flex-col gap-[2px] ml-2">
                 <button
@@ -110,8 +110,12 @@ const TradePanel = ({ livePrice, loading }) => {
                   −
                 </button>
               </div>
-              <span className="text-[10px] text-yellow-300 ml-2">Last</span>
-              <span className="text-[10px] text-gray-400 ml-1">USDT</span>
+              <span className="text-[10px] text-yellow-300 ml-2 whitespace-nowrap">
+                Last
+              </span>
+              <span className="text-[10px] text-gray-400 ml-1 whitespace-nowrap">
+                USDT
+              </span>
             </div>
 
             {/* Quantity */}
