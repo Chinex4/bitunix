@@ -204,7 +204,7 @@ const Navbar = () => {
 							key={index}>
 							<div className='relative'>
 								{link.dropdown ? (
-									<button className='btn btn-ghost btn-sm text-[10px] rounded-btn flex items-center gap-1 px-2'>
+									<button className='btn btn-ghost btn-sm hover:bg-transparent text-[10px] rounded-btn flex items-center gap-1 px-2'>
 										{link.name}
 										<ChevronDown size={16} />
 										{link.badge && (

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Bell, ChevronLeft, ChevronRight } from "lucide-react";
 
 const NotificationDropdown = ({
@@ -11,6 +11,28 @@ const NotificationDropdown = ({
   markAllAsRead,
 }) => {
   const dropdownRef = useRef(null);
+
+  // Auto-close if another dropdown is opened
+  useEffect(() => {
+    if (!dropdowns.notifications) return;
+
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdowns((prev) => ({ ...prev, notifications: false }));
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdowns.notifications, setDropdowns]);
+
+  useEffect(() => {
+    if (!dropdowns.notifications) return;
+
+    // If either user or assets dropdown opens, close notifications
+    if (dropdowns.user || dropdowns.assets) {
+      setDropdowns((prev) => ({ ...prev, notifications: false }));
+    }
+  }, [dropdowns.user, dropdowns.assets, dropdowns.notifications, setDropdowns]);
 
   return (
     <div className='relative' ref={dropdownRef}>

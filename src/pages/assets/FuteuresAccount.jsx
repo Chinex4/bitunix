@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import SweetLoader from '../../components/SweetLoader';
 
 const PER_PAGE_OPTIONS = [20, 50, 100];
 
@@ -99,7 +100,7 @@ const FuturesAccount = () => {
 
 			{/* Table */}
 			{loading ? (
-				<div className='text-center py-10 text-white'>Loading...</div>
+				<SweetLoader />
 			) : (
 				<div className='overflow-x-auto text-sm'>
 					<table className='w-full mt-4 border-collapse'>
