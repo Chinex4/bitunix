@@ -16,7 +16,6 @@ import { logout } from '../redux/auth/authSlice'; // ✅ Update path as needed
 import UserDropdown from './navbar/UserDropdown';
 
 import QrDropdown from './navbar/QrDropdown';
-import LanguageCurrencyDropdown from './navbar/LanguageCurrencyDropdown';
 import toast from 'react-hot-toast';
 import UserMobileDrawer from './navbar/UserMobileDrawer';
 import MobileNavDrawer from './navbar/MobileNavDrawer';
@@ -26,6 +25,7 @@ import NotificationDropdown from './navbar/NotificationDropdown';
 import MobileUserTrigger from './navbar/MobileUserTrigger';
 import { fetchLoggedInUser } from '../redux/user/userThunk';
 import useFetchLoggedInUser from '../hooks/useFetchedLoggedInUser';
+import LanguageCurrencyTrigger from './navbar/LanguageCurrencyTrigger';
 
 const Navbar = () => {
 	const { user: fetchedUser, error, loading } = useFetchLoggedInUser();
@@ -277,7 +277,7 @@ const Navbar = () => {
 							markAllAsRead={markAllAsRead}
 						/>
 
-						<LanguageCurrencyDropdown />
+						<LanguageCurrencyTrigger />
 
 						<MobileUserTrigger setIsUserOpen={setIsUserOpen} />
 					</>

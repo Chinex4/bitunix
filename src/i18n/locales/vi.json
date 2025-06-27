@@ -1,5 +1,4 @@
 {
-	"profile": "Hồ sơ",
-	"settings": "Cài đặt",
-	"select_language": "Chọn ngôn ngữ cho thông báo"
+  "welcome": "Chào mừng",
+  "language": "Ngôn ngữ & Vùng"
 }

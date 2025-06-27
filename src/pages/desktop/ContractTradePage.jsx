@@ -166,7 +166,6 @@ const ContractTradePage = () => {
 				{/* Right - OrderBook */}
 				<div className='w-full lg:w-[340px] space-y-4'>
 					<div className='bg-[#111] rounded-lg p-3'>
-						<h2 className='text-sm font-semibold mb-2'>Orderbook</h2>
 						<OrderBook
 							bids={bids}
 							asks={asks}

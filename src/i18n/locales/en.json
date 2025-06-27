@@ -1,5 +1,4 @@
 {
-	"profile": "Profile",
-	"settings": "Settings",
-	"select_language": "Select language for notifications"
+  "welcome": "Welcome",
+  "language": "Language & Region"
 }

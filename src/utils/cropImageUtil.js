@@ -1,35 +1,27 @@
-export const getCroppedImg = async (imageSrc, cropPixels) => {
-	const image = await createImage(imageSrc);
-	const canvas = document.createElement('canvas');
-	const ctx = canvas.getContext('2d');
+export const getCroppedImg = (file, croppedAreaPixels, returnBlob = false) => {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.src = URL.createObjectURL(file);
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-	canvas.width = cropPixels.width;
-	canvas.height = cropPixels.height;
+      const { width, height, x, y } = croppedAreaPixels;
+      canvas.width = width;
+      canvas.height = height;
 
-	ctx.drawImage(
-		image,
-		cropPixels.x,
-		cropPixels.y,
-		cropPixels.width,
-		cropPixels.height,
-		0,
-		0,
-		cropPixels.width,
-		cropPixels.height
-	);
+      ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
 
-	return new Promise((resolve) => {
-		canvas.toBlob((blob) => {
-			resolve(URL.createObjectURL(blob));
-		}, 'image/jpeg');
-	});
+      canvas.toBlob((blob) => {
+        if (returnBlob) {
+          resolve(blob);
+        } else {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        }
+      }, "image/jpeg");
+    };
+    image.onerror = reject;
+  });
 };
-
-const createImage = (url) =>
-	new Promise((resolve, reject) => {
-		const image = new Image();
-		image.addEventListener('load', () => resolve(image));
-		image.addEventListener('error', (err) => reject(err));
-		image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues
-		image.src = url;
-	});
