@@ -12,7 +12,7 @@ import {
   updateNickname,
   updateLanguage,
 } from "../../redux/user/userSettingsSlice";
-import { getCroppedImg } from '../../utils/cropImageUtil';
+import { getCroppedImg } from "../../utils/cropImageUtil";
 
 const languages = [
   "English",
@@ -50,6 +50,8 @@ const Settings = () => {
 
   const onSelectFile = (e) => {
     const file = e.target.files[0];
+    console.log(file);
+
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => setUploadedImagePreview(reader.result);
@@ -67,8 +69,15 @@ const Settings = () => {
       const formData = new FormData();
 
       if (selectedTab === 0 && selectedAvatar) {
-        formData.append("avatar", selectedAvatar);
+        // 1. Convert /public avatar image to Blob
+        const res = await fetch(selectedAvatar); // e.g. /avatars/a1.png
+        const blob = await res.blob();
+        const filename = selectedAvatar.split("/").pop(); // a1.png
+
+        // 2. Send it as an actual file
+        formData.append("avatarFile", blob, filename);
       } else if (rawImageFile && croppedAreaPixels) {
+        // 3. For uploaded and cropped image
         const croppedBlob = await getCroppedImg(
           rawImageFile,
           croppedAreaPixels,
@@ -77,8 +86,9 @@ const Settings = () => {
         formData.append("avatarFile", croppedBlob, rawImageFile.name);
       }
 
+      // 4. POST to PHP backend with proper multipart headers
       await showPromise(
-        axiosInstance.patch("/user/updateAvatar", formData, {
+        axiosInstance.post("/user/updateAvatar", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         }),
         {
