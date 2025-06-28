@@ -56,45 +56,54 @@ const ContractTradePage = () => {
     }
   }, [lastJsonMessage]);
 
+  // className="scale-[0.95] lg:scale-[0.85] origin-top-left"
+
   return (
-    <div className='min-h-screen bg-black text-white flex flex-col'>
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Tabs and Header */}
       <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <PairHeader symbol={normalizedSymbol} />
 
-      {/* 3-column grid on large screens */}
-      <div className='grid grid-cols-1 lg:grid-cols-12 gap-4 p-2 lg:p-4'>
-        {/* Chart - 7 out of 12 columns */}
-        <div className='lg:col-span-7 bg-[#0e0e0e] rounded-lg overflow-hidden'>
-          {activeTab === "Chart" ?
-            <div className='h-[500px] lg:h-[650px]'>
-              <TradingViewWidget
-                symbol={`BINANCE:${symbol.replace("-", "")}`}
+      {/* Apply scale to actual contents but preserve full width */}
+      <div className="relative w-full overflow-hidden">
+        <div className="transform scale-[0.95] lg:scale-[0.85] origin-top-left w-[105.26%] lg:w-[117.65%]">
+          {/* Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 p-2 lg:p-4">
+            {/* CHART COLUMN */}
+            <div className="lg:col-span-7 bg-[#0e0e0e] rounded-lg overflow-hidden lg:h-[650px]">
+              {activeTab === "Chart" ? (
+                <div className="h-[500px] lg:h-[650px]">
+                  <TradingViewWidget
+                    symbol={`BINANCE:${symbol.replace("-", "")}`}
+                  />
+                </div>
+              ) : (
+                <TradePanel livePrice={price} loading={loading} />
+              )}
+            </div>
+
+            {/* ORDERBOOK COLUMN */}
+            <div className="lg:col-span-3 bg-[#111] rounded-lg p-3 h-[650px]">
+              <OrderBook
+                bids={bids}
+                asks={asks}
+                trades={trades}
+                lastPrice={price}
+                loading={loading}
               />
             </div>
-          : <TradePanel livePrice={price} loading={loading} />}
+
+            {/* TRADEPANEL COLUMN */}
+            <div className="lg:col-span-2 bg-[#111] rounded-lg p-3 h-max">
+              <TradePanel livePrice={price} loading={loading} />
+            </div>
+
+            {/* TRADE TABS */}
+            <div className="mt-[0px] lg:-mt-[330px] lg:col-span-10">
+              <TradeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            </div>
+          </div>
         </div>
-
-        {/* Orderbook - 3 out of 12 columns */}
-        <div className='lg:col-span-3 bg-[#111] rounded-lg p-3 h-[650px]'>
-          <OrderBook
-            bids={bids}
-            asks={asks}
-            trades={trades}
-            lastPrice={price}
-            loading={loading}
-          />
-        </div>
-
-        {/* TradePanel - 2 out of 12 columns */}
-        <div className='lg:col-span-2 bg-[#111] rounded-lg p-3 h-[650px]'>
-          <TradePanel livePrice={price} loading={loading} />
-        </div>
-      </div>
-
-
-      {/* Trade Tabs component */}
-      <div className='mt-12 px-2 lg:px-4'>
-        <TradeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </div>
   );
